@@ -35,7 +35,7 @@ class ProphetCommand extends Command
             'config',
             null,
             InputArgument::OPTIONAL,
-            'Path to the prophet.json file- defaults to current directory',
+            'Path to the prophet.json file',
             './prophet.json'
         );
     }
