@@ -31,6 +31,10 @@ class Scry extends ProphetCommand
 
         if (empty($this->modules)) {
             $output->writeln('<error>No modules found in prophet.json.</error>');
+
+            if ($output->isVeryVerbose()) {
+                $output->writeln(print_r($this->modules, true));
+            }
         }
 
         foreach ($this->modules as $module) {

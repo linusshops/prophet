@@ -47,7 +47,7 @@ class ProphetCommand extends Command
             die("Failed to parse {$configFile}: file not found.".PHP_EOL);
         }
 
-        $json = json_decode(file_get_contents($configFile));
+        $json = json_decode(file_get_contents($configFile), true);
         if ($json === false) {
             die("Failed to parse {$configFile}: invalid json.".PHP_EOL);
         }
