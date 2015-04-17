@@ -70,13 +70,13 @@ $command->option('c')
 
 $prophet = new LinusShops\Prophet\Prophet();
 
-if (!file_exists($command['config']) === false) {
-    die("Failed to parse prophet.json: file not found.".PHP_EOL);
+if (file_exists($command['config']) === false) {
+    die("Failed to parse {$command['config']}: file not found.".PHP_EOL);
 }
 
 $json = json_decode(file_get_contents($command['config']));
 if ($json === false) {
-    die("Failed to parse prophet.json: invalid json.".PHP_EOL);
+    die("Failed to parse {$command['config']}: invalid json.".PHP_EOL);
 }
 $prophet->loadConfig($json);
 
