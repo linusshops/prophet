@@ -31,6 +31,16 @@
   ],
   "require": {
     "php": ">=5.3",
-    "nategood/commando": "*"
+    "ext-json": "*",
+    "nategood/commando": "*",
+    "phpunit/phpunit": "^4.6.4"
+  },
+  "bin": [
+    "prophet"
+  ],
+  "autoload": {
+    "psr-4": {
+      "LinusShops\\Prophet\\":"src/LinusShops/Prophet"
+    }
   }
 }
