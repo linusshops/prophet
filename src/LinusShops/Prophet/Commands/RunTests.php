@@ -10,6 +10,7 @@
 namespace LinusShops\Prophet\Commands;
 
 use LinusShops\Prophet\ProphetCommand;
+use LinusShops\Prophet\TestRunner;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -28,5 +29,15 @@ class RunTests extends ProphetCommand
     {
         parent::execute($input, $output);
 
+        if (empty($this->modules)) {
+            $output->writeln('<error>No modules found in prophet.json.</error>');
+        }
+
+        foreach ($this->modules as $module) {
+            $output->writeln('Starting tests for ['.$module['name'].']');
+
+            $runner = new TestRunner();
+            $runner->run($module['path']);
+        }
     }
 }
