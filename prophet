@@ -39,45 +39,8 @@ if (!defined('PROPHET_COMPOSER_INSTALL')) {
 
 require PROPHET_COMPOSER_INSTALL;
 
-//Define the commands
-$command = new Commando\Command();
+use Symfony\Component\Console\Application;
 
-$command->setHelp("
-Prophet is a testing harness for Magento modules. Its objective is to provide
-a testing system that does not require you to modify your Magento installation
-besides defining tests and Prophet configs.
-
-Prophet operates off of a command.json file in your Magento root. This file tells
-it where to find the modules to run tests on.
-");
-
-$command->option('i')
-    ->aka('init')
-    ->describedAs(
-        'Instead of running tests, check all modules from command.json. If '.
-        'they do not contain the expected structure, create the missing '.
-        'components. This will create a tests directory and a phpunit.xml.'
-    )
-    ->boolean();
-
-$command->option('c')
-    ->aka('config')
-    ->describedAs(
-        'Specify a prophet.json to use. If none specified, tries to find'.
-        'one in the current directory'
-    )
-    ->default('./prophet.json');
-
-$prophet = new LinusShops\Prophet\Prophet();
-
-if (file_exists($command['config']) === false) {
-    die("Failed to parse {$command['config']}: file not found.".PHP_EOL);
-}
-
-$json = json_decode(file_get_contents($command['config']));
-if ($json === false) {
-    die("Failed to parse {$command['config']}: invalid json.".PHP_EOL);
-}
-$prophet->loadConfig($json);
-
-$prophet->run();
+$application = new Application();
+$application->add(new LinusShops\Prophet\Commands\RunTests());
+$application->run();
