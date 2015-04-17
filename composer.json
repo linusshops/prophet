@@ -1,0 +1,36 @@
+{
+  "name": "linusshops/prophet",
+  "description": "Module testing for Magento Modules",
+  "version": "0.1.0",
+  "type": "utility",
+  "keywords": [
+    "magento",
+    "module",
+    "linus shops",
+    "canadas's motorcycle",
+    "mx canada",
+    "prophet",
+    "utility"
+  ],
+  "homepage": "https://github.com/linusshops/prophet",
+  "license": [
+    "MIT"
+  ],
+  "authors": [
+    {
+      "name": "Sam Schmidt",
+      "email": "samuel@dersam.net",
+      "homepage": "http://dersam.net",
+      "role": "Web Developer"
+    },
+    {
+      "name": "Linus Shops Inc",
+      "email": "corporate@linusshops.com",
+      "homepage": "http://www.linusshops.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.3",
+    "nategood/commando": "*"
+  }
+}
