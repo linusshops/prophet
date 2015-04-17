@@ -79,3 +79,5 @@ if ($json === false) {
     die("Failed to parse prophet.json: invalid json.".PHP_EOL);
 }
 $prophet->loadConfig($json);
+
+$prophet->run();
