@@ -42,5 +42,5 @@ require PROPHET_COMPOSER_INSTALL;
 use Symfony\Component\Console\Application;
 
 $application = new Application();
-$application->add(new LinusShops\Prophet\Commands\RunTests());
+$application->add(new LinusShops\Prophet\Commands\Scry());
 $application->run();

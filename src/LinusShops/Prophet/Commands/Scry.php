@@ -14,7 +14,7 @@ use LinusShops\Prophet\TestRunner;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class RunTests extends ProphetCommand
+class Scry extends ProphetCommand
 {
     protected function configure()
     {
