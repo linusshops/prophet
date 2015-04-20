@@ -9,6 +9,7 @@
 
 namespace LinusShops\Prophet\Commands;
 
+use LinusShops\Prophet\Magento;
 use LinusShops\Prophet\ProphetCommand;
 use LinusShops\Prophet\TestRunner;
 use Symfony\Component\Console\Input\InputInterface;
@@ -36,6 +37,10 @@ class Scry extends ProphetCommand
                 $output->writeln(print_r($this->modules, true));
             }
         }
+
+        $output->writeln('Loading Magento classes');
+
+        Magento::bootstrap();
 
         foreach ($this->modules as $module) {
             $output->writeln('Starting tests for ['.$module['name'].']');

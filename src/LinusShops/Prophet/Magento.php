@@ -35,7 +35,7 @@ class Magento
             require_once($file);
         }
 
-        Varien_Autoload::register();
+        \Varien_Autoload::register();
 
         $mageFilename = 'app/Mage.php';
 
@@ -47,7 +47,7 @@ class Magento
 
         require_once $mageFilename;
 
-        Mage::init();
+        \Mage::init();
 
         self::$loaded = true;
     }
