@@ -18,24 +18,6 @@ class ProphetCommand extends Command
 {
     protected $modules = array();
 
-    /**
-     * Loads a prophet.json, replacing whatever is currently held by this object
-     * @param string $prophet parsed JSON
-     */
-    public function loadConfig($prophet)
-    {
-        if (isset($prophet['modules'])) {
-            foreach ($prophet['modules'] as $definition) {
-                $module = new Module(
-                    $definition['name'],
-                    $definition['path']
-                );
-
-                $this->modules[] = $module;
-            }
-        }
-    }
-
     protected function configure()
     {
         $this->addOption(
@@ -59,7 +41,7 @@ class ProphetCommand extends Command
             die("Failed to parse {$configFile}: invalid json.".PHP_EOL);
         }
 
-        $this->loadConfig($json);
+        Config::loadConfig($json);
 
     }
 
