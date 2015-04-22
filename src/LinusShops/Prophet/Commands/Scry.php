@@ -32,12 +32,14 @@ class Scry extends ProphetCommand
     {
         parent::execute($input, $output);
 
-        if (empty($this->modules)) {
+        if (empty(Config::getModuleList())) {
             $output->writeln('<error>No modules found in prophet.json.</error>');
 
             if ($output->isVeryVerbose()) {
-                $output->writeln(print_r($this->modules, true));
+                $output->writeln(print_r(Config::getModuleList(), true));
             }
+
+            return;
         }
 
         $output->writeln('Loading Magento classes');
