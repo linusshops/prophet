@@ -25,7 +25,14 @@ class ProphetCommand extends Command
     public function loadConfig($prophet)
     {
         if (isset($prophet['modules'])) {
-            $this->modules = $prophet['modules'];
+            foreach ($prophet['modules'] as $definition) {
+                $module = new Module(
+                    $definition['name'],
+                    $definition['path']
+                );
+
+                $this->modules[] = $module;
+            }
         }
     }
 
