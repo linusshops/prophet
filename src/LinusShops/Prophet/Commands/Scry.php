@@ -31,12 +31,12 @@ class Scry extends ProphetCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         parent::execute($input, $output);
-
-        if (empty(Config::getModuleList())) {
+        $moduleList = Config::getModuleList();
+        if (empty($moduleList)) {
             $output->writeln('<error>No modules found in prophet.json.</error>');
 
             if ($output->isVeryVerbose()) {
-                $output->writeln(print_r(Config::getModuleList(), true));
+                $output->writeln(print_r($moduleList, true));
             }
 
             return;
@@ -47,7 +47,7 @@ class Scry extends ProphetCommand
         Magento::bootstrap();
 
         /** @var Module $module */
-        foreach (Config::getModuleList() as $module) {
+        foreach ($moduleList as $module) {
             $output->writeln('Starting tests for ['.$module->getName().']');
 
             $runner = new TestRunner();
