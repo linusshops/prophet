@@ -43,4 +43,5 @@ use Symfony\Component\Console\Application;
 
 $application = new Application();
 $application->add(new LinusShops\Prophet\Commands\Scry());
+$application->add(new LinusShops\Prophet\Commands\Validate());
 $application->run();

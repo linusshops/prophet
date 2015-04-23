@@ -9,6 +9,8 @@
 
 namespace LinusShops\Prophet\Commands;
 
+use LinusShops\Prophet\Config;
+use LinusShops\Prophet\Module;
 use LinusShops\Prophet\ProphetCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,11 +23,26 @@ class Validate extends ProphetCommand
 
         $this
             ->setName('validate')
-            ->setName('Check that all modules in prophet.json are valid to test');
+            ->setDescription('Check that all modules in prophet.json are valid to test');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         parent::execute($input, $output);
+
+        $moduleList = Config::getModuleList();
+
+        /** @var Module $module */
+        foreach ($moduleList as $module) {
+            $valid = $module->validate();
+
+            if ($valid) {
+                $output->writeln($module->getName().' validated.');
+            } else {
+                foreach ($module->getValidationErrors() as $error) {
+                    $output->write("<error>$error</error>");
+                }
+            }
+        }
     }
 }
