@@ -7,5 +7,8 @@ and the tests themselves.
 
 ##Commands
 
-_prophet scry_: Run tests for modules defined in prophet.json.
+_prophet_: Run tests for modules defined in prophet.json.
+
 _prophet validate_: Confirm that all modules in prophet.json are testable.
+
+_prophet init_: Initialize any modules in prophet.json that do not have the expected test structure.
