@@ -41,6 +41,15 @@ class Analyze extends Command
         }
 
         //Check if prophet.json already exists, warn about possible overwrite.
+        if (file_exists('prophet.json')) {
+            $question = new ConfirmationQuestion(
+                "<error>prophet.json already exists. Overwrite?</error>",false
+            );
+
+            if (!$question) {
+                return;
+            }
+        }
 
         $output->writeln('Scanning vendor directory for testable modules...');
 
@@ -57,7 +66,6 @@ class Analyze extends Command
             }
         }
 
-        print_r($paths);
         //Prompt the user on which modules to include in testing list
         $helper = $this->getHelper('question');
 
@@ -84,5 +92,17 @@ class Analyze extends Command
 
         //Write prophet.json
         print_r($modulesToWrite);
+        $output->writeln("Writing prophet.json");
+
+        $pjson = array('modules'=>array());
+
+        foreach ($modulesToWrite as $module) {
+            $pjson['modules'][] = array(
+                'path'=>$module->getPath(),
+                'name'=>$module->getName()
+            );
+        }
+
+        file_put_contents('prophet.json',json_encode($pjson));
     }
 }
