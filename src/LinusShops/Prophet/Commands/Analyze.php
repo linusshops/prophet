@@ -10,10 +10,12 @@
 
 namespace LinusShops\Prophet\Commands;
 
+use LinusShops\Prophet\Module;
 use SplFileInfo;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class Analyze extends Command
 {
@@ -24,7 +26,9 @@ class Analyze extends Command
             ->setDescription(
                 'Scan the project and attempt to make a prophet.json. When using'
                 .' Analyze, prophet will search in the vendor directory, as it'
-                .' expects you to be managing your modules with composer.'
+                .' expects you to be managing your modules with composer. This'
+                .' will only detect modules that are already configured to test'
+                .' with prophet.'
             );
     }
 
@@ -35,6 +39,8 @@ class Analyze extends Command
             $output->writeln('<error>No vendor directory found.</error>');
             return;
         }
+
+        //Check if prophet.json already exists, warn about possible overwrite.
 
         $output->writeln('Scanning vendor directory for testable modules...');
 
@@ -53,7 +59,30 @@ class Analyze extends Command
 
         print_r($paths);
         //Prompt the user on which modules to include in testing list
+        $helper = $this->getHelper('question');
+
+        $modulesToWrite = array();
+
+        foreach ($paths as $path) {
+            $arrPath = explode(DIRECTORY_SEPARATOR, $path);
+            $module = new Module($arrPath[count($arrPath)-1], $path);
+
+            $output->writeln(
+                "Detected {$module->getPath()} as a testable module."
+            );
+
+            $question = new ConfirmationQuestion(
+                "<question>Add to prophet as {$module->getName()}?</question>",false
+            );
+
+            if (!$helper->ask($input, $output, $question)) {
+                $output->writeln("<comment>Ignoring {$module->getPath()}</comment>");
+            } else {
+                $modulesToWrite[] = $module;
+            }
+        }
 
         //Write prophet.json
+        print_r($modulesToWrite);
     }
 }
