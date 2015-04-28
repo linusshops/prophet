@@ -41,4 +41,16 @@ class Config
     {
         return self::$modules;
     }
+
+    public static function writeModule(Module $module) {
+        $prophet = file_get_contents('prophet.json');
+        $prophet = json_decode($prophet, true);
+
+        $prophet['modules'][] = array(
+            'name'=>$module->getName(),
+            'path'=>$module->getPath()
+        );
+
+        file_put_contents('prophet.json',json_encode($prophet));
+    }
 }
