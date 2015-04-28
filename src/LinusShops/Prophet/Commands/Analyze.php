@@ -34,6 +34,8 @@ class Analyze extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $helper = $this->getHelper('question');
+
         //Check if the vendor directory exists
         if (!is_dir('vendor')) {
             $output->writeln('<error>No vendor directory found.</error>');
@@ -46,7 +48,7 @@ class Analyze extends Command
                 "<error>prophet.json already exists. Overwrite?</error>",false
             );
 
-            if (!$question) {
+            if (!$helper->ask($input, $output, $question)) {
                 return;
             }
         }
@@ -59,15 +61,20 @@ class Analyze extends Command
 
         $paths = array();
 
+        if ($output->isVerbose()) {
+            $output->writeln('Scanning files..');
+        }
+
         /** @var SplFileInfo $file */
         foreach ($files as $file) {
+            if ($output->isVeryVerbose()) {
+                $output->writeln($file->getRealPath());
+            }
+
             if ($file->getFilename() == 'phpunit.xml') {
                 $paths[] = $file->getPath();
             }
         }
-
-        //Prompt the user on which modules to include in testing list
-        $helper = $this->getHelper('question');
 
         $modulesToWrite = array();
 
@@ -80,7 +87,7 @@ class Analyze extends Command
             );
 
             $question = new ConfirmationQuestion(
-                "<question>Add to prophet as {$module->getName()}?</question>",false
+                "<question>Add {$module->getName()} to prophet.json?</question>",false
             );
 
             if (!$helper->ask($input, $output, $question)) {
@@ -91,7 +98,6 @@ class Analyze extends Command
         }
 
         //Write prophet.json
-        print_r($modulesToWrite);
         $output->writeln("Writing prophet.json");
 
         $pjson = array('modules'=>array());
@@ -103,6 +109,6 @@ class Analyze extends Command
             );
         }
 
-        file_put_contents('prophet.json',json_encode($pjson));
+        file_put_contents('./prophet.json',json_encode($pjson));
     }
 }
