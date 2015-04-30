@@ -8,10 +8,12 @@
 
   "require":{
     "magento-hackathon/magento-composer-installer":"2.1.1",
+    "magento-hackathon/composer-command-integrator":"~1.2",
     "linusshops/prophet-magento-test-module": ">=0.1.1"
   },
 
   "extra":{
-    "magento-root-dir": "."
+    "magento-root-dir": ".",
+    "magento-deploystrategy":"symlink"
   }
 }
