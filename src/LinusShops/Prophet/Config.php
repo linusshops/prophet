@@ -10,6 +10,9 @@
 namespace LinusShops\Prophet;
 
 
+use LinusShops\Prophet\Exceptions\InvalidConfigException;
+use LinusShops\Prophet\Exceptions\ProphetException;
+
 class Config
 {
     private static $modules;
@@ -20,6 +23,10 @@ class Config
      */
     public static function loadConfig($prophet)
     {
+        if (!is_array($prophet)) {
+            throw new InvalidConfigException('Config::loadConfig expects an array.');
+        }
+
         if (isset($prophet['modules'])) {
             foreach ($prophet['modules'] as $definition) {
                 $module = new Module(
