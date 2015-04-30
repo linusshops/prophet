@@ -7,3 +7,6 @@ php:
   - hhvm
 
 script: phpunit --configuration phpunit.xml
+
+install:
+  - composer install
