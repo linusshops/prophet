@@ -1,5 +1,6 @@
 # prophet
 Magento module testing
+[![Build Status](https://travis-ci.org/linusshops/prophet.svg)](https://travis-ci.org/linusshops/prophet)
 
 Objective: provide a test harness that does not require modifying Magento core,
 and allows testing by module.  The only thing that should exist is config files,
