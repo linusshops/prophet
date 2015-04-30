@@ -7,7 +7,7 @@
   ],
 
   "require":{
-    "linusshops/prophet-magento-test-module":"*"
+    "linusshops/prophet-magento-test-module": ">=0.1.1"
   },
 
   "extra":{
