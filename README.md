@@ -19,3 +19,9 @@ _prophet_: Run tests for modules defined in prophet.json.
 _prophet validate_: Confirm that all modules in prophet.json are testable.
 
 _prophet init_: Initialize any modules in prophet.json that do not have the expected test structure.
+
+_prophet analyze_: Search your vendor directory for testable modules, and attempt to create a prophet.json
+
+_prophet list_: View all commands
+
+_prophet help [command]_: View help for a specific command.
