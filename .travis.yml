@@ -15,5 +15,4 @@ install:
   - git clone https://github.com/OpenMage/magento-mirror.git magento
   - cd magento && git checkout tags/${MAGENTO_VERSION} && cd -
   - cp ./tests/composer.magento.json ./magento/composer.json
-  - cd magento && composer require --no-update  magento-hackathon/magento-composer-installer=2.1.1 && cd -
   - cd magento && composer install && cd -
