@@ -35,7 +35,7 @@ class Config
                     isset($definition['options']) ? $definition['options'] : array()
                 );
 
-                self::$modules[] = $module;
+                self::$modules[$module->getName()] = $module;
             }
         }
     }

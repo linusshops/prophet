@@ -19,15 +19,15 @@ class ConfigTest extends PHPUnit_Framework_TestCase {
                     'path'=>'path/to/module1'
                 ),
                 array(
-                    'name'=>'module1',
-                    'path'=>'path/to/module1',
+                    'name'=>'module2',
+                    'path'=>'path/to/module2',
                     'options'=>array(
                         'isolate'=>true
                     )
                 ),
                 array(
-                    'name'=>'module2',
-                    'path'=>'path/to/module2',
+                    'name'=>'module3',
+                    'path'=>'path/to/module3',
                     'options'=>array(
                         'isolate'=>false
                     )
@@ -45,11 +45,11 @@ class ConfigTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue(count($modules)==3);
 
         $module = Config::getModule('module1');
-        $this->assertInstanceOf('\LinusShops\Prophet\Module',$module);
+        $this->assertInstanceOf('\LinusShops\Prophet\Module', $module);
     }
 
     /**
-     * @expectedException InvalidConfigException
+     * @expectedException \LinusShops\Prophet\Exceptions\InvalidConfigException
      */
     public function testInvalidLoadConfig()
     {
