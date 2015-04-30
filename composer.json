@@ -33,12 +33,7 @@
     "php": ">=5.3",
     "ext-json": "*",
     "symfony/console": "~2.6",
-    "phpunit/phpunit": "^4.6.4",
-    "behat/behat": "^3.0.15",
-    "behat/mink": "~1.6",
-    "behat/mink-extension": "*",
-    "behat/mink-goutte-driver": "*",
-    "behat/mink-selenium2-driver": "*"
+    "phpunit/phpunit": "^4.6.4"
   },
   "bin": [
     "prophet"
