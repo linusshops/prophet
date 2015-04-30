@@ -9,4 +9,4 @@ php:
 script: phpunit --configuration phpunit.xml
 
 install:
-  - ./test/travis-build-mage.sh
+  - ./tests/travis-build-mage.sh
