@@ -15,3 +15,4 @@ install:
   - cd magento && git checkout tags/${MAGENTO_VERSION} && cd -
   - cp ./tests/composer.magento.json ./magento/composer.json
   - cd magento && composer install && cd -
+  - cd magento && ./vendor/bin/composerCommandIntegrator.php magento-module-deploy && cd -
