@@ -5,6 +5,11 @@
       "url": "http://packages.firegento.com"
     }
   ],
+
+  "require":{
+    "linusshops/prophet-magento-test-module":"*"
+  },
+
   "extra":{
     "magento-root-dir": "."
   }
