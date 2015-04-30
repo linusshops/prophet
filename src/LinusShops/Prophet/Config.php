@@ -24,7 +24,8 @@ class Config
             foreach ($prophet['modules'] as $definition) {
                 $module = new Module(
                     $definition['name'],
-                    $definition['path']
+                    $definition['path'],
+                    isset($definition['options']) ? $definition['options'] : array()
                 );
 
                 self::$modules[] = $module;

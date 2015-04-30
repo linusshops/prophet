@@ -32,7 +32,15 @@ class Scry extends ProphetCommand
                 'm',
                 InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                 'If set, prophet will only test modules matching the provided names.'
-            );
+            )
+            ->addOption(
+                'isolated',
+                null,
+                InputOption::VALUE_NONE,
+                'Indicates to prophet that it is running as a subprocess, and'.
+                ' should assume it has only one module to run.'
+            )
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -58,7 +66,7 @@ class Scry extends ProphetCommand
 
         Magento::bootstrap();
 
-        if (count($modulesRequested)>0) {
+        if (count($modulesRequested)>0 && $output->isVerbose()) {
             $output->writeln('<info>Module list provided, will only test:</info>');
 
             foreach ($modulesRequested as $requestedModule) {
@@ -68,17 +76,26 @@ class Scry extends ProphetCommand
 
         /** @var Module $module */
         foreach ($moduleList as $module) {
-            if (!in_array($module->getName(), $modulesRequested)) {
+            if (count($modulesRequested)>0 && !in_array($module->getName(), $modulesRequested)) {
                 if ($output->isVerbose()) {
                     $output->writeln('Skipping '.$module->getName());
                 }
                 continue;
             }
 
-            $output->writeln('Starting tests for ['.$module->getName().']');
+            if ($module->isIsolated() && !$input->getOption('isolated')) {
+                $output->writeln("<info>Isolating {$module->getName()}</info>");
+                $cmd = $_SERVER['argv'][0]." scry --isolated -m {$module->getName()}";
+                if ($output->isVeryVerbose()) {
+                    $output->writeln($cmd);
+                }
+                passthru($cmd);
+            } else {
+                $output->writeln('Starting tests for ['.$module->getName().']');
 
-            $runner = new TestRunner();
-            $runner->run($module->getPath());
+                $runner = new TestRunner();
+                $runner->run($module->getPath());
+            }
         }
     }
 }

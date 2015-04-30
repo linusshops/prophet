@@ -14,12 +14,27 @@ class Module
 {
     private $path;
     private $name;
+    private $options;
     private $validationErrors = array();
 
-    public function __construct($name, $path)
+    public function __construct($name, $path, $options = array())
     {
         $this->name = $name;
         $this->path = $path;
+
+        $this->options = $options;
+    }
+
+    public function getOption($name) {
+        if (!isset($this->options[$name])) {
+            return null;
+        }
+
+        return $this->options[$name];
+    }
+
+    public function isIsolated() {
+        return $this->getOption('isolate') === true;
     }
 
     /**
