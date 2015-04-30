@@ -1,4 +1,7 @@
 <?php
+use LinusShops\Prophet\Config;
+use LinusShops\Prophet\Exceptions\InvalidConfigException;
+
 /**
  * 
  *
@@ -35,22 +38,23 @@ class ConfigTest extends PHPUnit_Framework_TestCase {
 
     public function testLoadConfig()
     {
+        Config::loadConfig($this->getValidParsedConfig());
 
+        $modules = Config::getModuleList();
+
+        $this->assertTrue(count($modules)==3);
+
+        $module = Config::getModule('module1');
+        $this->assertInstanceOf('\LinusShops\Prophet\Module',$module);
     }
 
+    /**
+     * @expectedException InvalidConfigException
+     */
     public function testInvalidLoadConfig()
     {
-
-    }
-
-    public function testGetModule()
-    {
-
-    }
-
-    public function testGetModuleList()
-    {
-
+        $config = false;
+        Config::loadConfig($config);
     }
 
     public function testWriteModule()
