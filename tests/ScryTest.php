@@ -11,7 +11,13 @@ use Symfony\Component\Console\Tester\CommandTester;
  * @company Linus Shops
  */
 
-class ScryTest extends PHPUnit_Framework_TestCase
+namespace LinusShops\Prophet;
+
+use LinusShops\Prophet\Commands\Scry;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Tester\CommandTester;
+
+class ScryTest extends \PHPUnit_Framework_TestCase
 {
     private $path = './magento/prophet.json';
 
