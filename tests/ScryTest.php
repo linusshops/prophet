@@ -42,17 +42,13 @@ JSON
 
     public function testScry()
     {
-        $application = new Application();
-        $application->add(new Scry());
+        //For now, execute prophet and check its output against known values.
+        //Some attempts with Symfony CommandTester and mocking were not
+        //effective (specifically, the test contexts couldn't be separated),
+        // so this should do for now.
+        //TODO: revisit this, replace with mocks or different harness to separate contexts
 
-        $command = $application->find('scry');
-        $commandTester = new CommandTester($command);
-        $commandTester->execute(array(
-            'command' => $command->getName(),
-            '-p'=>'./magento'
-        ));
-
-        $output = $commandTester->getDisplay();
+        $output = shell_exec("./prophet scry -p ./magento");
 
         echo $output;
     }
