@@ -51,6 +51,7 @@ class ProphetCommand extends Command
 
         Config::loadConfig($json);
 
+        return true;
     }
 
 }
