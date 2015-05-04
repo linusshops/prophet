@@ -51,6 +51,11 @@ class Config
         return self::$modules;
     }
 
+    public static function hasModules()
+    {
+        return empty(self::$modules);
+    }
+
     public static function writeModule(Module $module) {
         self::$modules['modules'][] = array(
             'name'=>$module->getName(),
