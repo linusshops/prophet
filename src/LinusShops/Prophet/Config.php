@@ -15,14 +15,14 @@ use LinusShops\Prophet\Exceptions\ProphetException;
 
 class Config
 {
-    private static $modules;
-    private static $prophetFilePath;
+    private $modules;
+    private $prophetFilePath;
 
     /**
      * Loads a prophet.json, replacing whatever is currently held by this object
      * @param string $prophet parsed JSON
      */
-    public static function loadConfig($prophet)
+    public function __construct($prophet)
     {
         if (!is_array($prophet)) {
             throw new InvalidConfigException('Config::loadConfig expects an array.');
@@ -36,53 +36,57 @@ class Config
                     isset($definition['options']) ? $definition['options'] : array()
                 );
 
-                self::$modules[$module->getName()] = $module;
+                $this->modules[$module->getName()] = $module;
             }
         }
     }
 
-    public static function getModule($name)
+    public function getModule($name)
     {
-        return self::$modules[$name];
+        return $this->modules[$name];
     }
 
-    public static function getModuleList()
+    public function getModuleList()
     {
-        return self::$modules;
+        return $this->modules;
     }
 
-    public static function hasModules()
+    public function hasModules()
     {
-        return empty(self::$modules);
+        return empty($this->modules);
     }
 
-    public static function writeModule(Module $module) {
-        self::$modules['modules'][] = array(
+    public function writeModule(Module $module)
+    {
+        $this->modules['modules'][] = array(
             'name'=>$module->getName(),
             'path'=>$module->getPath()
         );
 
         file_put_contents(
-            self::getProphetFilePath(),
-            json_encode(self::$modules)
+            $this->getProphetFilePath(),
+            json_encode($this->modules)
         );
+
+        //Config state has changed, update repository version
+        ConfigRepository::setConfig($this);
     }
 
     /**
      * @return mixed
      */
-    public static function getProphetFilePath()
+    public function getProphetFilePath()
     {
-        return self::$prophetFilePath==null ?
+        return $this->prophetFilePath==null ?
             'prophet.json'
-            : self::$prophetFilePath;
+            : $this->prophetFilePath;
     }
 
     /**
      * @param mixed $prophetFilePath
      */
-    public static function setProphetFilePath($prophetFilePath)
+    public function setProphetFilePath($prophetFilePath)
     {
-        self::$prophetFilePath = $prophetFilePath;
+        $this->prophetFilePath = $prophetFilePath;
     }
 }

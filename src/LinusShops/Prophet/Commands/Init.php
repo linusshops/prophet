@@ -10,10 +10,12 @@
 namespace LinusShops\Prophet\Commands;
 
 use LinusShops\Prophet\Config;
+use LinusShops\Prophet\ConfigRepository;
 use LinusShops\Prophet\Module;
 use LinusShops\Prophet\ProphetCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class Init extends ProphetCommand
 {
@@ -36,28 +38,32 @@ class Init extends ProphetCommand
             return;
         }
 
-        $moduleList = Config::getModuleList();
+        $config = ConfigRepository::getConfig();
 
         /** @var Module $module */
-        foreach ($moduleList as $module) {
+        foreach ($config->getModuleList() as $module) {
             if (!$module->validate()) {
-                $output->writeln("Initializing {$module->getName()}");
-                $module->createTestStructure();
-
-                //Add to prophet.json
-                $helper = $this->getHelper('question');
-                $question = new ConfirmationQuestion(
-                    "<info>Add module to prophet.json?</info>",false
-                );
-
-                if ($helper->ask($input, $output, $question)) {
-                    Config::writeModule($module);
-                }
-
-
+                $this->initModule($config, $module, $input, $output);
             } else {
                 $output->writeln("Skipping {$module->getName()}: already initialized.");
             }
+        }
+    }
+
+    private function initModule(Config $config, Module $module, InputInterface $input, OutputInterface $output)
+    {
+        $output->writeln("Initializing {$module->getName()}");
+        $module->createTestStructure();
+
+        //Add to prophet.json
+        $helper = $this->getHelper('question');
+        $question = new ConfirmationQuestion(
+            "<info>Add module to prophet.json?</info>",
+            false
+        );
+
+        if ($helper->ask($input, $output, $question)) {
+            $config->writeModule($module);
         }
     }
 }

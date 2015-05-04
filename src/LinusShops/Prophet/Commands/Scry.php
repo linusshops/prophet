@@ -10,6 +10,7 @@
 namespace LinusShops\Prophet\Commands;
 
 use LinusShops\Prophet\Config;
+use LinusShops\Prophet\ConfigRepository;
 use LinusShops\Prophet\Magento;
 use LinusShops\Prophet\Module;
 use LinusShops\Prophet\ProphetCommand;
@@ -20,6 +21,23 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Scry extends ProphetCommand
 {
+    private $prophetCall;
+
+    public function __construct($prophetCall = 'prophet')
+    {
+        parent::__construct();
+
+        $this->prophetCall = $prophetCall;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProphetCall()
+    {
+        return $this->prophetCall;
+    }
+
     protected function configure()
     {
         parent::configure();
@@ -51,13 +69,14 @@ class Scry extends ProphetCommand
             return;
         }
 
+        $config = ConfigRepository::getConfig();
         $modulesRequested = $input->getOption('module');
 
-        if (Config::hasModules()) {
+        if ($config->hasModules()) {
             $output->writeln('<error>No modules found in prophet.json.</error>');
 
             if ($output->isVeryVerbose()) {
-                $output->writeln(print_r(Config::getModuleList(), true));
+                $output->writeln(print_r($config->getModuleList(), true));
             }
 
             return;
@@ -74,7 +93,7 @@ class Scry extends ProphetCommand
         }
 
         /** @var Module $module */
-        foreach (Config::getModuleList() as $module) {
+        foreach ($config->getModuleList() as $module) {
             if (count($modulesRequested)>0 && !in_array($module->getName(), $modulesRequested)) {
                 if ($output->isVerbose()) {
                     $output->writeln('Skipping '.$module->getName());
@@ -84,7 +103,7 @@ class Scry extends ProphetCommand
 
             if ($module->isIsolated() && !$input->getOption('isolated')) {
                 $output->writeln("<info>Isolating {$module->getName()}</info>");
-                $cmd = $_SERVER['argv'][0]." scry --isolated -m {$module->getName()}";
+                $cmd = $this->getProphetCall()." scry --isolated -m {$module->getName()}";
                 if ($output->isVeryVerbose()) {
                     $output->writeln($cmd);
                 }

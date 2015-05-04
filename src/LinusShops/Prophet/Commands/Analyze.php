@@ -10,11 +10,11 @@
 
 namespace LinusShops\Prophet\Commands;
 
-use LinusShops\Prophet\Config;
 use LinusShops\Prophet\Module;
 use SplFileInfo;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
@@ -30,7 +30,15 @@ class Analyze extends Command
                 .' expects you to be managing your modules with composer. This'
                 .' will only detect modules that are already configured to test'
                 .' with prophet.'
-            );
+            )
+            ->addOption(
+                'path',
+                'p',
+                InputOption::VALUE_REQUIRED,
+                'Set location to create prophet.json (defaults to cwd)',
+                'prophet.json'
+            )
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -44,7 +52,7 @@ class Analyze extends Command
         }
 
         //Check if prophet.json already exists, warn about possible overwrite.
-        if (file_exists(Config::getProphetFilePath())) {
+        if (file_exists($input->getOption('path'))) {
             $question = new ConfirmationQuestion(
                 "<error>prophet.json already exists. Overwrite?</error>",false
             );
@@ -88,7 +96,8 @@ class Analyze extends Command
             );
 
             $question = new ConfirmationQuestion(
-                "<question>Add {$module->getName()} to prophet.json?</question>",false
+                "<question>Add {$module->getName()} to prophet.json?</question>",
+                false
             );
 
             if (!$helper->ask($input, $output, $question)) {
@@ -110,6 +119,6 @@ class Analyze extends Command
             );
         }
 
-        file_put_contents(Config::getProphetFilePath(),json_encode($pjson));
+        file_put_contents($input->getOption('path'), json_encode($pjson));
     }
 }

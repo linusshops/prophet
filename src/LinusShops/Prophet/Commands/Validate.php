@@ -10,6 +10,7 @@
 namespace LinusShops\Prophet\Commands;
 
 use LinusShops\Prophet\Config;
+use LinusShops\Prophet\ConfigRepository;
 use LinusShops\Prophet\Module;
 use LinusShops\Prophet\ProphetCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,7 +35,8 @@ class Validate extends ProphetCommand
             return;
         }
 
-        $moduleList = Config::getModuleList();
+        $config = ConfigRepository::getConfig();
+        $moduleList = $config->getModuleList();
 
         /** @var Module $module */
         foreach ($moduleList as $module) {
