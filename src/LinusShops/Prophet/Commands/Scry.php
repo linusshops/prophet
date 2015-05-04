@@ -25,6 +25,13 @@ class Scry extends ProphetCommand
     /** @var ConsoleHelper  */
     private $cli;
 
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->cli = new ConsoleHelper();
+    }
+
     /**
      * @return string
      */
@@ -36,8 +43,6 @@ class Scry extends ProphetCommand
     protected function configure()
     {
         parent::configure();
-
-        $this->cli = new ConsoleHelper();
 
         $this
             ->setName('scry')
