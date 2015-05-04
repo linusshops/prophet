@@ -16,6 +16,7 @@ use LinusShops\Prophet\Exceptions\ProphetException;
 class Config
 {
     private static $modules;
+    private static $prophetFilePath;
 
     /**
      * Loads a prophet.json, replacing whatever is currently held by this object
@@ -57,8 +58,26 @@ class Config
         );
 
         file_put_contents(
-            'prophet.json',
+            self::getProphetFilePath(),
             json_encode(self::$modules)
         );
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function getProphetFilePath()
+    {
+        return self::$prophetFilePath==null ?
+            'prophet.json'
+            : self::$prophetFilePath;
+    }
+
+    /**
+     * @param mixed $prophetFilePath
+     */
+    public static function setProphetFilePath($prophetFilePath)
+    {
+        self::$prophetFilePath = $prophetFilePath;
     }
 }

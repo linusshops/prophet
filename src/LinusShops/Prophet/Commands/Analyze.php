@@ -10,6 +10,7 @@
 
 namespace LinusShops\Prophet\Commands;
 
+use LinusShops\Prophet\Config;
 use LinusShops\Prophet\Module;
 use SplFileInfo;
 use Symfony\Component\Console\Command\Command;
@@ -43,7 +44,7 @@ class Analyze extends Command
         }
 
         //Check if prophet.json already exists, warn about possible overwrite.
-        if (file_exists('prophet.json')) {
+        if (file_exists(Config::getProphetFilePath())) {
             $question = new ConfirmationQuestion(
                 "<error>prophet.json already exists. Overwrite?</error>",false
             );
@@ -109,6 +110,6 @@ class Analyze extends Command
             );
         }
 
-        file_put_contents('./prophet.json',json_encode($pjson));
+        file_put_contents(Config::getProphetFilePath(),json_encode($pjson));
     }
 }
