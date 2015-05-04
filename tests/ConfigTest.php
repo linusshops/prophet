@@ -70,6 +70,22 @@ class ConfigTest extends PHPUnit_Framework_TestCase {
 
     public function testWriteModule()
     {
+        if (file_exists('prophet.json')) {
+            unlink('prophet.json');
+        }
 
+        Config::loadConfig($this->getValidParsedConfig());
+        $module = new \LinusShops\Prophet\Module('test','path/to/test');
+        Config::writeModule($module);
+
+        $this->assertFileExists('prophet.json');
+
+        $prophet = file_get_contents('prophet.json');
+
+        $parsed = json_decode($prophet, true);
+        Config::loadConfig($parsed);
+        $module = Config::getModule('test');
+        $this->assertTrue($module->getName()=='test');
+        unlink('prophet.json');
     }
 }
