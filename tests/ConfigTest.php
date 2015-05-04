@@ -44,8 +44,19 @@ class ConfigTest extends PHPUnit_Framework_TestCase {
 
         $this->assertTrue(count($modules)==3);
 
+        /** @var \LinusShops\Prophet\Module $module */
         $module = Config::getModule('module1');
         $this->assertInstanceOf('\LinusShops\Prophet\Module', $module);
+        $this->assertTrue($module->getName()=='module1');
+        $this->assertTrue($module->getPath()=='path/to/module1');
+        $this->assertFalse($module->isIsolated());
+
+        $module = Config::getModule('module2');
+        $this->assertInstanceOf('\LinusShops\Prophet\Module', $module);
+        $this->assertTrue($module->getName()=='module2');
+        $this->assertTrue($module->getPath()=='path/to/module2');
+        $this->assertTrue($module->isIsolated());
+        $this->assertTrue($module->getOption('isolate'));
     }
 
     /**
