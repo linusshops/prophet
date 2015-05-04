@@ -16,6 +16,7 @@ use LinusShops\Prophet\Module;
 use SplFileInfo;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
@@ -31,7 +32,15 @@ class Analyze extends Command
                 .' expects you to be managing your modules with composer. This'
                 .' will only detect modules that are already configured to test'
                 .' with prophet.'
-            );
+            )
+            ->addOption(
+                'path',
+                'p',
+                InputOption::VALUE_REQUIRED,
+                'Set location to create prophet.json (defaults to cwd)',
+                'prophet.json'
+            )
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -43,10 +52,9 @@ class Analyze extends Command
             $output->writeln('<error>No vendor directory found.</error>');
             return;
         }
-        $config = ConfigRepository::getConfig();
 
         //Check if prophet.json already exists, warn about possible overwrite.
-        if (file_exists($config->getProphetFilePath())) {
+        if (file_exists($input->getOption('path'))) {
             $question = new ConfirmationQuestion(
                 "<error>prophet.json already exists. Overwrite?</error>",false
             );
@@ -112,6 +120,6 @@ class Analyze extends Command
             );
         }
 
-        file_put_contents($config->getProphetFilePath(),json_encode($pjson));
+        file_put_contents($input->getOption('path'),json_encode($pjson));
     }
 }
