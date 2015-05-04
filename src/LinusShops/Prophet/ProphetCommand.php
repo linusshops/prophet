@@ -49,7 +49,7 @@ class ProphetCommand extends Command
             return false;
         }
 
-        Config::loadConfig($json);
+        ConfigRepository::setConfig(new Config($json));
 
         return true;
     }

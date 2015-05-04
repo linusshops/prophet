@@ -11,6 +11,7 @@
 namespace LinusShops\Prophet\Commands;
 
 use LinusShops\Prophet\Config;
+use LinusShops\Prophet\ConfigRepository;
 use LinusShops\Prophet\Module;
 use SplFileInfo;
 use Symfony\Component\Console\Command\Command;
@@ -42,9 +43,10 @@ class Analyze extends Command
             $output->writeln('<error>No vendor directory found.</error>');
             return;
         }
+        $config = ConfigRepository::getConfig();
 
         //Check if prophet.json already exists, warn about possible overwrite.
-        if (file_exists(Config::getProphetFilePath())) {
+        if (file_exists($config->getProphetFilePath())) {
             $question = new ConfirmationQuestion(
                 "<error>prophet.json already exists. Overwrite?</error>",false
             );
@@ -110,6 +112,6 @@ class Analyze extends Command
             );
         }
 
-        file_put_contents(Config::getProphetFilePath(),json_encode($pjson));
+        file_put_contents($config->getProphetFilePath(),json_encode($pjson));
     }
 }

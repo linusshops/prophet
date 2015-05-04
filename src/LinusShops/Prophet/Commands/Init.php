@@ -10,10 +10,12 @@
 namespace LinusShops\Prophet\Commands;
 
 use LinusShops\Prophet\Config;
+use LinusShops\Prophet\ConfigRepository;
 use LinusShops\Prophet\Module;
 use LinusShops\Prophet\ProphetCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class Init extends ProphetCommand
 {
@@ -36,17 +38,19 @@ class Init extends ProphetCommand
             return;
         }
 
+        $config = ConfigRepository::getConfig();
+
         /** @var Module $module */
-        foreach (Config::getModuleList() as $module) {
+        foreach ($config->getModuleList() as $module) {
             if (!$module->validate()) {
-                $this->initModule($module, $input, $output);
+                $this->initModule($config, $module, $input, $output);
             } else {
                 $output->writeln("Skipping {$module->getName()}: already initialized.");
             }
         }
     }
 
-    private function initModule(Module $module, InputInterface $input, OutputInterface $output)
+    private function initModule(Config $config, Module $module, InputInterface $input, OutputInterface $output)
     {
         $output->writeln("Initializing {$module->getName()}");
         $module->createTestStructure();
@@ -59,7 +63,7 @@ class Init extends ProphetCommand
         );
 
         if ($helper->ask($input, $output, $question)) {
-            Config::writeModule($module);
+            $config->writeModule($module);
         }
     }
 }
