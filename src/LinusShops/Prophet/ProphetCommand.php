@@ -31,27 +31,42 @@ class ProphetCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $configFile = $input->getOption('config');
-        if (file_exists($configFile) === false) {
-            $output->writeln(
-                "<error>Failed to parse {$configFile}: file not found.</error>"
-            );
+        $loaded = $this->checkFile($input, $output);
 
-            return false;
-        }
+        $loaded = $loaded ? $this->loadConfig($input, $output) : $loaded;
 
-        $json = json_decode(file_get_contents($configFile), true);
-        if ($json === false) {
-            $output->writeln(
-                "<error>Failed to parse {$configFile}: invalid json.</error>"
-            );
-
-            return false;
-        }
-
-        ConfigRepository::setConfig(new Config($json));
-
-        return true;
+        return $loaded;
     }
 
+    private function checkFile(InputInterface $input, OutputInterface $output)
+    {
+        $exists = true;
+
+        if (file_exists($input->getOption('config')) === false) {
+            $output->writeln(
+                "<error>Failed to parse {$input->getOption('config')}: file not found.</error>"
+            );
+
+            $exists = false;
+        }
+
+        return $exists;
+    }
+
+    private function loadConfig(InputInterface $input, OutputInterface $output)
+    {
+        $loaded = true;
+        $json = json_decode(file_get_contents($input->getOption('config')), true);
+        if ($json === false) {
+            $output->writeln(
+                "<error>Failed to parse {$input->getOption('config')}: invalid json.</error>"
+            );
+
+            $loaded = false;
+        } else {
+            ConfigRepository::setConfig(new Config($json));
+        }
+
+        return $loaded;
+    }
 }

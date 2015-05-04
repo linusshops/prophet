@@ -13,43 +13,27 @@ class Magento
 {
     protected static $loaded = false;
 
+    protected static $magento = array(
+        'functions' => 'app/code/core/Mage/Core/functions.php',
+        'autoload' => 'lib/Varien/Autoload.php'
+    );
+
     public static function bootstrap()
     {
-        if (self::isLoaded()) {
-            return;
-        }
+        if (!self::isLoaded()) {
 
-        //Check if we can find the necessary Magento files
-        $files = array(
-            'functions' => 'app/code/core/Mage/Core/functions.php',
-            'autoload'  => 'lib/Varien/Autoload.php'
-        );
-
-        foreach ($files as $file) {
-            if (!file_exists($file)) {
-                throw new Exceptions\ProphetException(
-                    'Failed to load Magento'.$file.' not found'
-                );
+            foreach (self::$magento as $file) {
+                require_once($file);
             }
 
-            require_once($file);
+            \Varien_Autoload::register();
+
+            require_once 'app/Mage.php';
+
+            \Mage::init();
+
+            self::$loaded = true;
         }
-
-        \Varien_Autoload::register();
-
-        $mageFilename = 'app/Mage.php';
-
-        if (!file_exists($mageFilename)) {
-            throw new Exceptions\ProphetException(
-                'Failed to load Magento'.$file.' not found'
-            );
-        }
-
-        require_once $mageFilename;
-
-        \Mage::init();
-
-        self::$loaded = true;
     }
 
     /**

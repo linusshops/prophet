@@ -47,7 +47,9 @@ $application->setName('Prophet');
 $application->setVersion('0.1.0');
 $application->setDefaultCommand('scry');
 
-$application->add(new LinusShops\Prophet\Commands\Scry($_SERVER['argv'][0]));
+\LinusShops\Prophet\ConfigRepository::setProphetPath($_SERVER['argv'][0]);
+
+$application->add(new LinusShops\Prophet\Commands\Scry());
 $application->add(new LinusShops\Prophet\Commands\Validate());
 $application->add(new LinusShops\Prophet\Commands\Analyze());
 $application->add(new LinusShops\Prophet\Commands\Init());
