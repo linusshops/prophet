@@ -29,16 +29,26 @@ class Config
         }
 
         if (isset($prophet['modules'])) {
-            foreach ($prophet['modules'] as $definition) {
-                $module = new Module(
-                    $definition['name'],
-                    $definition['path'],
-                    isset($definition['options']) ? $definition['options'] : array()
-                );
-
-                $this->modules[$module->getName()] = $module;
-            }
+            $this->loadModules($prophet['modules']);
         }
+    }
+
+    private function loadModules($modules)
+    {
+        foreach ($modules as $definition) {
+            $module = new Module(
+                $definition['name'],
+                $definition['path'],
+                $this->loadOptions($definition)
+            );
+
+            $this->modules[$module->getName()] = $module;
+        }
+    }
+
+    private function loadOptions($definition)
+    {
+        return isset($definition['options']) ? $definition['options'] : array();
     }
 
     public function getModule($name)
