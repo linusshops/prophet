@@ -53,12 +53,11 @@ class Scry extends ProphetCommand
 
         $modulesRequested = $input->getOption('module');
 
-        $moduleList = Config::getModuleList();
-        if (empty($moduleList)) {
+        if (Config::hasModules()) {
             $output->writeln('<error>No modules found in prophet.json.</error>');
 
             if ($output->isVeryVerbose()) {
-                $output->writeln(print_r($moduleList, true));
+                $output->writeln(print_r(Config::getModuleList(), true));
             }
 
             return;
@@ -71,15 +70,11 @@ class Scry extends ProphetCommand
         Magento::bootstrap();
 
         if (count($modulesRequested)>0 && $output->isVerbose()) {
-            $output->writeln('<info>Module list provided, will only test:</info>');
-
-            foreach ($modulesRequested as $requestedModule) {
-                $output->writeln('<info>    -- '.$requestedModule.'</info>');
-            }
+            $this->showRequestedModuleList($modulesRequested, $output);
         }
 
         /** @var Module $module */
-        foreach ($moduleList as $module) {
+        foreach (Config::getModuleList() as $module) {
             if (count($modulesRequested)>0 && !in_array($module->getName(), $modulesRequested)) {
                 if ($output->isVerbose()) {
                     $output->writeln('Skipping '.$module->getName());
@@ -100,6 +95,15 @@ class Scry extends ProphetCommand
                 $runner = new TestRunner();
                 $runner->run($module->getPath());
             }
+        }
+    }
+
+    private function showRequestedModuleList($modules, OutputInterface $output)
+    {
+        $output->writeln('<info>Module list provided, will only test:</info>');
+
+        foreach ($modules as $requestedModule) {
+            $output->writeln('<info>    -- '.$requestedModule.'</info>');
         }
     }
 }
