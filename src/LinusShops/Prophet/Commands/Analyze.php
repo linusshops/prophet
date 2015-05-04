@@ -10,8 +10,6 @@
 
 namespace LinusShops\Prophet\Commands;
 
-use LinusShops\Prophet\Config;
-use LinusShops\Prophet\ConfigRepository;
 use LinusShops\Prophet\Module;
 use SplFileInfo;
 use Symfony\Component\Console\Command\Command;
@@ -120,6 +118,6 @@ class Analyze extends Command
             );
         }
 
-        file_put_contents($input->getOption('path'),json_encode($pjson));
+        file_put_contents($input->getOption('path'), json_encode($pjson));
     }
 }
