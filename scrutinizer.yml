@@ -1,0 +1,49 @@
+before_commands:
+    - composer install
+
+tools:
+    # Code Coverage
+    external_code_coverage:
+        enabled: true
+        timeout: 600
+
+    # Runs Scrutinizer's PHP Analyzer Tool
+    php_analyzer:
+        enabled:              true
+        filter:
+            excluded_paths:
+                - 'tests/*'
+                - 'vendor/*'
+        checks:
+            php: true
+        coding_style:
+            php:
+                spaces:
+                    general:
+                        linefeed_character: newline
+                    around_operators:
+                        relational: false
+                        additive: false
+                        concatenation: false
+                braces:
+                    classes_functions:
+                        class: undefined
+                        function: undefined
+                        closure: undefined
+                    if:
+                        opening: undefined
+                    for:
+                        opening: undefined
+                    while:
+                        opening: undefined
+                    do_while:
+                        opening: undefined
+                    switch:
+                        opening: undefined
+                    try:
+                        opening: undefined
+                upper_lower_casing:
+                    keywords:
+                        general: undefined
+                    constants:
+                        true_false_null: undefined
