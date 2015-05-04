@@ -36,10 +36,8 @@ class Init extends ProphetCommand
             return;
         }
 
-        $moduleList = Config::getModuleList();
-
         /** @var Module $module */
-        foreach ($moduleList as $module) {
+        foreach (Config::getModuleList() as $module) {
             if (!$module->validate()) {
                 $output->writeln("Initializing {$module->getName()}");
                 $module->createTestStructure();
