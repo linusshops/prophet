@@ -25,7 +25,8 @@ class Module
         $this->options = $options;
     }
 
-    public function getOption($name) {
+    public function getOption($name)
+    {
         if (!isset($this->options[$name])) {
             return null;
         }
@@ -33,7 +34,8 @@ class Module
         return $this->options[$name];
     }
 
-    public function isIsolated() {
+    public function isIsolated()
+    {
         return $this->getOption('isolate') === true;
     }
 
@@ -63,18 +65,27 @@ class Module
 
         //Confirm path is valid
         if (!is_dir($this->getPath())) {
-            $valid = false;
-            $this->validationErrors[] = $this->getName().': Path ['.$this->getPath().'] is not valid.';
+            $valid = $this->addValidationError(
+                $this->getName().
+                ': Path ['.$this->getPath().'] is not valid.'
+            );
         }
 
         //Confirm existence of phpunit.xml in path
-        if ($valid && !file_exists($this->getPath().'/phpunit.xml')) {
-            $valid = false;
-
-            $this->validationErrors[] = $this->getName().': ['.$this->getPath().'] does not contain a phpunit.xml.';
+        if (!file_exists($this->getPath().'/phpunit.xml')) {
+            $valid = $this->addValidationError(
+                $this->getName().
+                ': ['.$this->getPath().'] does not contain a phpunit.xml.'
+            );
         }
 
         return $valid;
+    }
+
+    private function addValidationError($message)
+    {
+        $this->validationErrors[] = $message;
+        return false;
     }
 
     /**
