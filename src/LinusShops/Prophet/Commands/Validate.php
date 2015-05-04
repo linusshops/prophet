@@ -1,11 +1,11 @@
 <?php
 /**
- * Command to verify that modules in prophet.json are all testable.
- *
- * @author Sam Schmidt
- * @date 2015-04-17
- * @company Linus Shops
- */
+     * Command to verify that modules in prophet.json are all testable.
+     *
+     * @author Sam Schmidt
+     * @date 2015-04-17
+     * @company Linus Shops
+     */
 
 namespace LinusShops\Prophet\Commands;
 
@@ -36,10 +36,10 @@ class Validate extends ProphetCommand
         }
 
         $config = ConfigRepository::getConfig();
-        $this->validateModules($config->getModuleList(),$input, $output);
+        $this->validateModules($config->getModuleList(), $output);
     }
 
-    protected function validateModules($moduleList, InputInterface $input, OutputInterface $output)
+    protected function validateModules($moduleList, OutputInterface $output)
     {
         /** @var Module $module */
         foreach ($moduleList as $module) {

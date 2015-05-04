@@ -1,12 +1,12 @@
 <?php
 /**
- * Scan the project, looking for testable modules.
- * Then, attempt to build a skeleton prophet.json.
- *
- * @author Sam Schmidt
- * @date 2015-04-23
- * @company Linus Shops
- */
+     * Scan the project, looking for testable modules.
+     * Then, attempt to build a skeleton prophet.json.
+     *
+     * @author Sam Schmidt
+     * @date 2015-04-23
+     * @company Linus Shops
+     */
 
 namespace LinusShops\Prophet\Commands;
 
@@ -45,46 +45,59 @@ class Analyze extends Command
     {
         $helper = $this->getHelper('question');
 
+        $build = true;
+
         //Check if the vendor directory exists
         if (!is_dir('vendor')) {
             $output->writeln('<error>No vendor directory found.</error>');
-            return;
+            $build = false;
         }
 
         //Check if prophet.json already exists, warn about possible overwrite.
         if (file_exists($input->getOption('path'))) {
             $question = new ConfirmationQuestion(
-                "<error>prophet.json already exists. Overwrite?</error>",false
+                "<error>prophet.json already exists. Overwrite?</error>", false
             );
 
             if (!$helper->ask($input, $output, $question)) {
-                return;
+                $build = false;
             }
         }
 
-        $output->writeln('Scanning vendor directory for testable modules...');
+        if ($build) {
+            $output->writeln('Scanning vendor directory for testable modules...');
 
-        //Descend into the vendor directory and build a list of testable modules
-        $directory = new \RecursiveDirectoryIterator('vendor');
-        $files = new \RecursiveIteratorIterator($directory);
-
-        $paths = array();
-
-        if ($output->isVerbose()) {
-            $output->writeln('Scanning files..');
-        }
-
-        /** @var SplFileInfo $file */
-        foreach ($files as $file) {
-            if ($output->isVeryVerbose()) {
-                $output->writeln($file->getRealPath());
+            if ($output->isVerbose()) {
+                $output->writeln('Scanning files..');
             }
 
-            if ($file->getFilename() == 'phpunit.xml') {
-                $paths[] = $file->getPath();
-            }
+            $paths = $this->detectModules($output);
+
+            $modulesToWrite = $this->buildJson($paths, $input, $output);
+
+            $this->writeJson($modulesToWrite, $input, $output);
+        }
+    }
+
+    private function writeJson($modulesToWrite, InputInterface $input, OutputInterface $output)
+    {
+        //Write prophet.json
+        $output->writeln("Writing prophet.json");
+
+        $pjson = array('modules'=>array());
+
+        foreach ($modulesToWrite as $module) {
+            $pjson['modules'][] = array(
+                'path'=>$module->getPath(),
+                'name'=>$module->getName()
+            );
         }
 
+        file_put_contents($input->getOption('path'), json_encode($pjson));
+    }
+
+    private function buildJson($paths, InputInterface $input, OutputInterface $output)
+    {
         $modulesToWrite = array();
 
         foreach ($paths as $path) {
@@ -100,25 +113,34 @@ class Analyze extends Command
                 false
             );
 
-            if (!$helper->ask($input, $output, $question)) {
+            if (!$this->getHelper('question')->ask($input, $output, $question)) {
                 $output->writeln("<comment>Ignoring {$module->getPath()}</comment>");
             } else {
                 $modulesToWrite[] = $module;
             }
         }
 
-        //Write prophet.json
-        $output->writeln("Writing prophet.json");
+        return $modulesToWrite;
+    }
 
-        $pjson = array('modules'=>array());
+    private function detectModules(OutputInterface $output)
+    {
+        //Descend into the vendor directory and build a list of testable modules
+        $directory = new \RecursiveDirectoryIterator('vendor');
+        $files = new \RecursiveIteratorIterator($directory);
+        $paths = array();
 
-        foreach ($modulesToWrite as $module) {
-            $pjson['modules'][] = array(
-                'path'=>$module->getPath(),
-                'name'=>$module->getName()
-            );
+        /** @var SplFileInfo $file */
+        foreach ($files as $file) {
+            if ($output->isVeryVerbose()) {
+                $output->writeln($file->getRealPath());
+            }
+
+            if ($file->getFilename() == 'phpunit.xml') {
+                $paths[] = $file->getPath();
+            }
         }
 
-        file_put_contents($input->getOption('path'), json_encode($pjson));
+        return $paths;
     }
 }

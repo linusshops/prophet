@@ -1,11 +1,11 @@
 <?php
 /**
- * 
- *
- * @author Sam Schmidt
- * @date 2015-04-22
- * @company Linus Shops
- */
+     * 
+     *
+     * @author Sam Schmidt
+     * @date 2015-04-22
+     * @company Linus Shops
+     */
 
 namespace LinusShops\Prophet;
 
@@ -87,7 +87,7 @@ class Config
      */
     public function getProphetFilePath()
     {
-        return $this->prophetFilePath==null ?
+        return $this->prophetFilePath == null ?
             'prophet.json'
             : $this->prophetFilePath;
     }
