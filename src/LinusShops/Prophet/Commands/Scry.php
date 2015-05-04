@@ -21,6 +21,23 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Scry extends ProphetCommand
 {
+    private $prophetCall;
+
+    public function __construct($prophetCall = 'prophet')
+    {
+        parent::__construct();
+
+        $this->prophetCall = $prophetCall;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProphetCall()
+    {
+        return $this->prophetCall;
+    }
+
     protected function configure()
     {
         parent::configure();
@@ -86,7 +103,7 @@ class Scry extends ProphetCommand
 
             if ($module->isIsolated() && !$input->getOption('isolated')) {
                 $output->writeln("<info>Isolating {$module->getName()}</info>");
-                $cmd = $_SERVER['argv'][0]." scry --isolated -m {$module->getName()}";
+                $cmd = $this->getProphetCall()." scry --isolated -m {$module->getName()}";
                 if ($output->isVeryVerbose()) {
                     $output->writeln($cmd);
                 }
