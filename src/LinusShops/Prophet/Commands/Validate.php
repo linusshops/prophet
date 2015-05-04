@@ -36,10 +36,10 @@ class Validate extends ProphetCommand
         }
 
         $config = ConfigRepository::getConfig();
-        $this->validateModules($config->getModuleList(),$input, $output);
+        $this->validateModules($config->getModuleList(), $output);
     }
 
-    protected function validateModules($moduleList, InputInterface $input, OutputInterface $output)
+    protected function validateModules($moduleList, OutputInterface $output)
     {
         /** @var Module $module */
         foreach ($moduleList as $module) {
