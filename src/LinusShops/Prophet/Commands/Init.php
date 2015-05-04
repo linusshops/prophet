@@ -54,7 +54,8 @@ class Init extends ProphetCommand
         //Add to prophet.json
         $helper = $this->getHelper('question');
         $question = new ConfirmationQuestion(
-            "<info>Add module to prophet.json?</info>",false
+            "<info>Add module to prophet.json?</info>",
+            false
         );
 
         if ($helper->ask($input, $output, $question)) {
