@@ -33,12 +33,20 @@ class ProphetCommand extends Command
     {
         $configFile = $input->getOption('config');
         if (file_exists($configFile) === false) {
-            die("Failed to parse {$configFile}: file not found.".PHP_EOL);
+            $output->writeln(
+                "<error>Failed to parse {$configFile}: file not found.</error>"
+            );
+
+            return false;
         }
 
         $json = json_decode(file_get_contents($configFile), true);
         if ($json === false) {
-            die("Failed to parse {$configFile}: invalid json.".PHP_EOL);
+            $output->writeln(
+                "<error>Failed to parse {$configFile}: invalid json.</error>"
+            );
+
+            return false;
         }
 
         Config::loadConfig($json);

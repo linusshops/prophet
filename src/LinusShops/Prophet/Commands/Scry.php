@@ -45,7 +45,11 @@ class Scry extends ProphetCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        parent::execute($input, $output);
+        $setupSuccessful = parent::execute($input, $output);
+
+        if (!$setupSuccessful) {
+            return;
+        }
 
         $modulesRequested = $input->getOption('module');
 

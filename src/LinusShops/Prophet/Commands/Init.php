@@ -30,7 +30,11 @@ class Init extends ProphetCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        parent::execute($input, $output);
+        $setupSuccessful = parent::execute($input, $output);
+
+        if (!$setupSuccessful) {
+            return;
+        }
 
         $moduleList = Config::getModuleList();
 
