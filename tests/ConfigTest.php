@@ -1,5 +1,6 @@
 <?php
 use LinusShops\Prophet\Config;
+use LinusShops\Prophet\ConfigRepository;
 use LinusShops\Prophet\Exceptions\InvalidConfigException;
 
 /**
@@ -38,20 +39,23 @@ class ConfigTest extends PHPUnit_Framework_TestCase {
 
     public function testLoadConfig()
     {
-        Config::loadConfig($this->getValidParsedConfig());
+        ConfigRepository::setConfig(
+            new Config($this->getValidParsedConfig())
+        );
+        $config = ConfigRepository::getConfig();
 
-        $modules = Config::getModuleList();
+        $modules = $config->getModuleList();
 
         $this->assertTrue(count($modules)==3);
 
         /** @var \LinusShops\Prophet\Module $module */
-        $module = Config::getModule('module1');
+        $module = $config->getModule('module1');
         $this->assertInstanceOf('\LinusShops\Prophet\Module', $module);
         $this->assertTrue($module->getName()=='module1');
         $this->assertTrue($module->getPath()=='path/to/module1');
         $this->assertFalse($module->isIsolated());
 
-        $module = Config::getModule('module2');
+        $module = $config->getModule('module2');
         $this->assertInstanceOf('\LinusShops\Prophet\Module', $module);
         $this->assertTrue($module->getName()=='module2');
         $this->assertTrue($module->getPath()=='path/to/module2');
@@ -65,7 +69,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase {
     public function testInvalidLoadConfig()
     {
         $config = false;
-        Config::loadConfig($config);
+        new Config($config);
     }
 
     public function testWriteModule()
@@ -74,17 +78,21 @@ class ConfigTest extends PHPUnit_Framework_TestCase {
             unlink('prophet.json');
         }
 
-        Config::loadConfig($this->getValidParsedConfig());
+        ConfigRepository::setConfig(
+            new Config($this->getValidParsedConfig())
+        );
+        $config = ConfigRepository::getConfig();
+
         $module = new \LinusShops\Prophet\Module('test','path/to/test');
-        Config::writeModule($module);
+        $config->writeModule($module);
 
         $this->assertFileExists('prophet.json');
 
         $prophet = file_get_contents('prophet.json');
 
         $parsed = json_decode($prophet, true);
-        Config::loadConfig($parsed);
-        $module = Config::getModule('test');
+        $config = new Config($parsed);
+        $module = $config->getModule('test');
         $this->assertTrue($module->getName()=='test');
         unlink('prophet.json');
     }
