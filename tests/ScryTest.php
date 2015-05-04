@@ -13,6 +13,27 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class ScryTest extends PHPUnit_Framework_TestCase
 {
+    private $path = './magento/prophet.json';
+
+    public function setUp()
+    {
+        if (file_exists($this->path)) {
+            unlink($this->path);
+        }
+
+        file_put_contents($this->path, <<<JSON
+{
+    "modules": [
+        {
+            "path": "vendor/linusshops/prophet-magento-test-module",
+            "name": "test-module"
+        }
+    ]
+}
+JSON
+        );
+    }
+
     public function testScry()
     {
         $application = new Application();
@@ -26,5 +47,14 @@ class ScryTest extends PHPUnit_Framework_TestCase
         ));
 
         $output = $commandTester->getDisplay();
+
+        echo $output;
+    }
+
+    public function tearDown()
+    {
+        if (file_exists($this->path)) {
+            unlink($this->path);
+        }
     }
 }
