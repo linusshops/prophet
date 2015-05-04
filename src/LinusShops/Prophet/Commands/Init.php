@@ -39,23 +39,26 @@ class Init extends ProphetCommand
         /** @var Module $module */
         foreach (Config::getModuleList() as $module) {
             if (!$module->validate()) {
-                $output->writeln("Initializing {$module->getName()}");
-                $module->createTestStructure();
-
-                //Add to prophet.json
-                $helper = $this->getHelper('question');
-                $question = new ConfirmationQuestion(
-                    "<info>Add module to prophet.json?</info>",false
-                );
-
-                if ($helper->ask($input, $output, $question)) {
-                    Config::writeModule($module);
-                }
-
-
+                $this->initModule($module, $input, $output);
             } else {
                 $output->writeln("Skipping {$module->getName()}: already initialized.");
             }
+        }
+    }
+
+    private function initModule(Module $module, InputInterface $input, OutputInterface $output)
+    {
+        $output->writeln("Initializing {$module->getName()}");
+        $module->createTestStructure();
+
+        //Add to prophet.json
+        $helper = $this->getHelper('question');
+        $question = new ConfirmationQuestion(
+            "<info>Add module to prophet.json?</info>",false
+        );
+
+        if ($helper->ask($input, $output, $question)) {
+            Config::writeModule($module);
         }
     }
 }
