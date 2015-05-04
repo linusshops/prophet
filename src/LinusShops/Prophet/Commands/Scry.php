@@ -1,11 +1,11 @@
 <?php
 /**
- * Command to execute the test suites
- *
- * @author Sam Schmidt
- * @date 2015-04-17
- * @company Linus Shops
- */
+     * Command to execute the test suites
+     *
+     * @author Sam Schmidt
+     * @date 2015-04-17
+     * @company Linus Shops
+     */
 
 namespace LinusShops\Prophet\Commands;
 
@@ -77,11 +77,11 @@ class Scry extends ProphetCommand
                     if ($this->checkIfRequested($modulesRequested, $module, $output)) {
                         if ($this->isIsolated($module, $input)) {
                             $output->writeln("<info>Isolating {$module->getName()}</info>");
-                            $cmd = $this->getProphetCall() . " scry --isolated -m {$module->getName()}";
+                            $cmd = $this->getProphetCall()." scry --isolated -m {$module->getName()}";
                             $this->cli->veryVerbose($cmd, $output);
                             passthru($cmd);
                         } else {
-                            $output->writeln('Starting tests for [' . $module->getName() . ']');
+                            $output->writeln('Starting tests for ['.$module->getName().']');
 
                             $runner = new TestRunner();
                             $runner->run($module->getPath());
