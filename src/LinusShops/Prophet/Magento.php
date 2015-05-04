@@ -13,17 +13,16 @@ class Magento
 {
     protected static $loaded = false;
 
+    protected static $magento = array(
+        'functions' => 'app/code/core/Mage/Core/functions.php',
+        'autoload' => 'lib/Varien/Autoload.php'
+    );
+
     public static function bootstrap()
     {
         if (!self::isLoaded()) {
 
-            //Check if we can find the necessary Magento files
-            $files = array(
-                'functions' => 'app/code/core/Mage/Core/functions.php',
-                'autoload' => 'lib/Varien/Autoload.php'
-            );
-
-            foreach ($files as $file) {
+            foreach (self::$magento as $file) {
                 require_once($file);
             }
 
