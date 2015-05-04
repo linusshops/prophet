@@ -96,7 +96,8 @@ class Analyze extends Command
             );
 
             $question = new ConfirmationQuestion(
-                "<question>Add {$module->getName()} to prophet.json?</question>",false
+                "<question>Add {$module->getName()} to prophet.json?</question>",
+                false
             );
 
             if (!$helper->ask($input, $output, $question)) {
