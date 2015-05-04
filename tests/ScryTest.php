@@ -46,11 +46,12 @@ JSON
         //Some attempts with Symfony CommandTester and mocking were not
         //effective (specifically, the test contexts couldn't be separated),
         // so this should do for now.
+        // Means no code coverage stats though :(
         //TODO: revisit this, replace with mocks or different harness to separate contexts
 
         $output = shell_exec("./prophet scry -p ./magento");
 
-        echo $output;
+        $this->assertRegExp('/OK \(1 test, 1 assertion\)/', $output);
     }
 
     public function tearDown()
