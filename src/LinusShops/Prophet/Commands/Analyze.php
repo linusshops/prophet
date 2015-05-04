@@ -1,12 +1,12 @@
 <?php
 /**
- * Scan the project, looking for testable modules.
- * Then, attempt to build a skeleton prophet.json.
- *
- * @author Sam Schmidt
- * @date 2015-04-23
- * @company Linus Shops
- */
+     * Scan the project, looking for testable modules.
+     * Then, attempt to build a skeleton prophet.json.
+     *
+     * @author Sam Schmidt
+     * @date 2015-04-23
+     * @company Linus Shops
+     */
 
 namespace LinusShops\Prophet\Commands;
 
@@ -56,7 +56,7 @@ class Analyze extends Command
         //Check if prophet.json already exists, warn about possible overwrite.
         if (file_exists($input->getOption('path'))) {
             $question = new ConfirmationQuestion(
-                "<error>prophet.json already exists. Overwrite?</error>",false
+                "<error>prophet.json already exists. Overwrite?</error>", false
             );
 
             if (!$helper->ask($input, $output, $question)) {
