@@ -71,7 +71,7 @@ class Scry extends ProphetCommand
             $config = ConfigRepository::getConfig();
             $modulesRequested = $input->getOption('module');
 
-            if ($this->loadClasses($modulesRequested, $config, $output)) {
+            if ($this->loadClasses($modulesRequested, $config, $input, $output)) {
                 /** @var Module $module */
                 foreach ($config->getModuleList() as $module) {
                     if ($this->checkIfRequested($modulesRequested, $module, $output)) {
@@ -84,7 +84,7 @@ class Scry extends ProphetCommand
                             $output->writeln('Starting tests for ['.$module->getName().']');
 
                             $runner = new TestRunner();
-                            $runner->run($module->getPath());
+                            $runner->run($path = $input->getOption('path').'/'.$module->getPath());
                         }
                     }
                 }
@@ -92,7 +92,7 @@ class Scry extends ProphetCommand
         }
     }
 
-    private function loadClasses($modulesRequested, Config $config, OutputInterface $output)
+    private function loadClasses($modulesRequested, Config $config, InputInterface $input, OutputInterface $output)
     {
         $loaded = true;
         if ($config->hasModules()) {
@@ -101,7 +101,7 @@ class Scry extends ProphetCommand
         } else {
             $this->cli->veryVerbose('Loading Magento classes...', $output);
 
-            Magento::bootstrap();
+            Magento::bootstrap($input->getOption('path'));
 
             $this->showRequestedModuleList($modulesRequested, $output);
         }
