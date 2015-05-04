@@ -98,28 +98,19 @@ class Module
 
     public function createTestStructure()
     {
-        //Write phpunit.xml
-        $xml = <<<XML
-<?xml version="1.0" encoding="UTF-8"?>
-<phpunit stopOnFailure="false"
-         colors="true" syntaxCheck="true" verbose="false"
-         processIsolation="false" stderr="true">
-    <testsuite name="{$this->getName()} Tests">
-        <directory suffix="Test.php">tests</directory>
-    </testsuite>
-
-    <filter>
-        <!--Indicate locations to check for test coverage-->
-        <whitelist>
-            <directory suffix=".php">src/app/code</directory>
-        </whitelist>
-    </filter>
-</phpunit>
-XML;
-
-        file_put_contents($this->getPath().'/phpunit.xml', $xml);
+        file_put_contents($this->getPhpUnitPath(), $this->getPhpunitStandardXml());
 
         //Create tests directory
         mkdir($this->getPath().'/tests');
+    }
+
+    public function getPhpUnitPath()
+    {
+        return $this->getPath().'/phpunit.xml';
+    }
+
+    public function getPhpunitStandardXml()
+    {
+        return file_get_contents(ConfigRepository::getProphetPath().'/resources/phpunit.xml');
     }
 }

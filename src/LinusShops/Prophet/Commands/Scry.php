@@ -21,21 +21,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Scry extends ProphetCommand
 {
-    private $prophetCall;
-
-    public function __construct($prophetCall = 'prophet')
-    {
-        parent::__construct();
-
-        $this->prophetCall = $prophetCall;
-    }
-
     /**
      * @return string
      */
     public function getProphetCall()
     {
-        return $this->prophetCall;
+        return ConfigRepository::getProphetPath();
     }
 
     protected function configure()

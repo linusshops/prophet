@@ -13,6 +13,8 @@ namespace LinusShops\Prophet;
 class ConfigRepository {
     private static $config;
 
+    private static $prophetPath;
+
     /**
      * @return Config
      */
@@ -27,6 +29,22 @@ class ConfigRepository {
     public static function setConfig($config)
     {
         self::$config = $config;
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function getProphetPath()
+    {
+        return self::$prophetPath;
+    }
+
+    /**
+     * @param mixed $prophetPath
+     */
+    public static function setProphetPath($prophetPath)
+    {
+        self::$prophetPath = rtrim($prophetPath,'/');
     }
 
 
