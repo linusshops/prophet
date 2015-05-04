@@ -1,4 +1,8 @@
 <?php
+use LinusShops\Prophet\Commands\Scry;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Tester\CommandTester;
+
 /**
  * 
  *
@@ -9,8 +13,18 @@
 
 class ScryTest extends PHPUnit_Framework_TestCase
 {
-    public function testExample()
+    public function testScry()
     {
+        $application = new Application();
+        $application->add(new Scry());
 
+        $command = $application->find('scry');
+        $commandTester = new CommandTester($command);
+        $commandTester->execute(array(
+            'command' => $command->getName(),
+            '-p'=>'./magento'
+        ));
+
+        $output = $commandTester->getDisplay();
     }
 }
