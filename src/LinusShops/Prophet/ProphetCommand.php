@@ -21,11 +21,11 @@ class ProphetCommand extends Command
     protected function configure()
     {
         $this->addOption(
-            'config',
-            null,
+            'path',
+            'p',
             InputArgument::OPTIONAL,
-            'Path to the prophet.json file',
-            './prophet.json'
+            'Path to the magento root (defaults to current directory)',
+            '.'
         );
     }
 
@@ -41,10 +41,10 @@ class ProphetCommand extends Command
     private function checkFile(InputInterface $input, OutputInterface $output)
     {
         $exists = true;
-
-        if (file_exists($input->getOption('config')) === false) {
+        $path = $input->getOption('path').'/prophet.json';
+        if (file_exists($path) === false) {
             $output->writeln(
-                "<error>Failed to parse {$input->getOption('config')}: file not found.</error>"
+                "<error>Failed to parse {$path}: file not found.</error>"
             );
 
             $exists = false;
@@ -56,10 +56,11 @@ class ProphetCommand extends Command
     private function loadConfig(InputInterface $input, OutputInterface $output)
     {
         $loaded = true;
-        $json = json_decode(file_get_contents($input->getOption('config')), true);
+        $path = $input->getOption('path').'/prophet.json';
+        $json = json_decode(file_get_contents($path), true);
         if ($json === false) {
             $output->writeln(
-                "<error>Failed to parse {$input->getOption('config')}: invalid json.</error>"
+                "<error>Failed to parse {$path}: invalid json.</error>"
             );
 
             $loaded = false;

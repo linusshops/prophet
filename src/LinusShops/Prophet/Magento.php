@@ -14,21 +14,21 @@ class Magento
     protected static $loaded = false;
 
     protected static $magento = array(
-        'functions' => 'app/code/core/Mage/Core/functions.php',
-        'autoload' => 'lib/Varien/Autoload.php'
+        'functions' => '/app/code/core/Mage/Core/functions.php',
+        'autoload' => '/lib/Varien/Autoload.php'
     );
 
-    public static function bootstrap()
+    public static function bootstrap($path = '.')
     {
         if (!self::isLoaded()) {
 
             foreach (self::$magento as $file) {
-                require_once($file);
+                require_once($path.$file);
             }
 
             \Varien_Autoload::register();
 
-            require_once 'app/Mage.php';
+            require_once $path.'/app/Mage.php';
 
             \Mage::init();
 
