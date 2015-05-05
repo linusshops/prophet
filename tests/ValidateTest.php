@@ -7,7 +7,9 @@
  * @company Linus Shops
  */
 
-class ValidateTest extends PHPUnit_Framework_TestCase
+namespace LinusShops\Prophet;
+
+class ValidateTest extends \PHPUnit_Framework_TestCase
 {
     public function testExample()
     {

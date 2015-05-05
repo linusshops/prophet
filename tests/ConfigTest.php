@@ -1,4 +1,5 @@
 <?php
+namespace LinusShops\Prophet;
 use LinusShops\Prophet\Config;
 use LinusShops\Prophet\ConfigRepository;
 use LinusShops\Prophet\Exceptions\InvalidConfigException;
@@ -11,7 +12,7 @@ use LinusShops\Prophet\Exceptions\InvalidConfigException;
  * @company Linus Shops
  */
 
-class ConfigTest extends PHPUnit_Framework_TestCase {
+class ConfigTest extends \PHPUnit_Framework_TestCase {
     public function getValidParsedConfig() {
         return array(
             'modules' => array(
