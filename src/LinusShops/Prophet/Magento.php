@@ -1,11 +1,11 @@
 <?php
 /**
- * Boostraps the containing Magento installation
- *
- * @author Sam Schmidt
- * @date 2015-04-17
- * @company Linus Shops
- */
+     * Boostraps the containing Magento installation
+     *
+     * @author Sam Schmidt
+     * @date 2015-04-17
+     * @company Linus Shops
+     */
 
 namespace LinusShops\Prophet;
 
