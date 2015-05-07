@@ -21,13 +21,9 @@ class ScryTest extends \PHPUnit_Framework_TestCase
 {
     private $path = './magento/prophet.json';
 
-    public function setUp()
+    public function getJson()
     {
-        if (file_exists($this->path)) {
-            unlink($this->path);
-        }
-
-        file_put_contents($this->path, <<<JSON
+        return <<<JSON
 {
     "modules": [
         {
@@ -36,8 +32,16 @@ class ScryTest extends \PHPUnit_Framework_TestCase
         }
     ]
 }
-JSON
-        );
+JSON;
+    }
+
+    public function setUp()
+    {
+        if (file_exists($this->path)) {
+            unlink($this->path);
+        }
+
+        file_put_contents($this->path, $this->getJson());
     }
 
     public function tearDown()
