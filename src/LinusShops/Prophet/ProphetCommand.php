@@ -33,7 +33,9 @@ class ProphetCommand extends Command
     {
         $loaded = $this->checkFile($input, $output);
 
-        $loaded = $loaded ? $this->loadConfig($input, $output) : $loaded;
+        $loaded = $loaded ?
+            ConfigRepository::loadConfig($input->getOption('path'))
+            : $loaded;
 
         return $loaded;
     }
@@ -53,21 +55,5 @@ class ProphetCommand extends Command
         return $exists;
     }
 
-    private function loadConfig(InputInterface $input, OutputInterface $output)
-    {
-        $loaded = true;
-        $path = $input->getOption('path').'/prophet.json';
-        $json = json_decode(file_get_contents($path), true);
-        if ($json === false) {
-            $output->writeln(
-                "<error>Failed to parse {$path}: invalid json.</error>"
-            );
 
-            $loaded = false;
-        } else {
-            ConfigRepository::setConfig(new Config($json));
-        }
-
-        return $loaded;
-    }
 }

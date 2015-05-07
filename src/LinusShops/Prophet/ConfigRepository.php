@@ -47,5 +47,17 @@ class ConfigRepository {
         self::$prophetPath = rtrim($prophetPath, '/');
     }
 
+    public static function loadConfig($path)
+    {
+        $loaded = true;
+        $path = $path.'/prophet.json';
+        $json = json_decode(file_get_contents($path), true);
+        if ($json === false) {
+            $loaded = false;
+        } else {
+            self::setConfig(new Config($json));
+        }
 
+        return $loaded;
+    }
 }
