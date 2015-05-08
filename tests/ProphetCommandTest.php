@@ -78,6 +78,6 @@ JSON;
             '-p' => './magento'
         ));
 
-        echo $commandTester->getDisplay();
+        //$commandTester->getDisplay();
     }
 }
