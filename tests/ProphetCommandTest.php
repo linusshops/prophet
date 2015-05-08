@@ -40,12 +40,20 @@ JSON;
     public function getPhpUnitXml()
     {
         return <<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+
 <phpunit colors="true">
     <testsuites>
-        <testsuite name="Dummy Test Suite">
+        <testsuite name="Prophet Test Suite">
             <directory suffix="Test.php">./tests/</directory>
         </testsuite>
     </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>./src</directory>
+        </whitelist>
+    </filter>
 </phpunit>
 XML;
 
@@ -91,16 +99,16 @@ XML;
 
     public function testScryFullExecution()
     {
+        $this->makePhpunitXml();
         $output = shell_exec("./prophet scry -p ./magento");
 
         $this->assertRegExp('/OK \(1 test, 1 assertion\)/', $output);
+        $this->destroyPhpunitXml();
     }
 
     public function testValidateCommand()
     {
-        //Create dummy phpunit.xml
-
-        ////
+        $this->makePhpunitXml();
 
         $application = new Application();
         $application->add(new Validate());
@@ -112,11 +120,16 @@ XML;
             '--path' => './magento'
         ));
 
-        echo $commandTester->getDisplay();
+        $output =  $commandTester->getDisplay();
+
+        $this->assertRegExp('/test-module validated/', $output);
+
+        $this->destroyPhpunitXml();
     }
 
-    public function testValidateCommandWithoutPhpunit()
+    public function testValidateCommandWithoutPhpunitXml()
     {
+        $this->destroyPhpunitXml();
         $application = new Application();
         $application->add(new Validate());
 
@@ -129,7 +142,6 @@ XML;
 
         $output = $commandTester->getDisplay();
 
-        $this->assertRegExp('/is not valid/',$output);
-        $this->assertRegExp('/does not contain a phpunit.xml/',$output);
+        $this->assertRegExp('/does not contain a phpunit.xml/', $output);
     }
 }
