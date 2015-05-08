@@ -59,23 +59,25 @@ class Module
      * Check if the module is valid for testing with prophet
      * @return boolean
      */
-    public function validate()
+    public function validate($pathPrefix = '')
     {
         $valid = true;
 
+        $path = empty($pathPrefix) ? $this->getPath() : $pathPrefix.'/'.$this->getPath();
+
         //Confirm path is valid
-        if (!is_dir($this->getPath())) {
+        if (!is_dir($path)) {
             $valid = $this->addValidationError(
                 $this->getName().
-                ': Path ['.$this->getPath().'] is not valid.'
+                ': Path ['.$path.'] is not valid.'
             );
         }
 
         //Confirm existence of phpunit.xml in path
-        if (!file_exists($this->getPath().'/phpunit.xml')) {
+        if (!file_exists($path.'/phpunit.xml')) {
             $valid = $this->addValidationError(
                 $this->getName().
-                ': ['.$this->getPath().'] does not contain a phpunit.xml.'
+                ': ['.$path.'] does not contain a phpunit.xml.'
             );
         }
 

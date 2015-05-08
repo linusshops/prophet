@@ -21,6 +21,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 class ProphetCommandTest extends \PHPUnit_Framework_TestCase
 {
     private $path = './magento';
+    private $modulePath = '/vendor/linusshops/prophet-magento-test-module';
 
     public function getJson()
     {
@@ -36,9 +37,48 @@ class ProphetCommandTest extends \PHPUnit_Framework_TestCase
 JSON;
     }
 
+    public function getPhpUnitXml()
+    {
+        return <<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit colors="true">
+    <testsuites>
+        <testsuite name="Prophet Test Suite">
+            <directory suffix="Test.php">./tests/</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>./src</directory>
+        </whitelist>
+    </filter>
+</phpunit>
+XML;
+
+    }
+
     public function getJsonPath()
     {
         return $this->path.'/prophet.json';
+    }
+
+    public function makePhpunitXml()
+    {
+        if (!file_exists($this->path.'/'.$this->modulePath.'/phpunit.xml')) {
+            file_put_contents(
+                $this->path.'/'.$this->modulePath.'/phpunit.xml',
+                $this->getPhpUnitXml()
+            );
+        }
+    }
+
+    public function destroyPhpunitXml()
+    {
+        if (file_exists($this->path.'/'.$this->modulePath.'/phpunit.xml')) {
+            unlink($this->path.'/'.$this->modulePath.'/phpunit.xml');
+        }
     }
 
     public function setUp()
@@ -59,24 +99,49 @@ JSON;
 
     public function testScryFullExecution()
     {
+        $this->makePhpunitXml();
         $output = shell_exec("./prophet scry -p ./magento");
 
         $this->assertRegExp('/OK \(1 test, 1 assertion\)/', $output);
+        $this->destroyPhpunitXml();
     }
 
     public function testValidateCommand()
     {
+        $this->makePhpunitXml();
+
         $application = new Application();
         $application->add(new Validate());
 
         $command = $application->find('validate');
         $commandTester = new CommandTester($command);
         $commandTester->execute(array(
-            'command' => $command->getName()
-        ), array(
-            '-p' => './magento'
+            'command' => $command->getName(),
+            '--path' => './magento'
         ));
 
-        //$commandTester->getDisplay();
+        $output =  $commandTester->getDisplay();
+
+        $this->assertRegExp('/test-module validated/', $output);
+
+        $this->destroyPhpunitXml();
+    }
+
+    public function testValidateCommandWithoutPhpunitXml()
+    {
+        $this->destroyPhpunitXml();
+        $application = new Application();
+        $application->add(new Validate());
+
+        $command = $application->find('validate');
+        $commandTester = new CommandTester($command);
+        $commandTester->execute(array(
+            'command' => $command->getName(),
+            '--path' => './magento'
+        ));
+
+        $output = $commandTester->getDisplay();
+
+        $this->assertRegExp('/does not contain a phpunit.xml/', $output);
     }
 }
