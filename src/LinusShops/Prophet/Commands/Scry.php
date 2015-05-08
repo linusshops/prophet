@@ -75,9 +75,9 @@ class Scry extends ProphetCommand
                 /** @var Module $module */
                 foreach ($config->getModuleList() as $module) {
                     if ($this->checkIfRequested($modulesRequested, $module, $output)) {
-                        if ($this->isIsolated($module, $input)) {
+                        if (!$this->isIsolated($input)) {
                             $output->writeln("<info>Isolating {$module->getName()}</info>");
-                            $cmd = $this->getProphetCall()." scry --isolated -m {$module->getName()}";
+                            $cmd = $this->getProphetCall()." scry --isolated -m {$module->getName()} -p {$input->getOption('path')}";
                             $this->cli->veryVerbose($cmd, $output);
                             passthru($cmd);
                         } else {
@@ -109,9 +109,9 @@ class Scry extends ProphetCommand
         return $loaded;
     }
 
-    private function isIsolated($module, InputInterface $input)
+    private function isIsolated(InputInterface $input)
     {
-        return $module->isIsolated() && !$input->getOption('isolated');
+        return $input->getOption('isolated');
     }
 
     private function checkIfRequested($modulesRequested, $module, OutputInterface $output)
