@@ -120,6 +120,25 @@ XML;
         $this->destroyPhpunitXml();
     }
 
+    public function testMissingProphetJson()
+    {
+        $this->tearDown();
+
+        $application = new Application();
+        $application->add(new Validate());
+
+        $command = $application->find('validate');
+        $commandTester = new CommandTester($command);
+        $commandTester->execute(array(
+            'command' => $command->getName(),
+            '--path' => './magento'
+        ));
+
+        $output =  $commandTester->getDisplay();
+
+        $this->assertRegExp('/Failed to parse/', $output);
+    }
+
     public function testValidateCommand()
     {
         $this->makePhpunitXml();
@@ -175,5 +194,10 @@ XML;
         $output = $commandTester->getDisplay();
 
         $this->assertRegExp('/is not valid/', $output);
+    }
+
+    public function testInitCommand()
+    {
+
     }
 }
