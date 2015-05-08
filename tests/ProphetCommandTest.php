@@ -21,6 +21,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 class ProphetCommandTest extends \PHPUnit_Framework_TestCase
 {
     private $path = './magento';
+    private $modulePath = '/vendor/linusshops/prophet-magento-test-module';
 
     public function getJson()
     {
@@ -36,6 +37,20 @@ class ProphetCommandTest extends \PHPUnit_Framework_TestCase
 JSON;
     }
 
+    public function getPhpUnitXml()
+    {
+        return <<<XML
+<phpunit colors="true">
+    <testsuites>
+        <testsuite name="Dummy Test Suite">
+            <directory suffix="Test.php">./tests/</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
+XML;
+
+    }
+
     public function getJsonPath()
     {
         return $this->path.'/prophet.json';
@@ -43,12 +58,19 @@ JSON;
 
     public function makePhpunitXml()
     {
-
+        if (!file_exists($this->path.'/'.$this->modulePath.'/phpunit.xml')) {
+            file_put_contents(
+                $this->path.'/'.$this->modulePath.'/phpunit.xml',
+                $this->getPhpUnitXml()
+            );
+        }
     }
 
     public function destroyPhpunitXml()
     {
-
+        if (file_exists($this->path.'/'.$this->modulePath.'/phpunit.xml')) {
+            unlink($this->path.'/'.$this->modulePath.'/phpunit.xml');
+        }
     }
 
     public function setUp()
@@ -77,22 +99,20 @@ JSON;
     public function testValidateCommand()
     {
         //Create dummy phpunit.xml
-        if (!file_exists($this->path.'/vendor/linusshops/prophet-magento-test-module/phpunit.xml')) {
 
-        }
         ////
 
-//        $application = new Application();
-//        $application->add(new Validate());
-//
-//        $command = $application->find('validate');
-//        $commandTester = new CommandTester($command);
-//        $commandTester->execute(array(
-//            'command' => $command->getName(),
-//            '--path' => './magento'
-//        ));
-//
-//        echo $commandTester->getDisplay();
+        $application = new Application();
+        $application->add(new Validate());
+
+        $command = $application->find('validate');
+        $commandTester = new CommandTester($command);
+        $commandTester->execute(array(
+            'command' => $command->getName(),
+            '--path' => './magento'
+        ));
+
+        echo $commandTester->getDisplay();
     }
 
     public function testValidateCommandWithoutPhpunit()
