@@ -43,7 +43,6 @@ JSON;
 
     public function setUp()
     {
-        echo $this->getJsonPath();
         if (file_exists($this->getJsonPath())) {
             unlink($this->getJsonPath());
         }
