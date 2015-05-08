@@ -13,6 +13,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 namespace LinusShops\Prophet;
 
+use LinusShops\Prophet\Commands\Init;
 use LinusShops\Prophet\Commands\Scry;
 use LinusShops\Prophet\Commands\Validate;
 use Symfony\Component\Console\Application;
@@ -113,6 +114,9 @@ XML;
 
     public function testScryFullExecution()
     {
+        //This is kind of a hack for now- phpunit context gets shared
+        //when executing nested instances of phpunit, so spin it off
+        //and check the returned output for expected string
         $this->makePhpunitXml();
         $output = shell_exec("./prophet scry -p ./magento");
 
@@ -198,6 +202,27 @@ XML;
 
     public function testInitCommand()
     {
+        $this->destroyPhpunitXml();
+
+        $application = new Application();
+        $application->add(new Init());
+        $command = $application->find('init');
+
+        //We'll need to mock the question helpers
+        $question = $this->getMock('Symfony\Component\Console\Helper\QuestionHelper', array('ask'));
+        $question->expects($this->at(0))
+            ->method('ask')
+            ->will($this->returnValue(true));
+
+        $command->getHelperSet()->set($question, 'question');
+
+        $commandTester = new CommandTester($command);
+        $commandTester->execute(array(
+            'command' => $command->getName(),
+            '--path' => './magento'
+        ));
+
+        echo $commandTester->getDisplay();
 
     }
 }
