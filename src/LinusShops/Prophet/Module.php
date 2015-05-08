@@ -98,21 +98,42 @@ class Module
         return $this->validationErrors;
     }
 
-    public function createTestStructure()
+    public function createTestStructure($pathPrefix='.')
     {
-        file_put_contents($this->getPhpUnitPath(), $this->getPhpunitStandardXml());
+        file_put_contents($this->getPhpUnitPath($pathPrefix), $this->getPhpunitStandardXml());
 
         //Create tests directory
-        mkdir($this->getPath().'/tests');
+        if(!file_exists($pathPrefix.'/'.$this->getPath())){
+            mkdir($pathPrefix.'/'.$this->getPath().'/tests');
+        }
+
     }
 
-    public function getPhpUnitPath()
+    public function getPhpUnitPath($pathPrefix = '.')
     {
-        return $this->getPath().'/phpunit.xml';
+        return $pathPrefix.'/'.$this->getPath().'/phpunit.xml';
     }
 
     public function getPhpunitStandardXml()
     {
-        return file_get_contents(ConfigRepository::getProphetPath().'/resources/phpunit.xml');
+        return <<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit colors="true">
+    <testsuites>
+        <testsuite name="Prophet Test Suite">
+            <directory suffix="Test.php">./tests/</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>./src</directory>
+        </whitelist>
+    </filter>
+</phpunit>
+
+XML;
+
     }
 }

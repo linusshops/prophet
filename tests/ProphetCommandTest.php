@@ -117,6 +117,7 @@ XML;
         //This is kind of a hack for now- phpunit context gets shared
         //when executing nested instances of phpunit, so spin it off
         //and check the returned output for expected string
+        $this->destroyPhpunitXml();
         $this->makePhpunitXml();
         $output = shell_exec("./prophet scry -p ./magento");
 
@@ -209,7 +210,9 @@ XML;
         $command = $application->find('init');
 
         //We'll need to mock the question helpers
-        $question = $this->getMock('Symfony\Component\Console\Helper\QuestionHelper', array('ask'));
+        $question = $this->getMock(
+            'Symfony\Component\Console\Helper\QuestionHelper',
+            array('ask'));
         $question->expects($this->at(0))
             ->method('ask')
             ->will($this->returnValue(true));
@@ -222,7 +225,8 @@ XML;
             '--path' => './magento'
         ));
 
-        echo $commandTester->getDisplay();
+        $output = $commandTester->getDisplay();
 
+        $this->assertRegExp('/Initializing test-module/', $output);
     }
 }

@@ -51,7 +51,7 @@ class Init extends ProphetCommand
     private function initModule(Config $config, Module $module, InputInterface $input, OutputInterface $output)
     {
         $output->writeln("Initializing {$module->getName()}");
-        $module->createTestStructure();
+        $module->createTestStructure($input->getOption('path'));
 
         //Add to prophet.json
         $helper = $this->getHelper('question');
