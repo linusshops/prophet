@@ -41,6 +41,16 @@ JSON;
         return $this->path.'/prophet.json';
     }
 
+    public function makePhpunitXml()
+    {
+
+    }
+
+    public function destroyPhpunitXml()
+    {
+
+    }
+
     public function setUp()
     {
         if (file_exists($this->getJsonPath())) {
@@ -66,17 +76,40 @@ JSON;
 
     public function testValidateCommand()
     {
+        //Create dummy phpunit.xml
+        if (!file_exists($this->path.'/vendor/linusshops/prophet-magento-test-module/phpunit.xml')) {
+
+        }
+        ////
+
+//        $application = new Application();
+//        $application->add(new Validate());
+//
+//        $command = $application->find('validate');
+//        $commandTester = new CommandTester($command);
+//        $commandTester->execute(array(
+//            'command' => $command->getName(),
+//            '--path' => './magento'
+//        ));
+//
+//        echo $commandTester->getDisplay();
+    }
+
+    public function testValidateCommandWithoutPhpunit()
+    {
         $application = new Application();
         $application->add(new Validate());
 
         $command = $application->find('validate');
         $commandTester = new CommandTester($command);
         $commandTester->execute(array(
-            'command' => $command->getName()
-        ), array(
-            '-p' => './magento'
+            'command' => $command->getName(),
+            '--path' => './magento'
         ));
 
-        //$commandTester->getDisplay();
+        $output = $commandTester->getDisplay();
+
+        $this->assertRegExp('/is not valid/',$output);
+        $this->assertRegExp('/does not contain a phpunit.xml/',$output);
     }
 }
