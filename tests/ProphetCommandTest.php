@@ -37,6 +37,20 @@ class ProphetCommandTest extends \PHPUnit_Framework_TestCase
 JSON;
     }
 
+    public function getJsonWithInvalidPath()
+    {
+        return <<<JSON
+{
+    "modules": [
+        {
+            "path": "vendor/linusshops/prophet-magento-fake-module",
+            "name": "fake-module"
+        }
+    ]
+}
+JSON;
+    }
+
     public function getPhpUnitXml()
     {
         return <<<XML
@@ -143,5 +157,23 @@ XML;
         $output = $commandTester->getDisplay();
 
         $this->assertRegExp('/does not contain a phpunit.xml/', $output);
+    }
+
+    public function testValidateCommandWithInvalidPath()
+    {
+        file_put_contents($this->getJsonPath(), $this->getJsonWithInvalidPath());
+        $application = new Application();
+        $application->add(new Validate());
+
+        $command = $application->find('validate');
+        $commandTester = new CommandTester($command);
+        $commandTester->execute(array(
+            'command' => $command->getName(),
+            '--path' => './magento'
+        ));
+
+        $output = $commandTester->getDisplay();
+
+        $this->assertRegExp('/is not valid/', $output);
     }
 }
