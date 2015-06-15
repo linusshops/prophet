@@ -31,19 +31,17 @@ class Validate extends ProphetCommand
     {
         $setupSuccessful = parent::execute($input, $output);
 
-        if (!$setupSuccessful) {
-            return;
+        if ($setupSuccessful) {
+            $config = ConfigRepository::getConfig();
+            $this->validateModules($config->getModuleList(), $output, $config->getPathPrefix());
         }
-
-        $config = ConfigRepository::getConfig();
-        $this->validateModules($config->getModuleList(), $output);
     }
 
-    protected function validateModules($moduleList, OutputInterface $output)
+    protected function validateModules($moduleList, OutputInterface $output, $pathPrefix = '')
     {
         /** @var Module $module */
         foreach ($moduleList as $module) {
-            if ($module->validate()) {
+            if ($module->validate($pathPrefix)) {
                 $output->writeln($module->getName().' validated.');
             } else {
                 foreach ($module->getValidationErrors() as $error) {

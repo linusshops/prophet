@@ -17,13 +17,16 @@ class Config
 {
     private $modules;
     private $prophetFilePath;
+    private $pathPrefix;
 
     /**
      * Loads a prophet.json, replacing whatever is currently held by this object
      * @param string $prophet parsed JSON
      */
-    public function __construct($prophet)
+    public function __construct($prophet, $prefix = '')
     {
+        $this->pathPrefix = $prefix;
+
         if (!is_array($prophet)) {
             throw new InvalidConfigException('Config::loadConfig expects an array.');
         }
@@ -98,5 +101,13 @@ class Config
     public function setProphetFilePath($prophetFilePath)
     {
         $this->prophetFilePath = $prophetFilePath;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPathPrefix()
+    {
+        return $this->pathPrefix;
     }
 }

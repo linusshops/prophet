@@ -12,6 +12,7 @@ namespace LinusShops\Prophet\Commands;
 use LinusShops\Prophet\Config;
 use LinusShops\Prophet\ConfigRepository;
 use LinusShops\Prophet\ConsoleHelper;
+use LinusShops\Prophet\Events;
 use LinusShops\Prophet\Magento;
 use LinusShops\Prophet\Module;
 use LinusShops\Prophet\ProphetCommand;
@@ -19,6 +20,7 @@ use LinusShops\Prophet\TestRunner;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class Scry extends ProphetCommand
 {
@@ -70,6 +72,7 @@ class Scry extends ProphetCommand
         if ($setupSuccessful) {
             $config = ConfigRepository::getConfig();
             $modulesRequested = $input->getOption('module');
+            $dispatcher = new EventDispatcher();
 
             if ($this->loadClasses($modulesRequested, $config, $input, $output)) {
                 /** @var Module $module */
@@ -77,14 +80,75 @@ class Scry extends ProphetCommand
                     if ($this->checkIfRequested($modulesRequested, $module, $output)) {
                         if (!$this->isIsolated($input)) {
                             $output->writeln("<info>Isolating {$module->getName()}</info>");
-                            $cmd = $this->getProphetCall()." scry --isolated -m {$module->getName()} -p {$input->getOption('path')}";
+                            $cmd = $this->getProphetCall()
+                                . " scry --isolated -m {$module->getName()} -p {$input->getOption('path')}";
                             $this->cli->veryVerbose($cmd, $output);
                             passthru($cmd);
                         } else {
-                            $output->writeln('Starting tests for ['.$module->getName().']');
+                            $path = $module->getPath().'/tests/ProphetEvents.php';
+                            if (file_exists($path)) {
+                                include $path;
+                            }
 
+                            $modulePath = $module->getPath();
+                            $rootPath = $input->getOption('path');
+
+                            //Register a custom autoloader so that controller classes
+                            //can be loaded for testing.
+                            $localPool = function ($classname) use ($modulePath, $rootPath) {
+                                if (strpos($classname, 'Controller') !== false) {
+                                    $parts = explode('_', $classname);
+
+                                    $loadpath = $rootPath.'/'.$modulePath.'/src/app/code/local';
+                                    foreach ($parts as $part) {
+                                        if (strpos($part, 'Controller') === false) {
+                                            $loadpath .= '/' . $part;
+                                        } else {
+                                            $loadpath .= '/Controllers/'.$part;
+                                        }
+                                    }
+
+                                    $loadpath .= '.php';
+
+                                    if (file_exists($loadpath)) {
+                                        include $loadpath;
+                                    }
+                                }
+                            };
+
+                            $communityPool = function ($classname) use ($modulePath, $rootPath) {
+                                if (strpos($classname, 'Controller') !== false) {
+                                    $parts = explode('_', $classname);
+
+                                    $loadpath = $rootPath.'/'.$modulePath.'/src/app/code/community/';
+                                    foreach ($parts as $part) {
+                                        if (strpos($classname, 'Controller') === false) {
+                                            $loadpath .= '/' . $part;
+                                        } else {
+                                            $loadpath .= '/Controllers/'.$part;
+                                        }
+                                    }
+
+                                    $loadpath .= '.php';
+
+                                    if (file_exists($loadpath)) {
+                                        include $loadpath;
+                                    }
+                                }
+                            };
+
+                            //This autoloader is prepended, as the Varien autoloader
+                            //will cause everything to die if it can't find the class. Also,
+                            //this will give us a hook in the future if Prophet ever
+                            //needs to intercept class loading.
+                            spl_autoload_register($localPool, true, true);
+                            spl_autoload_register($communityPool, true, true);
+
+                            $output->writeln('Starting tests for ['.$module->getName().']');
+                            $dispatcher->dispatch(Events::PROPHET_PREMODULE, new Events\Module($module));
                             $runner = new TestRunner();
                             $runner->run($path = $input->getOption('path').'/'.$module->getPath());
+                            $dispatcher->dispatch(Events::PROPHET_POSTMODULE, new Events\Module($module));
                         }
                     }
                 }
