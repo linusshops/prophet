@@ -15,12 +15,13 @@ class TestRunner
      * Call the same functions used by the CLI PHPUnit
      * to engage the tests
      * @param string $modulePath path to the phpunit.xml to use
+     * @param bool $coverage
      * @return int
-     *      0: Tests successful
-     *      1: Tests failed
-     *      2: Failed with exception
+     * 0: Tests successful
+     * 1: Tests failed
+     * 2: Failed with exception
      */
-    public function run($modulePath)
+    public function run($modulePath, $coverage = false)
     {
         $runner = new \PHPUnit_TextUI_Command();
         $options = array(
@@ -28,6 +29,10 @@ class TestRunner
             '--configuration',
             $modulePath.'/phpunit.xml'
         );
+
+        if ($coverage) {
+            $options[] = '--coverage-text';
+        }
 
         return $runner->run($options, false);
     }
