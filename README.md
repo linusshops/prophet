@@ -65,6 +65,8 @@ Prophet must be executed from the command line at the Magento root.
 
 `prophet help [command]`: View help for a specific command.
 
+For troubleshooting, you can increase verbosity with `-vvv`, as with any symfony/console app.
+
 ##Events and Bootstrapping
 
 Events can be listened for using symfony/event-dispatcher.
