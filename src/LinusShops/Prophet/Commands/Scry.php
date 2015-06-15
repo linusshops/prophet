@@ -90,6 +90,55 @@ class Scry extends ProphetCommand
                                 include $path;
                             }
 
+                            $modulePath = $module->getPath();
+
+                            //Register a custom autoloader so that controller classes
+                            //can be loaded for testing.
+                            $localPool = function ($classname) use ($modulePath) {
+                                if (strpos($classname, 'Controller') !== false) {
+                                    $parts = explode('_', $classname);
+
+                                    $loadpath = $modulePath.'app/code/local/';
+                                    foreach ($parts as $part) {
+                                        if (strpos($classname, 'Controller') === false) {
+                                            $loadpath .= '/' . $part;
+                                        } else {
+                                            $loadpath .= '/Controllers/'.$part;
+                                        }
+                                    }
+
+                                    if (file_exists($loadpath)) {
+                                        include $loadpath;
+                                    }
+                                }
+                            };
+
+                            $communityPool = function ($classname) use ($modulePath) {
+                                if (strpos($classname, 'Controller') !== false) {
+                                    $parts = explode('_', $classname);
+
+                                    $loadpath = $modulePath.'app/code/community/';
+                                    foreach ($parts as $part) {
+                                        if (strpos($classname, 'Controller') === false) {
+                                            $loadpath .= '/' . $part;
+                                        } else {
+                                            $loadpath .= '/Controllers/'.$part;
+                                        }
+                                    }
+
+                                    if (file_exists($loadpath)) {
+                                        include $loadpath;
+                                    }
+                                }
+                            };
+
+                            //This autoloader is prepended, as the Varien autoloader
+                            //will cause everything to die if it can't find the class. Also,
+                            //this will give us a hook in the future if Prophet ever
+                            //needs to intercept class loading.
+                            spl_autoload_register($localPool, true, true);
+                            spl_autoload_register($communityPool, true, true);
+
                             $output->writeln('Starting tests for ['.$module->getName().']');
                             $dispatcher->dispatch(Events::PROPHET_PREMODULE, new Events\Module($module));
                             $runner = new TestRunner();
