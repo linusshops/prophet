@@ -9,7 +9,7 @@
 
 namespace LinusShops\Prophet\Overrides;
 
-class Response extends Mage_Core_Controller_Response_Http
+class Response extends \Mage_Core_Controller_Response_Http
 {
     /**
      * When we're testing with this class, we don't care about actually sending

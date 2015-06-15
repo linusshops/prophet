@@ -9,7 +9,7 @@
 
 namespace LinusShops\Prophet\Overrides;
 
-class Request extends Mage_Core_Controller_Request_Http
+class Request extends \Mage_Core_Controller_Request_Http
 {
     private $requestMethod = null;
 
