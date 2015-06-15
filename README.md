@@ -76,6 +76,12 @@ will fail over to the Varien autloader in the event it cannot find anything.
 
 Eventually, this will be abstracted in such a way that any class can be intercepted by Prophet's autoloader.
 
+## Custom Classes
+
+Prophet includes some classes for testing that can be used in place of the regular classes.  See the overrides dir.
+
+These classes can be instantiated in your tests using the Classes helper.
+
 ## Author
 
 [Samuel Schmidt](https://github.com/dersam)
