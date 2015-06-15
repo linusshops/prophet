@@ -85,6 +85,11 @@ class Scry extends ProphetCommand
                             $this->cli->veryVerbose($cmd, $output);
                             passthru($cmd);
                         } else {
+                            $path = $module->getPath().'/tests/ProphetEvents.php';
+                            if (file_exists($path)) {
+                                include $path;
+                            }
+
                             $output->writeln('Starting tests for ['.$module->getName().']');
                             $dispatcher->dispatch(Events::PROPHET_PREMODULE, new Events\Module($module));
                             $runner = new TestRunner();
