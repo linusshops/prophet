@@ -62,6 +62,12 @@ class Scry extends ProphetCommand
                 'Indicates to prophet that it is running as a subprocess, and'.
                 ' should assume it has only one module to run.'
             )
+            ->addOption(
+                'coverage',
+                null,
+                InputOption::VALUE_NONE,
+                'If set, will display code coverage report'
+            )
         ;
     }
 
@@ -82,6 +88,9 @@ class Scry extends ProphetCommand
                             $output->writeln("<info>Isolating {$module->getName()}</info>");
                             $cmd = $this->getProphetCall()
                                 . " scry --isolated -m {$module->getName()} -p {$input->getOption('path')}";
+                            if ($input->getOption('coverage')) {
+                                $cmd .= ' --coverage';
+                            }
                             $this->cli->veryVerbose($cmd, $output);
                             passthru($cmd);
                         } else {
@@ -156,7 +165,10 @@ class Scry extends ProphetCommand
                             $output->writeln('Starting tests for ['.$module->getName().']');
                             $dispatcher->dispatch(Events::PROPHET_PREMODULE, new Events\Module($module));
                             $runner = new TestRunner();
-                            $runner->run($path = $input->getOption('path').'/'.$module->getPath());
+                            $runner->run(
+                                $path = $input->getOption('path').'/'.$module->getPath(),
+                                $input->getOption('coverage')
+                            );
                             $dispatcher->dispatch(Events::PROPHET_POSTMODULE, new Events\Module($module));
                         }
                     }
