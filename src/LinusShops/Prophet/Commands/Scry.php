@@ -91,21 +91,24 @@ class Scry extends ProphetCommand
                             }
 
                             $modulePath = $module->getPath();
+                            $rootPath = $input->getOption('path');
 
                             //Register a custom autoloader so that controller classes
                             //can be loaded for testing.
-                            $localPool = function ($classname) use ($modulePath) {
+                            $localPool = function ($classname) use ($modulePath, $rootPath) {
                                 if (strpos($classname, 'Controller') !== false) {
                                     $parts = explode('_', $classname);
 
-                                    $loadpath = $modulePath.'app/code/local/';
+                                    $loadpath = $rootPath.'/'.$modulePath.'/src/app/code/local';
                                     foreach ($parts as $part) {
-                                        if (strpos($classname, 'Controller') === false) {
+                                        if (strpos($part, 'Controller') === false) {
                                             $loadpath .= '/' . $part;
                                         } else {
                                             $loadpath .= '/Controllers/'.$part;
                                         }
                                     }
+
+                                    $loadpath .= '.php';
 
                                     if (file_exists($loadpath)) {
                                         include $loadpath;
@@ -113,11 +116,11 @@ class Scry extends ProphetCommand
                                 }
                             };
 
-                            $communityPool = function ($classname) use ($modulePath) {
+                            $communityPool = function ($classname) use ($modulePath, $rootPath) {
                                 if (strpos($classname, 'Controller') !== false) {
                                     $parts = explode('_', $classname);
 
-                                    $loadpath = $modulePath.'app/code/community/';
+                                    $loadpath = $rootPath.'/'.$modulePath.'/src/app/code/community/';
                                     foreach ($parts as $part) {
                                         if (strpos($classname, 'Controller') === false) {
                                             $loadpath .= '/' . $part;
@@ -125,6 +128,8 @@ class Scry extends ProphetCommand
                                             $loadpath .= '/Controllers/'.$part;
                                         }
                                     }
+
+                                    $loadpath .= '.php';
 
                                     if (file_exists($loadpath)) {
                                         include $loadpath;
