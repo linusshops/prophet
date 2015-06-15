@@ -117,6 +117,30 @@ injects a general autoloader that will look in this directory for a class before
 Prophet loaders have priority over the Varien autoloader.  Essentially, this allows you to do
 testing-specific rewrites and overrides, without any risk of it being used in normal execution.
 
+##Controller test example
+
+```
+public function testRecentAction()
+{
+    $request = LinusShops\Prophet\Helpers\Classes::getRequest();
+    $request->setMethod('GET');
+
+    $response = LinusShops\Prophet\Helpers\Classes::getResponse();
+
+    $controller = new Linus_Garage_SampleController($request, $response);
+    $controller->indexAction();
+    $headers = $controller->getResponse()->getHeaders();
+    $this->assertEquals($headers[0]['name'], 'Content-Type');
+    $this->assertEquals($headers[0]['value'], 'application/json');
+
+    $body = $controller->getResponse()->getBody();
+    $json = json_decode($body, true);
+    $this->assertTrue($json !== false);
+
+    $this->assertArrayHasKey('orders', $json);
+}
+```
+
 ## Author
 
 [Samuel Schmidt](https://github.com/dersam)
