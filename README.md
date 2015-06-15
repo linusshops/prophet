@@ -46,13 +46,13 @@ Events can be listened for using symfony/event-dispatcher.
 `prophet.postmodule`: Fired right after the module test suite is completed (regardless of success or failure).
 
 ```
-$dispatcher = new \\Symfony\\Component\\EventDispatcher\\EventDispatcher();
+$dispatcher = new \Symfony\Component\EventDispatcher\EventDispatcher();
 
- $dispatcher->addListener('prophet.premodule', function (\\Symfony\\Component\\EventDispatcher\\Event $event) {
+ $dispatcher->addListener('prophet.premodule', function (\Symfony\Component\EventDispatcher\Event $event) {
      echo "PREMODULE";
  });
 
- $dispatcher->addListener('prophet.premodule', function (\\Symfony\\Component\\EventDispatcher\\Event $event) {
+ $dispatcher->addListener('prophet.premodule', function (\Symfony\Component\EventDispatcher\Event $event) {
      echo "POSTMODULE";
  });
 ```
