@@ -33,6 +33,7 @@
     "php": ">=5.3",
     "ext-json": "*",
     "symfony/console": "~2.6",
+    "symfony/event-dispatcher":"~2.7",
     "phpunit/phpunit": "^4.6.4"
   },
   "bin": [
