@@ -84,7 +84,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
         );
         $config = ConfigRepository::getConfig();
 
-        $module = new \LinusShops\Prophet\Module('test','path/to/test');
+        $module = new \LinusShops\Prophet\Module('test', 'path/to/test');
         $config->writeModule($module);
 
         $this->assertFileExists('prophet.json');

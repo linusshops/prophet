@@ -34,18 +34,16 @@ class Init extends ProphetCommand
     {
         $setupSuccessful = parent::execute($input, $output);
 
-        if (!$setupSuccessful) {
-            return;
-        }
+        if ($setupSuccessful) {
+            $config = ConfigRepository::getConfig();
 
-        $config = ConfigRepository::getConfig();
-
-        /** @var Module $module */
-        foreach ($config->getModuleList() as $module) {
-            if (!$module->validate()) {
-                $this->initModule($config, $module, $input, $output);
-            } else {
-                $output->writeln("Skipping {$module->getName()}: already initialized.");
+            /** @var Module $module */
+            foreach ($config->getModuleList() as $module) {
+                if (!$module->validate()) {
+                    $this->initModule($config, $module, $input, $output);
+                } else {
+                    $output->writeln("Skipping {$module->getName()}: already initialized.");
+                }
             }
         }
     }
@@ -53,7 +51,7 @@ class Init extends ProphetCommand
     private function initModule(Config $config, Module $module, InputInterface $input, OutputInterface $output)
     {
         $output->writeln("Initializing {$module->getName()}");
-        $module->createTestStructure();
+        $module->createTestStructure($input->getOption('path'));
 
         //Add to prophet.json
         $helper = $this->getHelper('question');

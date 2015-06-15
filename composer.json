@@ -1,7 +1,7 @@
 {
   "name": "linusshops/prophet",
   "description": "Module testing for Magento Modules",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "type": "utility",
   "keywords": [
     "magento",
@@ -33,6 +33,7 @@
     "php": ">=5.3",
     "ext-json": "*",
     "symfony/console": "~2.6",
+    "symfony/event-dispatcher":"~2.7",
     "phpunit/phpunit": "^4.6.4"
   },
   "bin": [

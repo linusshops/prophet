@@ -37,3 +37,53 @@ Prophet should be installed via composer.  It is recommended to install it globa
 `prophet list`: View all commands
 
 `prophet help [command]`: View help for a specific command.
+
+##Events and Bootstrapping
+
+Events can be listened for using symfony/event-dispatcher.
+
+`prophet.premodule`: Fired right before the module test suite begins.
+`prophet.postmodule`: Fired right after the module test suite is completed (regardless of success or failure).
+
+```
+$dispatcher = new \\Symfony\\Component\\EventDispatcher\\EventDispatcher();
+
+ $dispatcher->addListener('prophet.premodule', function (\\Symfony\\Component\\EventDispatcher\\Event $event) {
+     echo "PREMODULE";
+ });
+
+ $dispatcher->addListener('prophet.premodule', function (\\Symfony\\Component\\EventDispatcher\\Event $event) {
+     echo "POSTMODULE";
+ });
+```
+
+Prophet will check for the existence of a tests/ProphetEvents.php file in your module. If it exists, it
+will be included.  The check for this occurs immediately prior to the registration of custom autoloaders
+and the firing of the premodule event.
+
+This file is included, so it is executed within the same context as Prophet. It can serve as a module
+bootstrap file, though it is not recommended as the premodule event should be used for this, or
+the PHPUnit setUp functions.
+
+##Autoloader
+
+The Varien autoloader is not able to directly load controllers.  To allow these controllers to be
+instantiated for testing, Prophet creates its own autoloader functions, and prepends them
+on the autoloader stack.  This means that Prophet's autoloader has priority over the Varien autoloader.
+
+This is due to the fact that the Varien autoloader dies if it can't instantiate the class.  Prophet
+will fail over to the Varien autloader in the event it cannot find anything.
+
+Eventually, this will be abstracted in such a way that any class can be intercepted by Prophet's autoloader.
+
+## Author
+
+[Samuel Schmidt](https://github.com/dersam)
+
+## Contributors
+
+[Dane MacMillan](https://github.com/danemacmillan)
+
+## License
+
+This tool was created by Linus Shops and licensed under the [MIT License](http://opensource.org/licenses/MIT).

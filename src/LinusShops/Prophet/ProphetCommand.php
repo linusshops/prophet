@@ -34,7 +34,7 @@ class ProphetCommand extends Command
         $loaded = $this->checkFile($input, $output);
 
         $loaded = $loaded ?
-            ConfigRepository::loadConfig($input->getOption('path'))
+            ConfigRepository::loadConfig($input->getOption('path'), $input->getOption('path'))
             : $loaded;
 
         return $loaded;
