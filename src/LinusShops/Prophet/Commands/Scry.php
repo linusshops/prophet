@@ -102,6 +102,12 @@ class Scry extends ProphetCommand
                             $modulePath = $module->getPath();
                             $rootPath = $input->getOption('path');
 
+                            $this->cli->veryVerbose('Loading Magento classes...', $output);
+
+                            $dispatcher->dispatch(Events::PROPHET_PREMAGENTO);
+                            Magento::bootstrap($input->getOption('path'));
+                            $dispatcher->dispatch(Events::PROPHET_POSTMAGENTO);
+
                             //Register a custom autoloader so that controller classes
                             //can be loaded for testing.
                             $localPool = function ($classname) use ($modulePath, $rootPath) {
@@ -184,10 +190,6 @@ class Scry extends ProphetCommand
             $output->writeln('<error>No modules found in prophet.json.</error>');
             $loaded = false;
         } else {
-            $this->cli->veryVerbose('Loading Magento classes...', $output);
-
-            Magento::bootstrap($input->getOption('path'));
-
             $this->showRequestedModuleList($modulesRequested, $output);
         }
 

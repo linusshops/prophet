@@ -20,4 +20,14 @@ final class Events
      * This event is thrown after completing all module tests
      */
     const PROPHET_POSTMODULE = 'prophet.postmodule';
+
+    /**
+     * Thrown before Magento is bootstrapped
+     */
+    const PROPHET_PREMAGENTO = 'prophet.premagento';
+
+    /**
+     * Thrown after Magento bootstrap
+     */
+    const PROPHET_POSTMAGENTO = 'prophet.postmagento';
 }
