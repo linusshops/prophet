@@ -129,7 +129,7 @@ class Scry extends ProphetCommand
                                         if (strpos($part, 'Controller') === false) {
                                             $loadpath .= '/' . $part;
                                         } else {
-                                            $loadpath .= '/Controllers/'.$part;
+                                            $loadpath .= '/controllers/'.$part;
                                         }
                                     }
 
@@ -150,7 +150,7 @@ class Scry extends ProphetCommand
                                         if (strpos($classname, 'Controller') === false) {
                                             $loadpath .= '/' . $part;
                                         } else {
-                                            $loadpath .= '/Controllers/'.$part;
+                                            $loadpath .= '/controllers/'.$part;
                                         }
                                     }
 
