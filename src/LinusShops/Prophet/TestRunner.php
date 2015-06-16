@@ -36,9 +36,22 @@ class TestRunner
         }
 
         if ($coverage) {
-            $options[] = '--coverage-text';
+            switch($coverage) {
+                case 'html':
+                    $options[] = '--coverage-html';
+                    $options[] = $this->getCoverageName();
+                    break;
+                default:
+                    $options[] = '--coverage-text';
+                    break;
+            }
         }
 
         return $runner->run($options, false);
+    }
+
+    private function getCoverageName()
+    {
+        return 'var/coverage/'.date('YmdHis');
     }
 }

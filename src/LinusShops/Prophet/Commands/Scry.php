@@ -64,9 +64,10 @@ class Scry extends ProphetCommand
             )
             ->addOption(
                 'coverage',
-                null,
-                InputOption::VALUE_NONE,
-                'If set, will display code coverage report'
+                'c',
+                InputOption::VALUE_OPTIONAL,
+                'If set, will display code coverage report',
+                false
             )
             ->addOption(
                 'filter',
@@ -95,7 +96,7 @@ class Scry extends ProphetCommand
                             $cmd = $this->getProphetCall()
                                 . " scry --isolated -m {$module->getName()} -p {$input->getOption('path')}";
                             if ($input->getOption('coverage')) {
-                                $cmd .= ' --coverage';
+                                $cmd .= ' --coverage '.$input->getOption('coverage');
                             }
                             if ($input->getOption('filter')) {
                                 $cmd .= ' --filter '.$input->getOption('filter');
