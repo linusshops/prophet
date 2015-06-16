@@ -44,7 +44,7 @@ use Symfony\Component\Console\Application;
 $application = new Application();
 
 $application->setName('Prophet');
-$application->setVersion('0.3.6');
+$application->setVersion('0.3.7');
 $application->setDefaultCommand('scry');
 
 \LinusShops\Prophet\ConfigRepository::setProphetPath($_SERVER['argv'][0]);
