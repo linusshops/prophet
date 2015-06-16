@@ -21,7 +21,7 @@ class TestRunner
      * 1: Tests failed
      * 2: Failed with exception
      */
-    public function run($modulePath, $coverage = false)
+    public function run($modulePath, $coverage = false, $filter = false)
     {
         $runner = new \PHPUnit_TextUI_Command();
         $options = array(
@@ -29,6 +29,11 @@ class TestRunner
             '--configuration',
             $modulePath.'/phpunit.xml'
         );
+
+        if ($filter !== false) {
+            $options[] = '--filter';
+            $options[] = $filter;
+        }
 
         if ($coverage) {
             $options[] = '--coverage-text';

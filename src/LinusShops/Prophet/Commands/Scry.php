@@ -68,6 +68,12 @@ class Scry extends ProphetCommand
                 InputOption::VALUE_NONE,
                 'If set, will display code coverage report'
             )
+            ->addOption(
+                'filter',
+                'f',
+                InputOption::VALUE_OPTIONAL,
+                'Filter test methods by a regular expression'
+            )
         ;
     }
 
@@ -90,6 +96,9 @@ class Scry extends ProphetCommand
                                 . " scry --isolated -m {$module->getName()} -p {$input->getOption('path')}";
                             if ($input->getOption('coverage')) {
                                 $cmd .= ' --coverage';
+                            }
+                            if ($input->getOption('filter')) {
+                                $cmd .= ' --filter '.$input->getOption('filter');
                             }
                             $this->cli->veryVerbose($cmd, $output);
                             passthru($cmd);
@@ -173,7 +182,8 @@ class Scry extends ProphetCommand
                             $runner = new TestRunner();
                             $runner->run(
                                 $path = $input->getOption('path').'/'.$module->getPath(),
-                                $input->getOption('coverage')
+                                $input->getOption('coverage'),
+                                $input->getOption('filter')
                             );
                             $dispatcher->dispatch(Events::PROPHET_POSTMODULE, new Events\Module($module));
                         }
