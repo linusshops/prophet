@@ -124,13 +124,12 @@ class Scry extends ProphetCommand
                                 if (strpos($classname, 'Controller') !== false) {
                                     $parts = explode('_', $classname);
 
-                                    $loadpath = $rootPath.'/'.$modulePath.'/src/app/code/local';
-                                    foreach ($parts as $part) {
-                                        if (strpos($part, 'Controller') === false) {
-                                            $loadpath .= '/' . $part;
-                                        } else {
-                                            $loadpath .= '/controllers/'.$part;
-                                        }
+                                    $loadpath = $rootPath.'/'.$modulePath.'/src/app/code/local/'
+                                        .$parts[0].'/'.$parts[1]
+                                        .'/controllers'
+                                    ;
+                                    for ($i=2; $i < count($parts); $i++) {
+                                        $loadpath .= '/'.$parts[$i];
                                     }
 
                                     $loadpath .= '.php';
@@ -145,13 +144,12 @@ class Scry extends ProphetCommand
                                 if (strpos($classname, 'Controller') !== false) {
                                     $parts = explode('_', $classname);
 
-                                    $loadpath = $rootPath.'/'.$modulePath.'/src/app/code/community/';
-                                    foreach ($parts as $part) {
-                                        if (strpos($classname, 'Controller') === false) {
-                                            $loadpath .= '/' . $part;
-                                        } else {
-                                            $loadpath .= '/controllers/'.$part;
-                                        }
+                                    $loadpath = $rootPath.'/'.$modulePath.'/src/app/code/local/'
+                                        .$parts[0].'/'.$parts[1]
+                                        .'/controllers'
+                                    ;
+                                    for ($i=2; $i < count($parts); $i++) {
+                                        $loadpath .= '/'.$parts[$i];
                                     }
 
                                     $loadpath .= '.php';
