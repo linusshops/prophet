@@ -27,7 +27,7 @@ your testing system can never adversely affect your site when not executing via 
 ##Impetus
 
 As mentioned above, Magento was never designed with unit testing in mind (and according to
-the core team, does not have automated test to this day).  This problem has been tackled
+the core team, does not have automated tests to this day).  This problem has been tackled
 before by other packages, but all of them require installing a module to handle testing, or
 modifying core.
 
@@ -38,7 +38,8 @@ test unless it is being executed in the test context.
 Prophet seeks to solve this problem by focusing on testing on a module basis, and by focusing
 on the Firegento/Composer Magento ecosystem.  Prophet expects tests to be written on a module
 by module basis, and seeks to execute them with the modules in isolation.  Since test code
-is confined to a test directory of a module, it is not ever going to be invoked by Magento.
+is confined to a test directory of a module, it is not ever going to be invoked by Magento
+under normal execution conditions.
 
 Prophet's footprint becomes only the config files and the test cases the developer
 creates- it adds nothing to Magento core or the local code pool.
@@ -48,6 +49,8 @@ creates- it adds nothing to Magento core or the local code pool.
 Prophet should be installed via composer.  It is recommended to install it globally.
 
 `composer global require linusshops/prophet`
+
+For best results, your Magento installation should be managed with magento-composer-installer.
 
 ##Commands
 
@@ -117,7 +120,7 @@ You can also include custom test classes by adding them to a tests/classes direc
 injects a general autoloader that will look in this directory for a class before anything else.
 
 Prophet loaders have priority over the Varien autoloader.  Essentially, this allows you to do
-testing-specific rewrites and overrides, without any risk of it being used in normal execution.
+*testing-specific rewrites and overrides*, without any risk of it being used in normal execution.
 
 ##Controller test example
 
