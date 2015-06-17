@@ -36,15 +36,18 @@ class TestRunner
         }
 
         if ($coverage) {
+            $name = $this->getCoverageName();
             switch($coverage) {
                 case 'html':
                     $options[] = '--coverage-html';
-                    $options[] = $this->getCoverageName();
+                    $options[] = $name;
                     break;
                 default:
                     $options[] = '--coverage-text';
                     break;
             }
+            
+            echo "Coverage data will be written to $name".PHP_EOL;
         }
 
         return $runner->run($options, false);
