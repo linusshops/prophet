@@ -36,25 +36,26 @@ class TestRunner
         }
 
         if ($coverage) {
-            $name = $this->getCoverageName();
+            $path = $this->getCoveragePath();
             switch($coverage) {
                 case 'html':
                     $options[] = '--coverage-html';
-                    $options[] = $name;
+                    $path .= '/html';
+                    $options[] = $path;
                     break;
                 default:
                     $options[] = '--coverage-text';
                     break;
             }
-            
-            echo "Coverage data will be written to $name".PHP_EOL;
+
+            echo "Coverage data will be written to $path".PHP_EOL;
         }
 
         return $runner->run($options, false);
     }
 
-    private function getCoverageName()
+    private function getCoveragePath()
     {
-        return 'var/coverage/'.date('YmdHis');
+        return 'var/coverage';
     }
 }
