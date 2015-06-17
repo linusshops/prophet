@@ -11,6 +11,13 @@ namespace LinusShops\Prophet;
 
 class TestRunner
 {
+    private $module;
+
+    public function __construct($module)
+    {
+        $this->module = $module;
+    }
+
     /**
      * Call the same functions used by the CLI PHPUnit
      * to engage the tests
@@ -56,6 +63,6 @@ class TestRunner
 
     private function getCoveragePath()
     {
-        return 'var/coverage';
+        return 'var/coverage/'.$this->module->getName();
     }
 }

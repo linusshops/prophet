@@ -178,7 +178,7 @@ class Scry extends ProphetCommand
 
                             $output->writeln('Starting tests for ['.$module->getName().']');
                             $dispatcher->dispatch(Events::PROPHET_PREMODULE, new Events\Module($module));
-                            $runner = new TestRunner();
+                            $runner = new TestRunner($module);
                             $runner->run(
                                 $path = $input->getOption('path').'/'.$module->getPath(),
                                 $input->getOption('coverage'),
