@@ -70,6 +70,11 @@ Prophet must be executed from the command line at the Magento root.
 
 For troubleshooting, you can increase verbosity with `-vvv`, as with any symfony/console app.
 
+##Debug Helper
+
+Prophet has [PsySh](http://psysh.org) support built in for debugging. You can break into Psysh
+with `PD::breakpoint()`.
+
 ##Events and Bootstrapping
 
 Events can be listened for using symfony/event-dispatcher.
@@ -127,10 +132,10 @@ Prophet loaders have priority over the Varien autoloader.  Essentially, this all
 ```
 public function testRecentAction()
 {
-    $request = LinusShops\Prophet\Helpers\Classes::getRequest();
+    $request = PD::getRequest();
     $request->setMethod('GET');
 
-    $response = LinusShops\Prophet\Helpers\Classes::getResponse();
+    $response = PD::getResponse();
 
     $controller = new Linus_Garage_SampleController($request, $response);
     $controller->indexAction();
