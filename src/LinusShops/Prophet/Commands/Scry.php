@@ -181,8 +181,10 @@ class Scry extends ProphetCommand
                             $runner = new TestRunner($module);
                             $runner->run(
                                 $path = $input->getOption('path').'/'.$module->getPath(),
-                                $input->getOption('coverage'),
-                                $input->getOption('filter')
+                                array(
+                                    'coverage'=>$input->getOption('coverage'),
+                                    'filter'=>$input->getOption('filter')
+                                )
                             );
                             $dispatcher->dispatch(Events::PROPHET_POSTMODULE, new Events\Module($module));
                         }

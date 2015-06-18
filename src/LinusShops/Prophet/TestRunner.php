@@ -28,21 +28,21 @@ class TestRunner
      * 1: Tests failed
      * 2: Failed with exception
      */
-    public function run($modulePath, $coverage = false, $filter = false)
+    public function run($modulePath, $params = array())
     {
         $runner = new \PHPUnit_TextUI_Command();
         $options = array(
-            'phpunit',
             '--configuration',
             $modulePath.'/phpunit.xml'
         );
 
-        if ($filter !== false) {
+        if (isset($params['filter']) && !empty($params['filter'])) {
             $options[] = '--filter';
-            $options[] = $filter;
+            $options[] = $params['filter'];
         }
 
-        if ($coverage) {
+        if (isset($params['coverage']) && !empty($params['coverage'])) {
+            $coverage = $params['coverage'];
             $path = $this->getCoveragePath();
             switch($coverage) {
                 case 'html':
@@ -57,6 +57,8 @@ class TestRunner
 
             echo "Coverage data will be written to $path".PHP_EOL;
         }
+
+        array_unshift($options, 'phpunit');
 
         return $runner->run($options, false);
     }
