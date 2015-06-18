@@ -38,6 +38,7 @@ if (!defined('PROPHET_COMPOSER_INSTALL')) {
 }
 
 require PROPHET_COMPOSER_INSTALL;
+require 'PD.php';
 
 use Symfony\Component\Console\Application;
 
