@@ -10,10 +10,17 @@
 namespace LinusShops\Prophet\Helpers;
 
 
+use Psy\Shell;
+
 class Debug
 {
-    public function start()
+    public function start($context = array())
     {
-        eval(\Psy\sh());
+        if (!is_array($context)) {
+            $context = array(
+                'var' => $context
+            );
+        }
+        Shell::debug($context);
     }
 }

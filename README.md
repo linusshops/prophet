@@ -72,8 +72,9 @@ For troubleshooting, you can increase verbosity with `-vvv`, as with any symfony
 
 ##Debug Helper
 
-Prophet has [PsySh](http://psysh.org) support built in for debugging. You can break into Psysh
-with `PD::breakpoint()`.
+Prophet has [PsySh](http://psysh.org) support built in for inspecting variables. You can
+break into Psysh with `PD::inspect($context)`. $context can be an array of variables, or
+just one variable.
 
 ##Events and Bootstrapping
 

@@ -21,9 +21,9 @@ class PD
         return $classHelper->getResponse();
     }
 
-    public static function breakpoint()
+    public static function inspect($context = array())
     {
         $dbg = new \LinusShops\Prophet\Helpers\Debug();
-        $dbg->start();
+        $dbg->start($context);
     }
 }
