@@ -64,6 +64,8 @@ Prophet must be executed from the command line at the Magento root.
 
 `prophet analyze`: Search your vendor directory for testable modules, and attempt to create a prophet.json
 
+`prophet inspect`: Bootstrap Magento and then start PsySH in that context. Useful for REPL testing.
+
 `prophet list`: View all commands
 
 `prophet help [command]`: View help for a specific command.
