@@ -154,6 +154,10 @@ public function testRecentAction()
 }
 ```
 
+## TODO
+* Add support for javascript testing via Jasmine and PhantomJS
+* Improve architecture to support other test frameworks like Behat and PHPSpec
+
 ## Author
 
 [Samuel Schmidt](https://github.com/dersam)
