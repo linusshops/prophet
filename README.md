@@ -68,7 +68,7 @@ Prophet must be executed from the command line at the Magento root.
 
 `prophet list`: View all commands
 
-`prophet jscry`: (experimental) Run javascript tests using Jest (https://facebook.github.io/jest/)
+`prophet jscry`: (experimental) Run javascript tests using Jest (https://facebook.github.io/jest/) Node 4+ only.
 
 `prophet help [command]`: View help for a specific command.
 
