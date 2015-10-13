@@ -68,6 +68,8 @@ Prophet must be executed from the command line at the Magento root.
 
 `prophet list`: View all commands
 
+`prophet jscry`: (experimental) Run javascript tests using Jest (https://facebook.github.io/jest/)
+
 `prophet help [command]`: View help for a specific command.
 
 For troubleshooting, you can increase verbosity with `-vvv`, as with any symfony/console app.
@@ -155,7 +157,6 @@ public function testRecentAction()
 ```
 
 ## TODO
-* Add support for javascript testing via Jasmine and PhantomJS
 * Improve architecture to support other test frameworks like Behat and PHPSpec
 
 ## Author
