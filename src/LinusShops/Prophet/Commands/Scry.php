@@ -12,13 +12,11 @@ namespace LinusShops\Prophet\Commands;
 use LinusShops\Prophet\Config;
 use LinusShops\Prophet\ConfigRepository;
 use LinusShops\Prophet\ConsoleHelper;
-use LinusShops\Prophet\Events;
 use LinusShops\Prophet\Module;
 use LinusShops\Prophet\ProphetCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 
 abstract class Scry extends ProphetCommand
 {
@@ -86,7 +84,7 @@ abstract class Scry extends ProphetCommand
      */
     protected function getRepeatInterval($optionEvery)
     {
-        return (int)$optionEvery;
+        return (int) $optionEvery;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
