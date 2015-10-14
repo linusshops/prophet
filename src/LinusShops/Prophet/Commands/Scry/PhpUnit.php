@@ -11,13 +11,9 @@ namespace LinusShops\Prophet\Commands\Scry;
 
 
 use LinusShops\Prophet\Commands\Scry;
-use LinusShops\Prophet\Config;
-use LinusShops\Prophet\ConfigRepository;
-use LinusShops\Prophet\ConsoleHelper;
 use LinusShops\Prophet\Events;
 use LinusShops\Prophet\Magento;
 use LinusShops\Prophet\Module;
-use LinusShops\Prophet\ProphetCommand;
 use LinusShops\Prophet\TestRunner;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
