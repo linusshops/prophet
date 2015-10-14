@@ -80,6 +80,10 @@ abstract class Scry extends ProphetCommand
         ;
     }
 
+    /**
+     * @param $optionEvery
+     * @return int|bool return false if there should be no repeat
+     */
     protected function getRepeatInterval($optionEvery)
     {
         return (int)$optionEvery;
@@ -157,5 +161,5 @@ abstract class Scry extends ProphetCommand
         }
     }
 
-    abstract function doTest(Module $module, InputInterface $input, OutputInterface $output);
+    abstract public function doTest(Module $module, InputInterface $input, OutputInterface $output);
 }
