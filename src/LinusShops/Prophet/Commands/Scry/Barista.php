@@ -15,16 +15,15 @@ use LinusShops\Prophet\Module;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Casper extends Scry
+class Barista extends Scry
 {
-
     protected function configure()
     {
         parent::configure();
 
         $this
-            ->setName('scry:casper')
-            ->setDescription('Run in-browser tests using CasperJS')
+            ->setName('scry:barista')
+            ->setDescription('Run mocha zombie tests for modules in prophet.json')
         ;
     }
 
@@ -33,8 +32,7 @@ class Casper extends Scry
         InputInterface $input,
         OutputInterface $output
     ) {
-        $cmd = "cd {$module->getPath()} && casperjs";
-        //TODO: read config file from module
+        $cmd = "mocha {$module->getPath()}/tests/mocha";
         $this->cliHelper()->veryVerbose($cmd, $output);
         passthru($cmd);
     }

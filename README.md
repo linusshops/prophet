@@ -76,7 +76,7 @@ Prophet must be executed from the command line at the Magento root.
 
 `prophet scry:phpunit`: Same as the basic `prophet` invocation.
 
-`prophet scry:jest`: (experimental) Run javascript tests using Jest (https://facebook.github.io/jest/) Node 4+ only.
+`prophet scry:barista`: (experimental) Run javascript acceptance tests using mocha and zombie. Requires mocha and zombie to be installed globally.
 
 `prophet help [command]`: View help for a specific command.
 
