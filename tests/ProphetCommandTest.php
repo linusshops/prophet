@@ -119,7 +119,7 @@ XML;
         //and check the returned output for expected string
         $this->destroyPhpunitXml();
         $this->makePhpunitXml();
-        $output = shell_exec("./prophet scry -p ./magento");
+        $output = shell_exec("./prophet scry:phpunit -p ./magento");
 
         $this->assertRegExp('/OK \(1 test, 1 assertion\)/', $output);
         $this->destroyPhpunitXml();
