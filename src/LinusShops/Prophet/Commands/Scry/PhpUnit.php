@@ -26,6 +26,8 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class PhpUnit extends Scry
 {
+    private $isolated;
+
     protected function configure()
     {
         parent::configure();
@@ -43,14 +45,15 @@ class PhpUnit extends Scry
         ;
     }
 
-    private function isIsolated(InputInterface $input)
+    private function isIsolated()
     {
-        return $input->getOption('isolated');
+        return $this->isolated;
     }
 
 
     function doTest(Module $module, InputInterface $input, OutputInterface $output)
     {
+        $isolated = $input->getOption('isolated');
         $dispatcher = new EventDispatcher();
 
         if (!$this->isIsolated($input)) {
@@ -167,4 +170,12 @@ class PhpUnit extends Scry
                 new Events\Module($module));
         }
     }
+
+    protected function getRepeatInterval($optionEvery)
+    {
+        $repeat = parent::getRepeatInterval($optionEvery);
+        return !$this->isIsolated() ? $repeat : false;
+    }
+
+
 }

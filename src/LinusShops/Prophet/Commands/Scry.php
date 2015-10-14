@@ -83,6 +83,11 @@ abstract class Scry extends ProphetCommand
         ;
     }
 
+    protected function getRepeatInterval($optionEvery)
+    {
+        return (int)$optionEvery;
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $setupSuccessful = parent::execute($input, $output);
@@ -91,7 +96,7 @@ abstract class Scry extends ProphetCommand
             $config = ConfigRepository::getConfig();
             $modulesRequested = $input->getOption('module');
 
-            $repeat = (int)$input->getOption('every');
+            $repeat = $this->getRepeatInterval($input->getOption('every'));
 
             if ($this->loadClasses($modulesRequested, $config, $input, $output)) {
                 /** @var Module $module */
