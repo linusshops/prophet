@@ -1,11 +1,11 @@
 <?php
 /**
- *
- *
- * @author Sam Schmidt <samuel@dersam.net>
- * @date 2015-10-13
- * @company Linus Shops
- */
+     *
+     *
+     * @author Sam Schmidt <samuel@dersam.net>
+     * @date 2015-10-13
+     * @company Linus Shops
+     */
 
 namespace LinusShops\Prophet\Commands\Scry;
 
@@ -57,15 +57,15 @@ class PhpUnit extends Scry
             $cmd = $this->getProphetCall()
                 . " scry:phpunit --isolated -m {$module->getName()} -p {$input->getOption('path')}";
             if ($input->getOption('coverage')) {
-                $cmd .= ' --coverage ' . $input->getOption('coverage');
+                $cmd .= ' --coverage '.$input->getOption('coverage');
             }
             if ($input->getOption('filter')) {
-                $cmd .= ' --filter ' . $input->getOption('filter');
+                $cmd .= ' --filter '.$input->getOption('filter');
             }
             $this->cliHelper()->veryVerbose($cmd, $output);
             passthru($cmd);
         } else {
-            $path = $module->getPath() . '/tests/ProphetEvents.php';
+            $path = $module->getPath().'/tests/ProphetEvents.php';
             if (file_exists($path)) {
                 include $path;
             }
@@ -82,7 +82,7 @@ class PhpUnit extends Scry
 
             //Register a custom autoloader so that controller classes
             //can be loaded for testing.
-            $localPool = function ($classname) use (
+            $localPool = function($classname) use (
                 $modulePath,
                 $rootPath
             ) {
@@ -91,11 +91,11 @@ class PhpUnit extends Scry
                 ) {
                     $parts = explode('_', $classname);
 
-                    $loadpath = $rootPath . '/' . $modulePath . '/src/app/code/local/'
-                        . $parts[0] . '/' . $parts[1]
+                    $loadpath = $rootPath.'/'.$modulePath.'/src/app/code/local/'
+                        . $parts[0].'/'.$parts[1]
                         . '/controllers';
-                    for ($i = 2; $i < count($parts); $i++) {
-                        $loadpath .= '/' . $parts[$i];
+                    for ($i = 2; $i<count($parts); $i++) {
+                        $loadpath .= '/'.$parts[$i];
                     }
 
                     $loadpath .= '.php';
@@ -106,7 +106,7 @@ class PhpUnit extends Scry
                 }
             };
 
-            $communityPool = function ($classname) use (
+            $communityPool = function($classname) use (
                 $modulePath,
                 $rootPath
             ) {
@@ -115,11 +115,11 @@ class PhpUnit extends Scry
                 ) {
                     $parts = explode('_', $classname);
 
-                    $loadpath = $rootPath . '/' . $modulePath . '/src/app/code/local/'
-                        . $parts[0] . '/' . $parts[1]
+                    $loadpath = $rootPath.'/'.$modulePath.'/src/app/code/local/'
+                        . $parts[0].'/'.$parts[1]
                         . '/controllers';
-                    for ($i = 2; $i < count($parts); $i++) {
-                        $loadpath .= '/' . $parts[$i];
+                    for ($i = 2; $i<count($parts); $i++) {
+                        $loadpath .= '/'.$parts[$i];
                     }
 
                     $loadpath .= '.php';
@@ -130,11 +130,11 @@ class PhpUnit extends Scry
                 }
             };
 
-            $overrideLoader = function ($classname) use (
+            $overrideLoader = function($classname) use (
                 $modulePath,
                 $rootPath
             ) {
-                $loadpath = $rootPath . '/' . $modulePath . '/tests/classes/' . $classname . '.php';
+                $loadpath = $rootPath.'/'.$modulePath.'/tests/classes/'.$classname.'.php';
 
                 if (file_exists($loadpath)) {
                     include $loadpath;
@@ -151,12 +151,12 @@ class PhpUnit extends Scry
             spl_autoload_register($overrideLoader, true,
                 true);
 
-            $output->writeln('Starting tests for [' . $module->getName() . ']');
+            $output->writeln('Starting tests for ['.$module->getName().']');
             $dispatcher->dispatch(Events::PROPHET_PREMODULE,
                 new Events\Module($module));
             $runner = new TestRunner($module);
             $runner->run(
-                $path = $input->getOption('path') . '/' . $module->getPath(),
+                $path = $input->getOption('path').'/'.$module->getPath(),
                 array(
                     'coverage' => $input->getOption('coverage'),
                     'filter' => $input->getOption('filter')
