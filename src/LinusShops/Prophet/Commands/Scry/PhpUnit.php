@@ -53,7 +53,7 @@ class PhpUnit extends Scry
 
     function doTest(Module $module, InputInterface $input, OutputInterface $output)
     {
-        $isolated = $input->getOption('isolated');
+        $this->isolated = $input->getOption('isolated');
         $dispatcher = new EventDispatcher();
 
         if (!$this->isIsolated($input)) {
