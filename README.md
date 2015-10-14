@@ -52,6 +52,12 @@ Prophet should be installed via composer.  It is recommended to install it globa
 
 For best results, your Magento installation should be managed with magento-composer-installer.
 
+If you want to use Jest with prophet, either have it installed globally
+
+`npm install -g jest-cli`
+
+or as part of your module's node modules.
+
 ##Commands
 
 Prophet must be executed from the command line at the Magento root.
