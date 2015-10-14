@@ -154,5 +154,5 @@ abstract class Scry extends ProphetCommand
         }
     }
 
-    abstract function doTest(Module $module, InputInterface $input, OutputInterface $output);
+    abstract public function doTest(Module $module, InputInterface $input, OutputInterface $output);
 }
