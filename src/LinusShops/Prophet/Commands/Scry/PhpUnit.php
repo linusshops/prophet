@@ -52,7 +52,7 @@ class PhpUnit extends Scry
         $this->isolated = $input->getOption('isolated');
         $dispatcher = new EventDispatcher();
 
-        if (!$this->isIsolated($input)) {
+        if (!$this->isIsolated()) {
             $output->writeln("<info>Isolating {$module->getName()}</info>");
             $cmd = $this->getProphetCall()
                 . " scry:phpunit --isolated -m {$module->getName()} -p {$input->getOption('path')}";
