@@ -1,11 +1,11 @@
 <?php
 /**
-     * 
-     *
-     * @author Sam Schmidt
-     * @date 2015-04-17
-     * @company Linus Shops
-     */
+ * 
+ *
+ * @author Sam Schmidt
+ * @date 2015-04-17
+ * @company Linus Shops
+ */
 
 namespace LinusShops\Prophet;
 
@@ -13,6 +13,9 @@ class TestRunner
 {
     private $module;
 
+    /**
+     * @param Module $module
+     */
     public function __construct($module)
     {
         $this->module = $module;
@@ -22,7 +25,6 @@ class TestRunner
      * Call the same functions used by the CLI PHPUnit
      * to engage the tests
      * @param string $modulePath path to the phpunit.xml to use
-     * @param bool $coverage
      * @return int
      * 0: Tests successful
      * 1: Tests failed
@@ -44,7 +46,7 @@ class TestRunner
         if (isset($params['coverage']) && !empty($params['coverage'])) {
             $coverage = $params['coverage'];
             $path = $this->getCoveragePath();
-            switch($coverage) {
+            switch ($coverage) {
                 case 'html':
                     $options[] = '--coverage-html';
                     $path .= '/html';
