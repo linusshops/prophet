@@ -47,7 +47,7 @@ class PhpUnit extends Scry
     }
 
 
-    function doTest(Module $module, InputInterface $input, OutputInterface $output)
+    public function doTest(Module $module, InputInterface $input, OutputInterface $output)
     {
         $this->isolated = $input->getOption('isolated');
         $dispatcher = new EventDispatcher();

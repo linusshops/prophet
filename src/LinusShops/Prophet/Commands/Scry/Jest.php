@@ -27,7 +27,7 @@ class Jest extends Scry
         ;
     }
 
-    function doTest(
+    public function doTest(
         Module $module,
         InputInterface $input,
         OutputInterface $output
