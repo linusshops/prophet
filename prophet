@@ -45,12 +45,12 @@ use Symfony\Component\Console\Application;
 $application = new Application();
 
 $application->setName('Prophet');
-$application->setVersion('0.3.8');
-$application->setDefaultCommand('scry');
+$application->setVersion('0.4.2');
+$application->setDefaultCommand('scry:phpunit');
 
 \LinusShops\Prophet\ConfigRepository::setProphetPath($_SERVER['argv'][0]);
 
-$application->add(new LinusShops\Prophet\Commands\Scry());
+$application->add(new LinusShops\Prophet\Commands\Scry\PhpUnit());
 $application->add(new LinusShops\Prophet\Commands\Validate());
 $application->add(new LinusShops\Prophet\Commands\Analyze());
 $application->add(new LinusShops\Prophet\Commands\Init());
