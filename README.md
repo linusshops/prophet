@@ -2,7 +2,7 @@
 Magento module testing
 
 [![Build Status](https://travis-ci.org/linusshops/prophet.svg)](https://travis-ci.org/linusshops/prophet)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/linusshops/prophet/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/linusshops/prophet/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/linusshops/prophet/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/linusshops/prophet/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/linusshops/prophet/badges/coverage.png?b=develop)](https://scrutinizer-ci.com/g/linusshops/prophet/?branch=develop)
 
 Objective: provide a test harness that does not require modifying Magento core,
@@ -56,7 +56,7 @@ For best results, your Magento installation should be managed with magento-compo
 
 Prophet must be executed from the command line at the Magento root.
 
-`prophet`: Run tests for modules defined in prophet.json.
+`prophet`: Run PHPUnit tests for modules defined in prophet.json (this is an alias of `scry:phpunit`).
 
 `prophet validate`: Confirm that all modules in prophet.json are testable.
 
@@ -68,7 +68,9 @@ Prophet must be executed from the command line at the Magento root.
 
 `prophet list`: View all commands
 
-`prophet jscry`: (experimental) Run javascript tests using Jest (https://facebook.github.io/jest/) Node 4+ only.
+`prophet scry:phpunit`: Same as the basic `prophet` invocation.
+
+`prophet scry:jest`: (experimental) Run javascript tests using Jest (https://facebook.github.io/jest/) Node 4+ only.
 
 `prophet help [command]`: View help for a specific command.
 
@@ -114,7 +116,7 @@ instantiated for testing, Prophet creates its own autoloader functions, and prep
 on the autoloader stack.  This means that Prophet's autoloader has priority over the Varien autoloader.
 
 This is due to the fact that the Varien autoloader dies if it can't instantiate the class.  Prophet
-will fail over to the Varien autoloader in the event it cannot find anything.
+will still use the Varien autoloader; the custom autoloaders just have priority.
 
 ## Custom Classes
 
@@ -156,8 +158,6 @@ public function testRecentAction()
 }
 ```
 
-## TODO
-* Improve architecture to support other test frameworks like Behat and PHPSpec
 
 ## Author
 
