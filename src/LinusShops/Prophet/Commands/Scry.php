@@ -131,6 +131,9 @@ abstract class Scry extends ProphetCommand
 
 
 
+    /**
+     * @param Module $module
+     */
     private function checkIfRequested($modulesRequested, $module, OutputInterface $output)
     {
         $requested = true;

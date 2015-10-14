@@ -98,12 +98,12 @@ class Module
         return $this->validationErrors;
     }
 
-    public function createTestStructure($pathPrefix='.')
+    public function createTestStructure($pathPrefix = '.')
     {
         file_put_contents($this->getPhpUnitPath($pathPrefix), $this->getPhpunitStandardXml());
 
         //Create tests directory
-        if(!file_exists($pathPrefix.'/'.$this->getPath())){
+        if (!file_exists($pathPrefix.'/'.$this->getPath())) {
             mkdir($pathPrefix.'/'.$this->getPath().'/tests');
         }
 

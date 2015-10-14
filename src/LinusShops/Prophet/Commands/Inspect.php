@@ -1,11 +1,11 @@
 <?php
 /**
- *
- *
- * @author Sam Schmidt <samuel@dersam.net>
- * @date 2015-08-03
- * @company Linus Shops
- */
+     *
+     *
+     * @author Sam Schmidt <samuel@dersam.net>
+     * @date 2015-08-03
+     * @company Linus Shops
+     */
 
 namespace LinusShops\Prophet\Commands;
 
