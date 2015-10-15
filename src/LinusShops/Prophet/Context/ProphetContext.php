@@ -14,6 +14,8 @@ namespace LinusShops\Prophet\Context;
 
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Mink\Driver\Selenium2Driver;
+use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Mink\WebAssert;
 use Behat\MinkExtension\Context\MinkContext;
 use Behat\Testwork\Tester\Result\TestResult;
 
@@ -67,5 +69,33 @@ class ProphetContext extends MinkContext
     public function setViewportSize($width, $height)
     {
         $this->getSession()->getDriver()->resizeWindow($width, $height);
+    }
+
+    /**
+     * @Given /^I wait "([^"]*)" seconds$/
+     */
+    public function iWaitSeconds($seconds)
+    {
+        sleep($seconds);
+    }
+
+    /**
+     * @Given /^I wait until selector "([^"]*)" exists$/
+     */
+    public function iWaitUntilISee($selector)
+    {
+        /** @var $context ProphetContext */
+        $this->waitFor(function($context) use ($selector)
+        {
+            /** @var WebAssert $session */
+            $session = $context->assertSession();
+            try {
+                $session->elementExists('css', $selector, $context->getSession()->getPage());
+            } catch (ElementNotFoundException $e) {
+                return false;
+            }
+
+            return true;
+        }, 10);
     }
 }
