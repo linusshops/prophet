@@ -23,7 +23,7 @@ class Barista extends Scry
 
         $this
             ->setName('scry:barista')
-            ->setDescription('Run mocha zombie tests for modules in prophet.json')
+            ->setDescription('Run mocha+zombie tests for modules in prophet.json')
         ;
     }
 
