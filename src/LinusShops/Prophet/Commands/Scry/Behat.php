@@ -36,9 +36,9 @@ class Behat extends Scry
         OutputInterface $output
     ) {
         chdir($module->getPath());
-        //Instantiate behat with a faked InputInterface to
+        //Instantiate behat with a custom console Input to
         //avoid pollution from Prophet's cli input.
-        $input = new ProphetInput();
+        $input = new ProphetInput(array());
 
         $factory = new ApplicationFactory();
         $factory->createApplication()->run($input);
