@@ -61,7 +61,7 @@ class Behat extends Scry
     public function checkProcess($name)
     {
         $running = false;
-        exec("pgrep {$name}", $output, $return);
+        exec("pgrep -f {$name}", $output, $return);
         if ($return == 0) {
             $running = true;
         }
