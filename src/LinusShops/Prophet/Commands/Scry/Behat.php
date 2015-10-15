@@ -10,6 +10,8 @@
 namespace LinusShops\Prophet\Commands\Scry;
 
 
+use Behat\Behat\ApplicationFactory;
+use LinusShops\Prophet\Adapters\Behat\ProphetInput;
 use LinusShops\Prophet\Commands\Scry;
 use LinusShops\Prophet\Module;
 use Symfony\Component\Console\Input\InputInterface;
@@ -33,6 +35,12 @@ class Behat extends Scry
         InputInterface $input,
         OutputInterface $output
     ) {
-        // TODO: Implement doTest() method.
+        chdir($module->getPath());
+        //Instantiate behat with a faked InputInterface to
+        //avoid pollution from Prophet's cli input.
+        $input = new ProphetInput();
+
+        $factory = new ApplicationFactory();
+        $factory->createApplication()->run($input);
     }
 }
