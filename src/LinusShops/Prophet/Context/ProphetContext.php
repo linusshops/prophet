@@ -13,8 +13,10 @@ namespace LinusShops\Prophet\Context;
 
 
 use Behat\Behat\Hook\Scope\AfterStepScope;
+use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Mink\Exception\ResponseTextException;
 use Behat\Mink\WebAssert;
 use Behat\MinkExtension\Context\MinkContext;
 use Behat\Testwork\Tester\Result\TestResult;
@@ -82,7 +84,7 @@ class ProphetContext extends MinkContext
     /**
      * @Given /^I wait until selector "([^"]*)" exists$/
      */
-    public function iWaitUntilISee($selector)
+    public function iWaitForSelector($selector)
     {
         /** @var $context ProphetContext */
         $this->waitFor(function($context) use ($selector)
@@ -97,5 +99,25 @@ class ProphetContext extends MinkContext
 
             return true;
         }, 10);
+    }
+
+    /**
+     * @Then /^I wait until I see "([^"]*)"$/
+     */
+    public function iWaitUntilISee($text)
+    {
+        $this->waitFor(function($context) use ($text)
+        {
+            /** @var WebAssert $session */
+            $session = $context->assertSession();
+
+            try {
+                $session->pageTextContains($text);
+            } catch (ResponseTextException $e) {
+                return false;
+            }
+
+            return true;
+        });
     }
 }
