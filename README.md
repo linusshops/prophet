@@ -1,6 +1,4 @@
 # prophet
-Magento module testing
-
 [![Build Status](https://travis-ci.org/linusshops/prophet.svg)](https://travis-ci.org/linusshops/prophet)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/linusshops/prophet/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/linusshops/prophet/?branch=develop)
 
