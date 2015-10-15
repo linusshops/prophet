@@ -177,6 +177,11 @@ If you are using self signed certificates, phantomjs must be started as follows:
 phantomjs --webdriver=8643 --debug=true --ssl-protocol=any --ignore-ssl-errors=true
 ```
 
+Prophet provides a ProphetContext class that inherits from MinkContext and adds
+additional useful step definitions. It is highly recommended to make your FeatureContext
+files inherit from this.  It also provides a post-step hook that will automatically
+take a screenshot if a step fails.
+
 ## Author
 
 [Samuel Schmidt](https://github.com/dersam)
