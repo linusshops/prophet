@@ -23,7 +23,7 @@ use Behat\Testwork\Tester\Result\TestResult;
 
 class ProphetContext extends MinkContext
 {
-    public function waitFor ($lambda, $wait = 60)
+    public function waitFor ($lambda, $wait = 10)
     {
         for ($i = 0; $i < $wait; $i++)
         {
@@ -38,7 +38,7 @@ class ProphetContext extends MinkContext
             sleep(1);
         }
 
-        throw new Exception(
+        throw new \Exception(
             "Step timed out after $wait seconds"
         );
     }
@@ -118,6 +118,6 @@ class ProphetContext extends MinkContext
             }
 
             return true;
-        });
+        }, 10);
     }
 }
