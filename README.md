@@ -76,6 +76,8 @@ Prophet must be executed from the command line at the Magento root.
 
 `prophet scry:phpunit`: Same as the basic `prophet` invocation.
 
+`prophet scry:behat`: Run functional tests using Behat. Requires phantomjs and selenium-server.
+
 `prophet scry:barista`: (experimental) Run javascript acceptance tests using mocha and zombie. Requires mocha and zombie to be installed globally.
 
 `prophet help [command]`: View help for a specific command.
@@ -164,6 +166,16 @@ public function testRecentAction()
 }
 ```
 
+## Behat
+
+Prophet can run functional tests using Behat and Mink. The default configuration from init will use
+PhantomJS and Selenium-Server, which must be installed separately.
+
+If you are using self signed certificates, phantomjs must be started as follows:
+
+```
+phantomjs --webdriver=8643 --debug=true --ssl-protocol=any --ignore-ssl-errors=true
+```
 
 ## Author
 
