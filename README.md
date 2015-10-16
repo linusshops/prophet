@@ -168,11 +168,9 @@ public function testRecentAction()
 Prophet can run functional tests using Behat and Mink. The default configuration from init will use
 PhantomJS and Selenium-Server, which must be installed separately.
 
-If you are using self signed certificates, phantomjs must be started as follows:
-
-```
-phantomjs --webdriver=8643 --debug=true --ssl-protocol=any --ignore-ssl-errors=true
-```
+At this time, the Behat integration does not support Windows. The process controls used to autostart and stop
+PhantomJS and Selenium-Server only work on OSX or Linux, and are very rudimentary.
+Better abstraction of process controls is planned but not yet available.
 
 Prophet provides a ProphetContext class that inherits from MinkContext and adds
 additional useful step definitions. It is highly recommended to make your FeatureContext
