@@ -120,4 +120,18 @@ class ProphetContext extends MinkContext
             return true;
         }, 10);
     }
+
+    public function waitForElement($element)
+    {
+        $this->waitFor(function($context) use ($element){
+            /** @var $context ProphetContext */
+            try {
+                $context->assertElementOnPage($element);
+            } catch (ElementNotFoundException $e) {
+                return false;
+            }
+
+            return true;
+        });
+    }
 }
