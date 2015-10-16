@@ -134,4 +134,20 @@ class ProphetContext extends MinkContext
             return true;
         });
     }
+
+    public function clickElement($element)
+    {
+        $this->getSession()
+            ->getPage()
+            ->find("css", $element)
+            ->click();
+    }
+
+    public function isVisible($element)
+    {
+        $session = $this->getSession();
+        $page = $session->getPage();
+
+        return $page->find('css', $element)->isVisible();
+    }
 }
