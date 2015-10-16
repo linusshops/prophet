@@ -165,6 +165,8 @@ public function testRecentAction()
 
 ## Behat
 
+http://dannorth.net/whats-in-a-story/
+
 Prophet can run functional tests using Behat and Mink. The default configuration from init will use
 PhantomJS and Selenium-Server, which must be installed separately.
 
