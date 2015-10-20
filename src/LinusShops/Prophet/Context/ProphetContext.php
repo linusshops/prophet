@@ -16,6 +16,7 @@ use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Mink\Exception\ExpectationException;
 use Behat\Mink\Exception\ResponseTextException;
 use Behat\Mink\WebAssert;
 use Behat\MinkExtension\Context\MinkContext;
@@ -149,5 +150,17 @@ class ProphetContext extends MinkContext
         $page = $session->getPage();
 
         return $page->find('css', $element)->isVisible();
+    }
+
+    public function assertIsVisible($element) {
+        if (!$this->isVisible($element)) {
+            throw new ExpectationException($element.' is not visible on page', $this->getSession()->getDriver());
+        }
+    }
+
+    public function assertIsNotVisible($element) {
+        if ($this->isVisible($element)) {
+            throw new ExpectationException($element.' is not visible on page', $this->getSession()->getDriver());
+        }
     }
 }
