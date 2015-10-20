@@ -149,7 +149,9 @@ class ProphetContext extends MinkContext
         $session = $this->getSession();
         $page = $session->getPage();
 
-        return $page->find('css', $element)->isVisible();
+        $pageElement = $page->find('css', $element);
+
+        return $pageElement == null ? false : $pageElement->isVisible();
     }
 
     public function assertIsVisible($element) {
