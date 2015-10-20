@@ -165,4 +165,11 @@ class ProphetContext extends MinkContext
             throw new ExpectationException($element.' is not visible on page', $this->getSession()->getDriver());
         }
     }
+
+    public function waitForVisible($element)
+    {
+        $this->waitFor(function($context) use ($element) {
+            return $context->isVisible($element);
+        });
+    }
 }
