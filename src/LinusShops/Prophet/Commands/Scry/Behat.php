@@ -15,7 +15,9 @@ use LinusShops\Prophet\Adapters\Behat\ProphetInput;
 use LinusShops\Prophet\Commands\Scry;
 use LinusShops\Prophet\ConsoleHelper;
 use LinusShops\Prophet\Module;
+use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Behat extends Scry
@@ -28,6 +30,12 @@ class Behat extends Scry
         $this
             ->setName('scry:behat')
             ->setDescription('Run behat tests for modules in prophet.json')
+            ->addOption(
+                'feature',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Run a specific feature only.'
+            )
         ;
     }
 
@@ -63,7 +71,13 @@ class Behat extends Scry
 
         //Instantiate behat with a custom console Input to
         //avoid pollution from Prophet's cli input.
-        $input = new ProphetInput(array());
+        $behatInput = array('behat');
+
+        if ($input->getOption('feature') != null) {
+            $behatInput[] = 'tests/behat/'.$input->getOption('feature');
+        }
+
+        $input = new ArgvInput($behatInput);
 
         $factory = new ApplicationFactory();
         $app = $factory->createApplication();
