@@ -14,11 +14,13 @@ use Behat\Behat\ApplicationFactory;
 use LinusShops\Prophet\Adapters\Behat\ProphetInput;
 use LinusShops\Prophet\Commands\Scry;
 use LinusShops\Prophet\ConsoleHelper;
+use LinusShops\Prophet\Events;
 use LinusShops\Prophet\Module;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class Behat extends Scry
 {
@@ -82,8 +84,12 @@ class Behat extends Scry
         $factory = new ApplicationFactory();
         $app = $factory->createApplication();
         $app->setAutoExit(false);
+        $dispatcher = new EventDispatcher();
+        $dispatcher->dispatch(Events::PROPHET_PREMODULE,
+            new Events\Module($module, 'behat'));
         $app->run($input);
-
+        $dispatcher->dispatch(Events::PROPHET_POSTMODULE,
+            new Events\Module($module, 'behat'));
         //Phantom doesn't seem to respond to normal signalling.
         //Known issue when using GhostDriver- just kill it.
         $this->killPhantom();

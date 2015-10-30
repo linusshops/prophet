@@ -65,11 +65,6 @@ class PhpUnit extends Scry
             $this->cliHelper()->veryVerbose($cmd, $output);
             passthru($cmd);
         } else {
-            $path = $module->getPath().'/tests/ProphetEvents.php';
-            if (file_exists($path)) {
-                include $path;
-            }
-
             $modulePath = $module->getPath();
             $rootPath = $input->getOption('path');
 
@@ -153,7 +148,7 @@ class PhpUnit extends Scry
 
             $output->writeln('Starting tests for ['.$module->getName().']');
             $dispatcher->dispatch(Events::PROPHET_PREMODULE,
-                new Events\Module($module));
+                new Events\Module($module, 'phpunit'));
             $runner = new TestRunner($module);
             $runner->run(
                 $path = $input->getOption('path').'/'.$module->getPath(),
@@ -163,7 +158,7 @@ class PhpUnit extends Scry
                 )
             );
             $dispatcher->dispatch(Events::PROPHET_POSTMODULE,
-                new Events\Module($module));
+                new Events\Module($module, 'phpunit'));
         }
     }
 

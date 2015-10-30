@@ -105,6 +105,10 @@ abstract class Scry extends ProphetCommand
                         if ($this->checkIfRequested($modulesRequested, $module,
                             $output)
                         ) {
+                            $path = $module->getPath().'/tests/ProphetEvents.php';
+                            if (file_exists($path)) {
+                                include $path;
+                            }
                             $this->doTest($module, $input, $output);
                         }
                     }
