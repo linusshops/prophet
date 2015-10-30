@@ -9,7 +9,7 @@
 
 namespace LinusShops\Prophet;
 
-final class Events
+class Events
 {
     /**
      * This event is thrown before beginning all module tests
@@ -30,4 +30,19 @@ final class Events
      * Thrown after Magento bootstrap
      */
     const PROPHET_POSTMAGENTO = 'prophet.postmagento';
+
+    protected static $events = array();
+
+    public static function listen($eventName, $callable) {
+        self::$events[$eventName][] = $callable;
+    }
+
+    public static function dispatch($eventName, $options=array())
+    {
+        if (isset(self::$events[$eventName])) {
+            foreach (self::$events[$eventName] as $event) {
+                $event($options);
+            }
+        }
+    }
 }

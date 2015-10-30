@@ -1,4 +1,5 @@
 <?php
+use LinusShops\Prophet\Events;
 
 /**
  * Facade class for Prophet Helpers
@@ -25,5 +26,10 @@ class PD
     {
         $dbg = new \LinusShops\Prophet\Helpers\Debug();
         $dbg->start($context);
+    }
+
+    public static function listen($event, $callable)
+    {
+        Events::listen($event, $callable);
     }
 }

@@ -71,9 +71,9 @@ class PhpUnit extends Scry
             $this->cliHelper()->veryVerbose('Loading Magento classes...',
                 $output);
 
-            $dispatcher->dispatch(Events::PROPHET_PREMAGENTO);
+            Events::dispatch(Events::PROPHET_PREMAGENTO);
             Magento::bootstrap($input->getOption('path'));
-            $dispatcher->dispatch(Events::PROPHET_POSTMAGENTO);
+            Events::dispatch(Events::PROPHET_POSTMAGENTO);
 
             //Register a custom autoloader so that controller classes
             //can be loaded for testing.
@@ -147,8 +147,7 @@ class PhpUnit extends Scry
                 true);
 
             $output->writeln('Starting tests for ['.$module->getName().']');
-            $dispatcher->dispatch(Events::PROPHET_PREMODULE,
-                new Events\Module($module, 'phpunit'));
+            Events::dispatch(Events::PROPHET_PREMODULE, array($module, 'phpunit'));
             $runner = new TestRunner($module);
             $runner->run(
                 $path = $input->getOption('path').'/'.$module->getPath(),
@@ -157,8 +156,7 @@ class PhpUnit extends Scry
                     'filter' => $input->getOption('filter')
                 )
             );
-            $dispatcher->dispatch(Events::PROPHET_POSTMODULE,
-                new Events\Module($module, 'phpunit'));
+            Events::dispatch(Events::PROPHET_POSTMODULE, array($module, 'phpunit'));
         }
     }
 

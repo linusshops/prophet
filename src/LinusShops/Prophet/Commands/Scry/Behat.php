@@ -84,12 +84,11 @@ class Behat extends Scry
         $factory = new ApplicationFactory();
         $app = $factory->createApplication();
         $app->setAutoExit(false);
-        $dispatcher = new EventDispatcher();
-        $dispatcher->dispatch(Events::PROPHET_PREMODULE,
-            new Events\Module($module, 'behat'));
+        Events::dispatch(Events::PROPHET_PREMODULE, array($module, 'behat'));
+
         $app->run($input);
-        $dispatcher->dispatch(Events::PROPHET_POSTMODULE,
-            new Events\Module($module, 'behat'));
+
+        Events::dispatch(Events::PROPHET_POSTMODULE, array($module, 'behat'));
         //Phantom doesn't seem to respond to normal signalling.
         //Known issue when using GhostDriver- just kill it.
         $this->killPhantom();
