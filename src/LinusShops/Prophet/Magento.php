@@ -18,7 +18,7 @@ class Magento
         'autoload' => '/lib/Varien/Autoload.php'
     );
 
-    public static function bootstrap($path = '.')
+    public static function bootstrap($path = '.', $options=array())
     {
         if (!self::isLoaded()) {
 
@@ -30,7 +30,7 @@ class Magento
 
             require_once $path.'/app/Mage.php';
 
-            \Mage::init();
+            \Mage::init('', '', $options);
 
             self::$loaded = true;
         }

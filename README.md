@@ -1,9 +1,6 @@
 # prophet
-Magento module testing
-
 [![Build Status](https://travis-ci.org/linusshops/prophet.svg)](https://travis-ci.org/linusshops/prophet)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/linusshops/prophet/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/linusshops/prophet/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/linusshops/prophet/badges/coverage.png?b=develop)](https://scrutinizer-ci.com/g/linusshops/prophet/?branch=develop)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/linusshops/prophet/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/linusshops/prophet/?branch=develop)
 
 Objective: provide a test harness that does not require modifying Magento core,
 and allows testing by module.  The only thing that should exist is config files,
@@ -27,7 +24,7 @@ your testing system can never adversely affect your site when not executing via 
 ##Impetus
 
 As mentioned above, Magento was never designed with unit testing in mind (and according to
-the core team, does not have automated test to this day).  This problem has been tackled
+the core team, does not have automated tests to this day).  This problem has been tackled
 before by other packages, but all of them require installing a module to handle testing, or
 modifying core.
 
@@ -38,7 +35,8 @@ test unless it is being executed in the test context.
 Prophet seeks to solve this problem by focusing on testing on a module basis, and by focusing
 on the Firegento/Composer Magento ecosystem.  Prophet expects tests to be written on a module
 by module basis, and seeks to execute them with the modules in isolation.  Since test code
-is confined to a test directory of a module, it is not ever going to be invoked by Magento.
+is confined to a test directory of a module, it is not ever going to be invoked by Magento
+under normal execution conditions.
 
 Prophet's footprint becomes only the config files and the test cases the developer
 creates- it adds nothing to Magento core or the local code pool.
@@ -49,11 +47,19 @@ Prophet should be installed via composer.  It is recommended to install it globa
 
 `composer global require linusshops/prophet`
 
+For best results, your Magento installation should be managed with magento-composer-installer.
+
+If you want to use Jest with prophet, either have it installed globally
+
+`npm install -g jest-cli`
+
+or as part of your module's node modules.
+
 ##Commands
 
 Prophet must be executed from the command line at the Magento root.
 
-`prophet`: Run tests for modules defined in prophet.json.
+`prophet`: Run PHPUnit tests for modules defined in prophet.json (this is an alias of `scry:phpunit`).
 
 `prophet validate`: Confirm that all modules in prophet.json are testable.
 
@@ -61,9 +67,25 @@ Prophet must be executed from the command line at the Magento root.
 
 `prophet analyze`: Search your vendor directory for testable modules, and attempt to create a prophet.json
 
+`prophet inspect`: Bootstrap Magento and then start PsySH in that context. Useful for REPL testing.
+
 `prophet list`: View all commands
 
+`prophet scry:phpunit`: Same as the basic `prophet` invocation.
+
+`prophet scry:behat`: Run functional tests using Behat. Requires phantomjs and selenium-server.
+
+`prophet scry:barista`: (experimental) Run javascript acceptance tests using mocha and zombie. Requires mocha and zombie to be installed globally.
+
 `prophet help [command]`: View help for a specific command.
+
+For troubleshooting, you can increase verbosity with `-vvv`, as with any symfony/console app.
+
+##Debug Helper
+
+Prophet has [PsySh](http://psysh.org) support built in for inspecting variables. You can
+break into Psysh with `PD::inspect($context)`. $context can be an array of variables, or
+just one variable. Psysh `list` command will show you all the variables in your context.
 
 ##Events and Bootstrapping
 
@@ -99,7 +121,7 @@ instantiated for testing, Prophet creates its own autoloader functions, and prep
 on the autoloader stack.  This means that Prophet's autoloader has priority over the Varien autoloader.
 
 This is due to the fact that the Varien autoloader dies if it can't instantiate the class.  Prophet
-will fail over to the Varien autoloader in the event it cannot find anything.
+will still use the Varien autoloader; the custom autoloaders just have priority.
 
 ## Custom Classes
 
@@ -115,17 +137,17 @@ You can also include custom test classes by adding them to a tests/classes direc
 injects a general autoloader that will look in this directory for a class before anything else.
 
 Prophet loaders have priority over the Varien autoloader.  Essentially, this allows you to do
-testing-specific rewrites and overrides, without any risk of it being used in normal execution.
+*testing-specific rewrites and overrides*, without any risk of it being used in normal execution.
 
 ##Controller test example
 
 ```
 public function testRecentAction()
 {
-    $request = LinusShops\Prophet\Helpers\Classes::getRequest();
+    $request = PD::getRequest();
     $request->setMethod('GET');
 
-    $response = LinusShops\Prophet\Helpers\Classes::getResponse();
+    $response = PD::getResponse();
 
     $controller = new Linus_Garage_SampleController($request, $response);
     $controller->indexAction();
@@ -140,6 +162,22 @@ public function testRecentAction()
     $this->assertArrayHasKey('orders', $json);
 }
 ```
+
+## Behat
+
+http://dannorth.net/whats-in-a-story/
+
+Prophet can run functional tests using Behat and Mink. The default configuration from init will use
+PhantomJS and Selenium-Server, which must be installed separately.
+
+At this time, the Behat integration does not support Windows. The process controls used to autostart and stop
+PhantomJS and Selenium-Server only work on OSX or Linux, and are very rudimentary.
+Better abstraction of process controls is planned but not yet available.
+
+Prophet provides a ProphetContext class that inherits from MinkContext and adds
+additional useful step definitions. It is highly recommended to make your FeatureContext
+files inherit from this.  It also provides a post-step hook that will automatically
+take a screenshot if a step fails.
 
 ## Author
 

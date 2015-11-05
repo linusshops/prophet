@@ -38,19 +38,25 @@ if (!defined('PROPHET_COMPOSER_INSTALL')) {
 }
 
 require PROPHET_COMPOSER_INSTALL;
+require 'PD.php';
+
+$composer = json_decode(file_get_contents(__DIR__.'/composer.json'), true);
 
 use Symfony\Component\Console\Application;
 
 $application = new Application();
 
 $application->setName('Prophet');
-$application->setVersion('0.3.5');
-$application->setDefaultCommand('scry');
+$application->setVersion($composer['version']);
+$application->setDefaultCommand('scry:phpunit');
 
 \LinusShops\Prophet\ConfigRepository::setProphetPath($_SERVER['argv'][0]);
 
-$application->add(new LinusShops\Prophet\Commands\Scry());
+$application->add(new LinusShops\Prophet\Commands\Scry\PhpUnit());
+$application->add(new LinusShops\Prophet\Commands\Scry\Behat());
+$application->add(new LinusShops\Prophet\Commands\Scry\Barista());
 $application->add(new LinusShops\Prophet\Commands\Validate());
 $application->add(new LinusShops\Prophet\Commands\Analyze());
 $application->add(new LinusShops\Prophet\Commands\Init());
+$application->add(new LinusShops\Prophet\Commands\Inspect());
 $application->run();

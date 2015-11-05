@@ -1,7 +1,7 @@
 {
   "name": "linusshops/prophet",
-  "description": "Module testing for Magento Modules",
-  "version": "0.3.5",
+  "description": "Zero footprint Module testing for Magento Modules",
+  "version": "0.6.5",
   "type": "utility",
   "keywords": [
     "magento",
@@ -33,8 +33,13 @@
     "php": ">=5.3",
     "ext-json": "*",
     "symfony/console": "~2.6",
-    "symfony/event-dispatcher":"~2.7",
-    "phpunit/phpunit": "^4.6.4"
+    "phpunit/phpunit": "^4.6.4",
+    "psy/psysh":"~0.4@stable",
+    "behat/behat": "~3",
+    "behat/mink-selenium2-driver":"~1",
+    "behat/mink-extension": "^2.1",
+    "behat/mink-goutte-driver": "^1.2",
+    "behat/mink": "^1.7"
   },
   "bin": [
     "prophet"

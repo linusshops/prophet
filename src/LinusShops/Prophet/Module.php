@@ -98,13 +98,16 @@ class Module
         return $this->validationErrors;
     }
 
-    public function createTestStructure($pathPrefix='.')
+    public function createTestStructure($pathPrefix = '.')
     {
         file_put_contents($this->getPhpUnitPath($pathPrefix), $this->getPhpunitStandardXml());
+        file_put_contents($this->getBehatPath($pathPrefix), $this->getBehatStandardConfig());
 
         //Create tests directory
-        if(!file_exists($pathPrefix.'/'.$this->getPath())){
+        if (!file_exists($pathPrefix.'/'.$this->getPath())) {
             mkdir($pathPrefix.'/'.$this->getPath().'/tests');
+            mkdir($pathPrefix.'/'.$this->getPath().'/tests/phpunit');
+            mkdir($pathPrefix.'/'.$this->getPath().'/tests/behat');
         }
 
     }
@@ -112,6 +115,11 @@ class Module
     public function getPhpUnitPath($pathPrefix = '.')
     {
         return $pathPrefix.'/'.$this->getPath().'/phpunit.xml';
+    }
+
+    public function getBehatPath($pathPrefix = '.')
+    {
+        return $pathPrefix.'/'.$this->getPath().'/behat.yml';
     }
 
     public function getPhpunitStandardXml()
@@ -134,6 +142,34 @@ class Module
 </phpunit>
 
 XML;
+
+    }
+
+    public function getBehatStandardConfig()
+    {
+        return <<<YML
+# behat.yml
+
+default:
+    autoload:
+        '': %paths.base%/tests/behat/contexts
+    suites:
+        default:
+          paths: [ %paths.base%/tests/behat ]
+          contexts:
+            - FeatureContext
+            - Behat\MinkExtension\Context\MinkContext
+    extensions:
+        Behat\MinkExtension:
+            base_url: https://develop.vagrant.dev
+            sessions:
+                headless:
+                    selenium2:
+                      wd_host: "http://localhost:8643/wd/hub"
+                full:
+                    selenium2: ~
+
+YML;
 
     }
 }

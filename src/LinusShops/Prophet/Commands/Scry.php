@@ -12,17 +12,13 @@ namespace LinusShops\Prophet\Commands;
 use LinusShops\Prophet\Config;
 use LinusShops\Prophet\ConfigRepository;
 use LinusShops\Prophet\ConsoleHelper;
-use LinusShops\Prophet\Events;
-use LinusShops\Prophet\Magento;
 use LinusShops\Prophet\Module;
 use LinusShops\Prophet\ProphetCommand;
-use LinusShops\Prophet\TestRunner;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 
-class Scry extends ProphetCommand
+abstract class Scry extends ProphetCommand
 {
     /** @var ConsoleHelper  */
     private $cli;
@@ -30,8 +26,15 @@ class Scry extends ProphetCommand
     public function __construct()
     {
         parent::__construct();
+    }
 
-        $this->cli = new ConsoleHelper();
+    public function cliHelper()
+    {
+        if ($this->cli == null) {
+            $this->cli = new ConsoleHelper();
+        }
+
+        return $this->cli;
     }
 
     /**
@@ -47,8 +50,6 @@ class Scry extends ProphetCommand
         parent::configure();
 
         $this
-            ->setName('scry')
-            ->setDescription('Run the test suites defined in prophet.json')
             ->addOption(
                 'module',
                 'm',
@@ -56,19 +57,34 @@ class Scry extends ProphetCommand
                 'If set, prophet will only test modules matching the provided names.'
             )
             ->addOption(
-                'isolated',
-                null,
-                InputOption::VALUE_NONE,
-                'Indicates to prophet that it is running as a subprocess, and'.
-                ' should assume it has only one module to run.'
+                'coverage',
+                'c',
+                InputOption::VALUE_OPTIONAL,
+                'If set, will display code coverage report',
+                false
             )
             ->addOption(
-                'coverage',
-                null,
-                InputOption::VALUE_NONE,
-                'If set, will display code coverage report'
+                'filter',
+                'f',
+                InputOption::VALUE_OPTIONAL,
+                'Filter test methods by a regular expression'
+            )
+            ->addOption(
+                'every',
+                'e',
+                InputOption::VALUE_OPTIONAL,
+                'Sleep for X seconds, then rerun tests after completing a test run'
             )
         ;
+    }
+
+    /**
+     * @param $optionEvery
+     * @return int|bool return false if there should be no repeat
+     */
+    protected function getRepeatInterval($optionEvery)
+    {
+        return (int) $optionEvery;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -78,101 +94,32 @@ class Scry extends ProphetCommand
         if ($setupSuccessful) {
             $config = ConfigRepository::getConfig();
             $modulesRequested = $input->getOption('module');
-            $dispatcher = new EventDispatcher();
+
+            $repeat = $this->getRepeatInterval($input->getOption('every'));
 
             if ($this->loadClasses($modulesRequested, $config, $input, $output)) {
                 /** @var Module $module */
-                foreach ($config->getModuleList() as $module) {
-                    if ($this->checkIfRequested($modulesRequested, $module, $output)) {
-                        if (!$this->isIsolated($input)) {
-                            $output->writeln("<info>Isolating {$module->getName()}</info>");
-                            $cmd = $this->getProphetCall()
-                                . " scry --isolated -m {$module->getName()} -p {$input->getOption('path')}";
-                            if ($input->getOption('coverage')) {
-                                $cmd .= ' --coverage';
-                            }
-                            $this->cli->veryVerbose($cmd, $output);
-                            passthru($cmd);
-                        } else {
+
+                do {
+                    foreach ($config->getModuleList() as $module) {
+                        if ($this->checkIfRequested($modulesRequested, $module,
+                            $output)
+                        ) {
+                            \PD::setCurrentModulePath($module->getPath());
+
                             $path = $module->getPath().'/tests/ProphetEvents.php';
                             if (file_exists($path)) {
                                 include $path;
                             }
-
-                            $modulePath = $module->getPath();
-                            $rootPath = $input->getOption('path');
-
-                            //Register a custom autoloader so that controller classes
-                            //can be loaded for testing.
-                            $localPool = function ($classname) use ($modulePath, $rootPath) {
-                                if (strpos($classname, 'Controller') !== false) {
-                                    $parts = explode('_', $classname);
-
-                                    $loadpath = $rootPath.'/'.$modulePath.'/src/app/code/local';
-                                    foreach ($parts as $part) {
-                                        if (strpos($part, 'Controller') === false) {
-                                            $loadpath .= '/' . $part;
-                                        } else {
-                                            $loadpath .= '/Controllers/'.$part;
-                                        }
-                                    }
-
-                                    $loadpath .= '.php';
-
-                                    if (file_exists($loadpath)) {
-                                        include $loadpath;
-                                    }
-                                }
-                            };
-
-                            $communityPool = function ($classname) use ($modulePath, $rootPath) {
-                                if (strpos($classname, 'Controller') !== false) {
-                                    $parts = explode('_', $classname);
-
-                                    $loadpath = $rootPath.'/'.$modulePath.'/src/app/code/community/';
-                                    foreach ($parts as $part) {
-                                        if (strpos($classname, 'Controller') === false) {
-                                            $loadpath .= '/' . $part;
-                                        } else {
-                                            $loadpath .= '/Controllers/'.$part;
-                                        }
-                                    }
-
-                                    $loadpath .= '.php';
-
-                                    if (file_exists($loadpath)) {
-                                        include $loadpath;
-                                    }
-                                }
-                            };
-
-                            $overrideLoader = function ($classname) use ($modulePath, $rootPath) {
-                                $loadpath = $rootPath.'/'.$modulePath.'/tests/classes/'.$classname.'.php';
-
-                                if (file_exists($loadpath)) {
-                                    include $loadpath;
-                                }
-                            };
-
-                            //This autoloader is prepended, as the Varien autoloader
-                            //will cause everything to die if it can't find the class. Also,
-                            //this will give us a hook in the future if Prophet ever
-                            //needs to intercept class loading.
-                            spl_autoload_register($communityPool, true, true);
-                            spl_autoload_register($localPool, true, true);
-                            spl_autoload_register($overrideLoader, true, true);
-
-                            $output->writeln('Starting tests for ['.$module->getName().']');
-                            $dispatcher->dispatch(Events::PROPHET_PREMODULE, new Events\Module($module));
-                            $runner = new TestRunner();
-                            $runner->run(
-                                $path = $input->getOption('path').'/'.$module->getPath(),
-                                $input->getOption('coverage')
-                            );
-                            $dispatcher->dispatch(Events::PROPHET_POSTMODULE, new Events\Module($module));
+                            $this->doTest($module, $input, $output);
                         }
                     }
-                }
+
+                    if ($repeat) {
+                        $output->writeln("<info>Next test run at ".date('Y-m-d H:i:s', strtotime("+{$repeat} seconds")).'</info>');
+                        sleep($repeat);
+                    }
+                } while ($repeat);
             }
         }
     }
@@ -184,26 +131,22 @@ class Scry extends ProphetCommand
             $output->writeln('<error>No modules found in prophet.json.</error>');
             $loaded = false;
         } else {
-            $this->cli->veryVerbose('Loading Magento classes...', $output);
-
-            Magento::bootstrap($input->getOption('path'));
-
             $this->showRequestedModuleList($modulesRequested, $output);
         }
 
         return $loaded;
     }
 
-    private function isIsolated(InputInterface $input)
-    {
-        return $input->getOption('isolated');
-    }
 
+
+    /**
+     * @param Module $module
+     */
     private function checkIfRequested($modulesRequested, $module, OutputInterface $output)
     {
         $requested = true;
         if (count($modulesRequested)>0 && !in_array($module->getName(), $modulesRequested)) {
-            $this->cli->verbose('Skipping '.$module->getName(), $output);
+            $this->cliHelper()->verbose('Skipping '.$module->getName(), $output);
 
             $requested = false;
         }
@@ -221,4 +164,6 @@ class Scry extends ProphetCommand
             }
         }
     }
+
+    abstract public function doTest(Module $module, InputInterface $input, OutputInterface $output);
 }

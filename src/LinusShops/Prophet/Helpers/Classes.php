@@ -14,12 +14,12 @@ use LinusShops\Prophet\Overrides\Response;
 
 class Classes
 {
-    public static function getRequest()
+    public function getRequest()
     {
         return new Request();
     }
 
-    public static function getResponse()
+    public function getResponse()
     {
         return new Response();
     }
