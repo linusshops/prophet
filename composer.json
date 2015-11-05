@@ -39,8 +39,7 @@
     "behat/mink-selenium2-driver":"~1",
     "behat/mink-extension": "^2.1",
     "behat/mink-goutte-driver": "^1.2",
-    "behat/mink": "^1.7",
-    "linusshops/iddqd":""
+    "behat/mink": "^1.7"
   },
   "bin": [
     "prophet"
