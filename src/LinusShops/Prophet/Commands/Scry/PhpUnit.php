@@ -125,11 +125,17 @@ class PhpUnit extends Scry
                 }
             };
 
+            //Prophet override loader.
+            //Prophet gives itself priority over all other loaders, as this
+            //allows the injection of testing specific classes. If there is
+            //a class you wish to override in testing, you can do this by adding
+            //a file with its exact class name in the tests/phpunit/classes directory
+            //in the module.
             $overrideLoader = function($classname) use (
                 $modulePath,
                 $rootPath
             ) {
-                $loadpath = $rootPath.'/'.$modulePath.'/tests/classes/'.$classname.'.php';
+                $loadpath = $rootPath.'/'.$modulePath.'/tests/phpunit/classes/'.$classname.'.php';
 
                 if (file_exists($loadpath)) {
                     include $loadpath;
