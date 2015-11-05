@@ -52,6 +52,9 @@ $application->setDefaultCommand('scry:phpunit');
 
 \LinusShops\Prophet\ConfigRepository::setProphetPath($_SERVER['argv'][0]);
 
+//Load plugins
+\LinusShops\Prophet\PluginRepository::load();
+
 $application->add(new LinusShops\Prophet\Commands\Scry\PhpUnit());
 $application->add(new LinusShops\Prophet\Commands\Scry\Behat());
 $application->add(new LinusShops\Prophet\Commands\Scry\Barista());
