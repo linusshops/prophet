@@ -71,7 +71,7 @@ class PhpUnit extends Scry
             $this->cliHelper()->veryVerbose('Loading Magento classes...',
                 $output);
 
-            $options = array();
+            $options = new Events\Options();
 
             Events::dispatch(Events::PROPHET_PREMAGENTO, $options);
             Magento::bootstrap($input->getOption('path'), $options);
@@ -155,8 +155,10 @@ class PhpUnit extends Scry
                 true);
 
             $output->writeln('Starting tests for ['.$module->getName().']');
+
             $eventData = array($module, 'phpunit');
-            Events::dispatch(Events::PROPHET_PREMODULE, $eventData);
+            $options = new Events\Options($eventData);
+            Events::dispatch(Events::PROPHET_PREMODULE, $options);
             $runner = new TestRunner($module);
             $runner->run(
                 $path = $input->getOption('path').'/'.$module->getPath(),
@@ -165,7 +167,7 @@ class PhpUnit extends Scry
                     'filter' => $input->getOption('filter')
                 )
             );
-            Events::dispatch(Events::PROPHET_POSTMODULE, $eventData);
+            Events::dispatch(Events::PROPHET_POSTMODULE, $options);
         }
     }
 

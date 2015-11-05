@@ -9,6 +9,8 @@
 
 namespace LinusShops\Prophet;
 
+use LinusShops\Prophet\Events\Options;
+
 class Magento
 {
     protected static $loaded = false;
@@ -18,7 +20,7 @@ class Magento
         'autoload' => '/lib/Varien/Autoload.php'
     );
 
-    public static function bootstrap($path = '.', $options=array())
+    public static function bootstrap($path = '.', Options $options)
     {
         if (!self::isLoaded()) {
 
@@ -30,7 +32,7 @@ class Magento
 
             require_once $path.'/app/Mage.php';
 
-            \Mage::init('', '', $options);
+            \Mage::init('', '', $options->getAll());
 
             self::$loaded = true;
         }
