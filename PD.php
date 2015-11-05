@@ -10,6 +10,24 @@ use LinusShops\Prophet\Events;
  */
 class PD
 {
+    private static $currentModulePath;
+
+    /**
+     * @return mixed
+     */
+    public static function getCurrentModulePath()
+    {
+        return self::$currentModulePath;
+    }
+
+    /**
+     * @param mixed $currentModulePath
+     */
+    public static function setCurrentModulePath($currentModulePath)
+    {
+        self::$currentModulePath = $currentModulePath;
+    }
+
     public static function getRequest()
     {
         $classHelper = new \LinusShops\Prophet\Helpers\Classes();
