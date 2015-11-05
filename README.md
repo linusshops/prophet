@@ -49,6 +49,8 @@ Prophet should be installed via composer.  It is recommended to install it globa
 
 For best results, your Magento installation should be managed with magento-composer-installer.
 
+Behat support requires the additional installation of `phantomjs` and `selenium-server-standalone`.
+
 If you want to use Jest with prophet, either have it installed globally
 
 `npm install -g jest-cli`
