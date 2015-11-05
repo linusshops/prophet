@@ -40,12 +40,14 @@ if (!defined('PROPHET_COMPOSER_INSTALL')) {
 require PROPHET_COMPOSER_INSTALL;
 require 'PD.php';
 
+$composer = json_decode(file_get_contents(__DIR__.'/composer.json'), true);
+
 use Symfony\Component\Console\Application;
 
 $application = new Application();
 
 $application->setName('Prophet');
-$application->setVersion('0.6.3');
+$application->setVersion($composer['version']);
 $application->setDefaultCommand('scry:phpunit');
 
 \LinusShops\Prophet\ConfigRepository::setProphetPath($_SERVER['argv'][0]);

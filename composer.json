@@ -1,7 +1,7 @@
 {
   "name": "linusshops/prophet",
   "description": "Zero footprint Module testing for Magento Modules",
-  "version": "0.6.3",
+  "version": "0.6.5",
   "type": "utility",
   "keywords": [
     "magento",
@@ -39,7 +39,8 @@
     "behat/mink-selenium2-driver":"~1",
     "behat/mink-extension": "^2.1",
     "behat/mink-goutte-driver": "^1.2",
-    "behat/mink": "^1.7"
+    "behat/mink": "^1.7",
+    "linusshops/iddqd":""
   },
   "bin": [
     "prophet"
