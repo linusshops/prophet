@@ -37,7 +37,7 @@ class Events
         self::$events[$eventName][] = $callable;
     }
 
-    public static function dispatch($eventName, $options=array())
+    public static function dispatch($eventName, &$options=array())
     {
         if (isset(self::$events[$eventName])) {
             foreach (self::$events[$eventName] as $event) {
