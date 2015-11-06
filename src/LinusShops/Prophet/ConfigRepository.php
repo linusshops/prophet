@@ -60,4 +60,9 @@ class ConfigRepository {
 
         return $loaded;
     }
+
+    public static function getPluginDirectory()
+    {
+        return dirname(ConfigRepository::getProphetPath()).'/plugins';
+    }
 }

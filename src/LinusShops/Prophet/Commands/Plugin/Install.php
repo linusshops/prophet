@@ -9,13 +9,15 @@
 
 namespace LinusShops\Prophet\Commands\Plugin;
 
+use LinusShops\Prophet\Commands\Plugin;
+use LinusShops\Prophet\ConfigRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Install extends Command
+class Install extends Plugin
 {
     protected function configure()
     {
@@ -23,15 +25,27 @@ class Install extends Command
             ->setName('plugin:install')
             ->setDescription('Install a plugin.')
             ->addArgument(
-                'url',
+                'repository',
                 InputArgument::REQUIRED,
-                'The url to the repository (git/http/https accepted)'
+                'Url to git repository'
             )
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $curdir = getcwd();
+        $url = $input->getArgument('repository');
+        chdir(ConfigRepository::getPluginDirectory());
+        $dirs = scandir('.');
+        passthru('git clone '.$url);
+        $newdirs = scandir('.');
+        $diff = array_diff($newdirs, $dirs);
+        $pluginName = array_pop($diff);
+        chdir($pluginName);
+        passthru('composer install');
+        $this->copyConfig($pluginName);
 
+        chdir($curdir);
     }
 }

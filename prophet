@@ -55,11 +55,18 @@ $application->setDefaultCommand('scry:phpunit');
 //Load plugins
 \LinusShops\Prophet\PluginRepository::load();
 
+//Test framework implementations
 $application->add(new LinusShops\Prophet\Commands\Scry\PhpUnit());
 $application->add(new LinusShops\Prophet\Commands\Scry\Behat());
 $application->add(new LinusShops\Prophet\Commands\Scry\Barista());
+
+//Test setup
 $application->add(new LinusShops\Prophet\Commands\Validate());
 $application->add(new LinusShops\Prophet\Commands\Analyze());
 $application->add(new LinusShops\Prophet\Commands\Init());
 $application->add(new LinusShops\Prophet\Commands\Inspect());
+
+//Plugins
+$application->add(new \LinusShops\Prophet\Commands\Plugin\Install());
+
 $application->run();
