@@ -9,6 +9,7 @@
 
 namespace LinusShops\Prophet\Commands\Plugin;
 
+use LinusShops\Prophet\ConfigRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -32,6 +33,15 @@ class Remove extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        
+        $curdir = getcwd();
+        $name = $input->getArgument('name');
+        chdir(ConfigRepository::getPluginDirectory());
+
+        if (strpos($name, 'prophet-plugin-')!==false) {
+            passthru('rm -rf '.$name);
+            echo "$name removed successfully.".PHP_EOL;
+        }
+
+        chdir($curdir);
     }
 }

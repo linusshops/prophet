@@ -68,5 +68,6 @@ $application->add(new LinusShops\Prophet\Commands\Inspect());
 
 //Plugins
 $application->add(new \LinusShops\Prophet\Commands\Plugin\Install());
+$application->add(new \LinusShops\Prophet\Commands\Plugin\Remove());
 
 $application->run();
