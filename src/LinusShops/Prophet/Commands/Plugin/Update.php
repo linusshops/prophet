@@ -9,6 +9,7 @@
 
 namespace LinusShops\Prophet\Commands\Plugin;
 
+use LinusShops\Prophet\ConfigRepository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -33,6 +34,26 @@ class Update extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        
+        $curdir = getcwd();
+        $name = $input->getArgument('name');
+        chdir(ConfigRepository::getPluginDirectory());
+
+        $plugins = array();
+
+        if ($name == null) {
+            $plugins = array_diff(scandir('.'), array('.','..','.gitignore'));
+        } else {
+            $plugins[] = $name;
+        }
+
+        \PD::inspect(array('plugins'=>$plugins));
+
+        foreach ($plugins as $plugin) {
+            chdir(ConfigRepository::getPluginDirectory().'/'.$plugin);
+            passthru('git pull');
+            passthru('composer update');
+        }
+
+        chdir($curdir);
     }
 }
