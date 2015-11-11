@@ -46,8 +46,6 @@ class Update extends Command
             $plugins[] = $name;
         }
 
-        \PD::inspect(array('plugins'=>$plugins));
-
         foreach ($plugins as $plugin) {
             chdir(ConfigRepository::getPluginDirectory().'/'.$plugin);
             passthru('git pull');
