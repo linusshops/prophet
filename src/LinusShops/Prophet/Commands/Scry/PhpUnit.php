@@ -18,11 +18,11 @@ use LinusShops\Prophet\TestRunner;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class PhpUnit extends Scry
 {
     private $isolated;
+    private $noIsolate;
 
     protected function configure()
     {
@@ -38,6 +38,12 @@ class PhpUnit extends Scry
                 'Indicates to prophet that it is running as a subprocess, and'.
                 ' should assume it has only one module to run.'
             )
+            ->addOption(
+                'no-isolate',
+                null,
+                InputOption::VALUE_NONE,
+                'Disable process isolation of tests'
+            )
         ;
     }
 
@@ -50,9 +56,9 @@ class PhpUnit extends Scry
     public function doTest(Module $module, InputInterface $input, OutputInterface $output)
     {
         $this->isolated = $input->getOption('isolated');
-        $dispatcher = new EventDispatcher();
+        $this->noIsolate = $input->getOption('no-isolate');
 
-        if (!$this->isIsolated()) {
+        if (!$this->isIsolated() && !$this->noIsolate) {
             $output->writeln("<info>Isolating {$module->getName()}</info>");
             $cmd = $this->getProphetCall()
                 . " scry:phpunit --isolated -m {$module->getName()} -p {$input->getOption('path')}";
