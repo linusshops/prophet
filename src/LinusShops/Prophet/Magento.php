@@ -32,7 +32,9 @@ class Magento
 
             require_once $path.'/app/Mage.php';
 
-            \Mage::init('', '', $options->getAll());
+            $app = \Mage::app('default', 'store', $options->getAll());
+            $app->getConfig()->loadEventObservers('global');
+            $app->getConfig()->loadEventObservers('front');
 
             self::$loaded = true;
         }

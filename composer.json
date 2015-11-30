@@ -1,7 +1,7 @@
 {
   "name": "linusshops/prophet",
   "description": "Zero footprint Module testing for Magento Modules",
-  "version": "0.6.7",
+  "version": "0.7.0",
   "type": "utility",
   "keywords": [
     "magento",
