@@ -27,13 +27,13 @@ class PluginRepository
                     $plugin = require($path);
                     $plugin->load();
                     $plugin->register();
-                    self::$plugins[$name] = $plugin;
+                    self::$plugins[strtolower($name)] = $plugin;
                 }
             }
         }
     }
 
-    public function get($name) {
-        return self::$plugins[$name];
+    public static function get($name) {
+        return self::$plugins[strtolower($name)];
     }
 }
