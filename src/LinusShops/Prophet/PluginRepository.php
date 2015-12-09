@@ -36,4 +36,8 @@ class PluginRepository
     public static function get($name) {
         return self::$plugins[strtolower($name)];
     }
+
+    public static function has($name) {
+        return isset(self::$plugins[strtolower($name)]);
+    }
 }
