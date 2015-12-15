@@ -118,7 +118,7 @@ class PhpUnit extends Scry
                 ) {
                     $parts = explode('_', $classname);
 
-                    $loadpath = $rootPath.'/'.$modulePath.'/src/app/code/local/'
+                    $loadpath = $rootPath.'/'.$modulePath.'/src/app/code/community/'
                         . $parts[0].'/'.$parts[1]
                         . '/controllers';
                     for ($i = 2; $i<count($parts); $i++) {
