@@ -179,6 +179,15 @@ via your behat.yml file. If you have not already configured something, the
  provides a preconfigured Selenium hub with Firefox and Chrome.
  
  TODO: add instructions on setting up elgalu container with prophet and behat.
+ 
+ ```bash
+ #Create the docker container (assuming you already pulled elgalu/selenium
+docker run --rm --name=grid --add-host='develop.vagrant.dev:192.168.80.80' -p 4444:24444 -p 5920:25900 \
+   -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola elgalu/selenium
+ 
+ #View the browser live during a test
+open vnc://:hola@$(docker-machine ip default):5920
+ ```
 
 Prophet provides a ProphetContext class that inherits from MinkContext and adds
 additional useful step definitions. It is highly recommended to make your FeatureContext
