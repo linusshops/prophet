@@ -171,12 +171,14 @@ public function testRecentAction()
 
 http://dannorth.net/whats-in-a-story/
 
-Prophet can run functional tests using Behat and Mink. The default configuration from init will use
-PhantomJS and Selenium-Server, which must be installed separately.
+Prophet can run functional tests using Behat and Mink.
 
-At this time, the Behat integration does not support Windows. The process controls used to autostart and stop
-PhantomJS and Selenium-Server only work on OSX or Linux, and are very rudimentary.
-Better abstraction of process controls is planned but not yet available.
+Prophet does not configure any browsers or drivers; this is all configured
+via your behat.yml file. If you have not already configured something, the 
+[elgalu/selenium](https://github.com/elgalu/docker-selenium) docker container
+ provides a preconfigured Selenium hub with Firefox and Chrome.
+ 
+ TODO: add instructions on setting up elgalu container with prophet and behat.
 
 Prophet provides a ProphetContext class that inherits from MinkContext and adds
 additional useful step definitions. It is highly recommended to make your FeatureContext
