@@ -65,6 +65,8 @@ Prophet must be executed from the command line at the Magento root.
 
 `prophet validate`: Confirm that all modules in prophet.json are testable.
 
+`prophet show`: Display all modules in prophet.json, and their available tests.
+
 `prophet init`: Initialize any modules in prophet.json that do not have the expected test structure.
 
 `prophet analyze`: Search your vendor directory for testable modules, and attempt to create a prophet.json
