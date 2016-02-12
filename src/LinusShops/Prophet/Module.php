@@ -112,6 +112,21 @@ class Module
 
     }
 
+    public function getAvailableTestFrameworks()
+    {
+        $frameworks = array();
+
+        if (is_file($this->getPhpUnitPath())) {
+            $frameworks[] = 'phpunit';
+        }
+
+        if (is_file($this->getBehatPath())) {
+            $frameworks[] = 'behat';
+        }
+
+        return $frameworks;
+    }
+
     public function getPhpUnitPath($pathPrefix = '.')
     {
         return $pathPrefix.'/'.$this->getPath().'/phpunit.xml';
