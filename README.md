@@ -170,7 +170,11 @@ via your behat.yml file. If you have not already configured something, the
 [elgalu/selenium](https://github.com/elgalu/docker-selenium) docker container
  provides a preconfigured Selenium hub with Firefox and Chrome.
  
- TODO: add instructions on setting up elgalu container with prophet and behat.
+Recommended to use Parallels instead of Virtualbox if using docker-machine, unless you like tests running as slow as molasses. Also recommended to give the docker-machine at least 4GB of RAM to satiate Chrome's hunger for memory.
+
+https://github.com/Parallels/docker-machine-parallels/
+ 
+ TODO: add instructions on setting up elgalu container with prophet and behat, setting up docker-machine- write script
  
  ```bash
  #Create the docker container (assuming you already pulled elgalu/selenium
