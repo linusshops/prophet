@@ -71,8 +71,6 @@ Prophet must be executed from the command line at the Magento root.
 
 `prophet scry:behat`: Run functional tests using Behat. Requires phantomjs and selenium-server.
 
-`prophet scry:barista`: (experimental) Run javascript acceptance tests using mocha and zombie. Requires mocha and zombie to be installed globally.
-
 `prophet help [command]`: View help for a specific command.
 
 For troubleshooting, you can increase verbosity with `-vvv`, as with any symfony/console app.
