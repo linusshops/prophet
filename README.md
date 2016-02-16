@@ -71,8 +71,6 @@ Prophet must be executed from the command line at the Magento root.
 
 `prophet scry:behat`: Run functional tests using Behat. Requires phantomjs and selenium-server.
 
-`prophet scry:barista`: (experimental) Run javascript acceptance tests using mocha and zombie. Requires mocha and zombie to be installed globally.
-
 `prophet help [command]`: View help for a specific command.
 
 For troubleshooting, you can increase verbosity with `-vvv`, as with any symfony/console app.
@@ -170,7 +168,11 @@ via your behat.yml file. If you have not already configured something, the
 [elgalu/selenium](https://github.com/elgalu/docker-selenium) docker container
  provides a preconfigured Selenium hub with Firefox and Chrome.
  
- TODO: add instructions on setting up elgalu container with prophet and behat.
+Recommended to use Parallels instead of Virtualbox if using docker-machine, unless you like tests running as slow as molasses. Also recommended to give the docker-machine at least 4GB of RAM to satiate Chrome's hunger for memory.
+
+https://github.com/Parallels/docker-machine-parallels/
+ 
+ TODO: add instructions on setting up elgalu container with prophet and behat, setting up docker-machine- write script
  
  ```bash
  #Create the docker container (assuming you already pulled elgalu/selenium
