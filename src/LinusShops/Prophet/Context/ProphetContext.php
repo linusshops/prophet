@@ -205,4 +205,25 @@ class ProphetContext extends MinkContext
             return $context->isVisible($element);
         });
     }
+
+    public function assert($condition, $message)
+    {
+        if (!$condition) {
+            throw new ExpectationException($message, $this->getSession()->getDriver());
+        }
+    }
+
+    public function assertIsValueOverX($expected, $actual)
+    {
+        $this->assert($expected < $actual, "Expected {$expected} to be less than {$actual}");
+    }
+
+    public function assertIsValueAroundX($expected, $actual, $tolerance=5)
+    {
+        $lowerBound = $expected - $tolerance;
+        $lowerBound = $lowerBound < 0 ? 0 : $lowerBound;
+        $upperBound = $expected + $tolerance;
+        $condition = $lowerBound <= $actual && $upperBound >= $actual;
+        $this->assert($condition, "Value not in expected range: {$lowerBound} <= {$actual} >= {$upperBound}");
+    }
 }
