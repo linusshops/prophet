@@ -13,14 +13,14 @@ namespace LinusShops\Prophet\Context;
 
 
 use Behat\Behat\Hook\Scope\AfterStepScope;
-use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Mink\Driver\Selenium2Driver;
+use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Mink\Exception\Exception;
 use Behat\Mink\Exception\ExpectationException;
 use Behat\Mink\Exception\ResponseTextException;
 use Behat\Mink\WebAssert;
 use Behat\MinkExtension\Context\MinkContext;
-use Behat\Testwork\Tester\Result\TestResult;
 
 class ProphetContext extends MinkContext
 {
@@ -56,7 +56,7 @@ class ProphetContext extends MinkContext
             if ($this->getSession()->getDriver() instanceof Selenium2Driver) {
                 $stepText = $event->getStep()->getText();
                 $fileTitle = preg_replace("#[^a-zA-Z0-9\._-]#", '', $stepText);
-                $fileName = '/tmp' . DIRECTORY_SEPARATOR . $fileTitle . '.png';
+                $fileName = '/tmp/prophet/' . $fileTitle . '.png';
                 $screenshot = $this->getSession()->getDriver()->getScreenshot();
                 file_put_contents($fileName, $screenshot);
                 print "Screenshot for '{$stepText}' placed in {$fileName}\n";
@@ -134,6 +134,39 @@ class ProphetContext extends MinkContext
 
             return true;
         });
+    }
+
+    public function waitForAtLeastOneVisibleElementOfType($selectorString)
+    {
+        $this->waitFor(function($context) use ($selectorString) {
+            /** @var $context ProphetContext */
+            $page = $this->getSession()->getPage();
+            /** @var NodeElement[] $nodes */
+            $nodes = $page->findAll('css', $selectorString);
+            /** @var NodeElement $node */
+            foreach ($nodes as $node) {
+                if ($node->isVisible()) {
+                    return true;
+                }
+            }
+            return false;
+        });
+    }
+
+    public function clickFirstVisibleElementOfType($selectorString)
+    {
+        /** @var $context ProphetContext */
+        $page = $this->getSession()->getPage();
+        /** @var NodeElement[] $nodes */
+        $nodes = $page->findAll('css', $selectorString);
+        foreach ($nodes as $node) {
+            if ($node->isVisible()) {
+                $node->click();
+                return;
+            }
+        }
+
+        throw new \Exception("No visible {$selectorString} element found.");
     }
 
     public function clickElement($element)
