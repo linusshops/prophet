@@ -226,4 +226,25 @@ class ProphetContext extends MinkContext
         $condition = $lowerBound <= $actual && $upperBound >= $actual;
         $this->assert($condition, "Value not in expected range: {$lowerBound} <= {$actual} >= {$upperBound}");
     }
+
+    public function assertQueryStringParameterValue($parameterName, $expectedValue)
+    {
+        $matches = array();
+        $matched = preg_match(
+            "/{$parameterName}=([^&#]*)/",
+            $this->getSession()->getCurrentUrl(),
+            $matches
+        );
+
+        $this->assert($matched, 'Parameter does not exist in querystring');
+        $this->assert(
+            $matches[1] == $expectedValue,
+            "{$matches[1]} does not match expected {$expectedValue}"
+        );
+    }
+
+    public function getElement($selector)
+    {
+        return $this->getSession()->getPage()->find('css', $selector);
+    }
 }
