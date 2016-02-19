@@ -274,4 +274,12 @@ class ProphetContext extends MinkContext
             }
         });
     }
+
+    /**
+     * @When /^I click on "([^"]*)"$/
+     */
+    public function iClickOn($selector)
+    {
+        $this->clickElement($selector);
+    }
 }
