@@ -169,12 +169,15 @@ class ProphetContext extends MinkContext
         throw new \Exception("No visible {$selectorString} element found.");
     }
 
-    public function clickElement($element)
+    public function clickElement($selector)
     {
-        $this->getSession()
+        $element = $this->getSession()
             ->getPage()
-            ->find("css", $element)
-            ->click();
+            ->find("css", $selector);
+
+        $this->assert($element != null, "{$selector} not found on the page");
+
+        $element->click();
     }
 
     public function isVisible($element)
@@ -243,8 +246,32 @@ class ProphetContext extends MinkContext
         );
     }
 
+    /**
+     * @param $selector
+     * @return NodeElement|mixed|null
+     */
     public function getElement($selector)
     {
         return $this->getSession()->getPage()->find('css', $selector);
+    }
+
+    /**
+     * @param $selector
+     * @return \Behat\Mink\Element\NodeElement[]
+     */
+    public function getElements($selector)
+    {
+        return $this->getSession()->getPage()->findAll('css', $selector);
+    }
+
+    public function waitForElementToHaveText($selector, $text)
+    {
+        $this->waitFor(function($context) use ($selector, $text){
+            try {
+                $this->assertElementContainsText($selector, $text);
+            } catch (ExpectationException $e) {
+
+            }
+        });
     }
 }
