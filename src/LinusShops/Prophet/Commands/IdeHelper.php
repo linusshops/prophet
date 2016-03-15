@@ -8,6 +8,7 @@
 
 namespace LinusShops\Prophet\Commands;
 
+use LinusShops\Contexts\Web;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -44,7 +45,10 @@ class IdeHelper extends Command
             $classesByNamespace[$namespace][] = $class;
         }
 
-        echo $this->buildIdeHelper($classesByNamespace);
+        file_put_contents(
+            $input->getOption('path').'/__prophet_ide_helper.php',
+            $this->buildIdeHelper($classesByNamespace)
+        );
     }
 
     public function getClassesToGenerate()
@@ -72,7 +76,7 @@ class IdeHelper extends Command
         $parameters = array();
 
         foreach ($method->getParameters() as $parameter) {
-            $parameters[] = $parameter->name;
+            $parameters[] = '$'.$parameter->name;
         }
 
         return implode(',', $parameters);
