@@ -1,7 +1,6 @@
 {
   "name": "linusshops/prophet",
   "description": "Zero footprint Module testing for Magento Modules",
-  "version": "0.7.3",
   "type": "utility",
   "keywords": [
     "magento",
@@ -13,9 +12,7 @@
     "utility"
   ],
   "homepage": "https://github.com/linusshops/prophet",
-  "license": [
-    "MIT"
-  ],
+  "license": "MIT",
   "authors": [
     {
       "name": "Sam Schmidt",
