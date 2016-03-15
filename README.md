@@ -69,6 +69,9 @@ Prophet must be executed from the command line at the Magento root.
 
 `prophet scry:behat`: Run functional tests using Behat. Requires phantomjs and selenium-server.
 
+`prophet generate:ide-helper`: Create a hint file to include in your project for
+autocomplete of contexts and functions provided when executing tests via Prophet.
+
 `prophet help [command]`: View help for a specific command.
 
 For troubleshooting, you can increase verbosity with `-vvv`, as with any symfony/console app.
