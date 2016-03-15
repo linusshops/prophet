@@ -47,7 +47,7 @@ use Symfony\Component\Console\Application;
 $application = new Application();
 
 $application->setName('Prophet');
-$application->setVersion('0.7.4');
+$application->setVersion('0.7.3');
 $application->setDefaultCommand('scry:phpunit');
 
 \LinusShops\Prophet\ConfigRepository::setProphetPath($_SERVER['argv'][0]);
@@ -58,7 +58,6 @@ $application->setDefaultCommand('scry:phpunit');
 //Test framework implementations
 $application->add(new LinusShops\Prophet\Commands\Scry\PhpUnit());
 $application->add(new LinusShops\Prophet\Commands\Scry\Behat());
-$application->add(new LinusShops\Prophet\Commands\Scry\Barista());
 
 //Test setup
 $application->add(new LinusShops\Prophet\Commands\Validate());
