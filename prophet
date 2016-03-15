@@ -42,6 +42,8 @@ require 'PD.php';
 
 $composer = json_decode(file_get_contents(__DIR__.'/composer.json'), true);
 
+define('PROPHET_ROOT_DIR', __DIR__);
+
 use Symfony\Component\Console\Application;
 
 $application = new Application();

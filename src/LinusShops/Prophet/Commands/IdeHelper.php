@@ -32,29 +32,39 @@ class IdeHelper extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        echo $this->makeHelperClass('LinusShops\Contexts\Web');
-    }
+        $classesByNamespace = [];
 
-    public function makeHelperClass($fullClassName)
-    {
-        $class = new \ReflectionClass($fullClassName);
-        $classNamespace = $class->getNamespaceName();
-        $className = $class->getName();
-        $parentClassName = $class->getParentClass()->getName();
+        /** @var \ReflectionClass $class */
+        foreach ($this->getClassesToGenerate() as $class) {
+            $namespace = $class->getNamespaceName();
+            if (!isset($classesByNamespace[$namespace])) {
+                $classesByNamespace[$namespace] = [];
+            }
 
-        $classHeader = <<<CLASS
-namespace {$classNamespace};
-class {$className} extends {$parentClassName}
-{
-CLASS;
-
-        /** @var \ReflectionMethod $method */
-        foreach ($class->getMethods() as $method) {
-            $comment = $method->getDocComment();
-            $parameters = $method->getParameters();
-            $name = $method->getName();
+            $classesByNamespace[$namespace][] = $class;
         }
 
-        return $classHeader.'}';
+        echo $this->buildIdeHelper($classesByNamespace);
+    }
+
+    public function getClassesToGenerate()
+    {
+        return [
+            new \ReflectionClass('LinusShops\Contexts\Web')
+        ];
+    }
+
+    public function buildIdeHelper($classesByNamespace)
+    {
+        print_r($classesByNamespace);
+        $fileContents = "<?php \n die('This file is for autocomplete only and should not be included');\n";
+
+        foreach ($classesByNamespace as $namespace => $classes) {
+            ob_start();
+            include(PROPHET_ROOT_DIR.'/src/LinusShops/Prophet/Templates/ide_helper_namespace.php');
+            $fileContents .= ob_get_clean();
+        }
+
+        return $fileContents;
     }
 }
