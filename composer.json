@@ -1,7 +1,6 @@
 {
   "name": "linusshops/prophet",
   "description": "Zero footprint Module testing for Magento Modules",
-  "version": "0.7.3",
   "type": "utility",
   "keywords": [
     "magento",
@@ -13,9 +12,7 @@
     "utility"
   ],
   "homepage": "https://github.com/linusshops/prophet",
-  "license": [
-    "MIT"
-  ],
+  "license": "MIT",
   "authors": [
     {
       "name": "Sam Schmidt",
@@ -39,7 +36,8 @@
     "behat/mink-selenium2-driver":"~1",
     "behat/mink-extension": "^2.1",
     "behat/mink-goutte-driver": "^1.2",
-    "behat/mink": "^1.7"
+    "behat/mink": "^1.7",
+    "linusshops/behat-contexts": "dev-master@dev"
   },
   "bin": [
     "prophet"
