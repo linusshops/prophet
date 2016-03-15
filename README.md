@@ -1,5 +1,4 @@
 # prophet
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/linusshops/prophet/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/linusshops/prophet/?branch=master)
 
 Objective: provide a test harness that does not require modifying Magento core,
 and allows testing by module.  The only thing that should exist is config files,
