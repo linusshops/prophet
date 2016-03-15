@@ -23,6 +23,23 @@ class ConfigRepository {
         return self::$config;
     }
 
+    public static function getModuleNames()
+    {
+        $names = array();
+
+        /** @var Module $module */
+        foreach(self::$config->getModuleList() as $module) {
+            $names[] = $module->getName();
+        }
+
+        return $names;
+    }
+
+    public static function getModules()
+    {
+        return self::$config->getModuleList();
+    }
+
     /**
      * @param Config $config
      */
@@ -59,5 +76,10 @@ class ConfigRepository {
         }
 
         return $loaded;
+    }
+
+    public static function getPluginDirectory()
+    {
+        return dirname(ConfigRepository::getProphetPath()).'/plugins';
     }
 }

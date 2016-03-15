@@ -13,14 +13,14 @@ namespace LinusShops\Prophet\Context;
 
 
 use Behat\Behat\Hook\Scope\AfterStepScope;
-use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Mink\Driver\Selenium2Driver;
+use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Mink\Exception\Exception;
 use Behat\Mink\Exception\ExpectationException;
 use Behat\Mink\Exception\ResponseTextException;
 use Behat\Mink\WebAssert;
 use Behat\MinkExtension\Context\MinkContext;
-use Behat\Testwork\Tester\Result\TestResult;
 
 class ProphetContext extends MinkContext
 {
@@ -56,7 +56,7 @@ class ProphetContext extends MinkContext
             if ($this->getSession()->getDriver() instanceof Selenium2Driver) {
                 $stepText = $event->getStep()->getText();
                 $fileTitle = preg_replace("#[^a-zA-Z0-9\._-]#", '', $stepText);
-                $fileName = '/tmp' . DIRECTORY_SEPARATOR . $fileTitle . '.png';
+                $fileName = '/tmp/prophet/' . $fileTitle . '.png';
                 $screenshot = $this->getSession()->getDriver()->getScreenshot();
                 file_put_contents($fileName, $screenshot);
                 print "Screenshot for '{$stepText}' placed in {$fileName}\n";
@@ -136,12 +136,48 @@ class ProphetContext extends MinkContext
         });
     }
 
-    public function clickElement($element)
+    public function waitForAtLeastOneVisibleElementOfType($selectorString)
     {
-        $this->getSession()
+        $this->waitFor(function($context) use ($selectorString) {
+            /** @var $context ProphetContext */
+            $page = $this->getSession()->getPage();
+            /** @var NodeElement[] $nodes */
+            $nodes = $page->findAll('css', $selectorString);
+            /** @var NodeElement $node */
+            foreach ($nodes as $node) {
+                if ($node->isVisible()) {
+                    return true;
+                }
+            }
+            return false;
+        });
+    }
+
+    public function clickFirstVisibleElementOfType($selectorString)
+    {
+        /** @var $context ProphetContext */
+        $page = $this->getSession()->getPage();
+        /** @var NodeElement[] $nodes */
+        $nodes = $page->findAll('css', $selectorString);
+        foreach ($nodes as $node) {
+            if ($node->isVisible()) {
+                $node->click();
+                return;
+            }
+        }
+
+        throw new \Exception("No visible {$selectorString} element found.");
+    }
+
+    public function clickElement($selector)
+    {
+        $element = $this->getSession()
             ->getPage()
-            ->find("css", $element)
-            ->click();
+            ->find("css", $selector);
+
+        $this->assert($element != null, "{$selector} not found on the page");
+
+        $element->click();
     }
 
     public function isVisible($element)
@@ -171,5 +207,79 @@ class ProphetContext extends MinkContext
         $this->waitFor(function($context) use ($element) {
             return $context->isVisible($element);
         });
+    }
+
+    public function assert($condition, $message)
+    {
+        if (!$condition) {
+            throw new ExpectationException($message, $this->getSession()->getDriver());
+        }
+    }
+
+    public function assertIsValueOverX($expected, $actual)
+    {
+        $this->assert($expected < $actual, "Expected {$expected} to be less than {$actual}");
+    }
+
+    public function assertIsValueAroundX($expected, $actual, $tolerance=5)
+    {
+        $lowerBound = $expected - $tolerance;
+        $lowerBound = $lowerBound < 0 ? 0 : $lowerBound;
+        $upperBound = $expected + $tolerance;
+        $condition = $lowerBound <= $actual && $upperBound >= $actual;
+        $this->assert($condition, "Value not in expected range: {$lowerBound} <= {$actual} >= {$upperBound}");
+    }
+
+    public function assertQueryStringParameterValue($parameterName, $expectedValue)
+    {
+        $matches = array();
+        $matched = preg_match(
+            "/{$parameterName}=([^&#]*)/",
+            $this->getSession()->getCurrentUrl(),
+            $matches
+        );
+
+        $this->assert($matched, 'Parameter does not exist in querystring');
+        $this->assert(
+            $matches[1] == $expectedValue,
+            "{$matches[1]} does not match expected {$expectedValue}"
+        );
+    }
+
+    /**
+     * @param $selector
+     * @return NodeElement|mixed|null
+     */
+    public function getElement($selector)
+    {
+        return $this->getSession()->getPage()->find('css', $selector);
+    }
+
+    /**
+     * @param $selector
+     * @return \Behat\Mink\Element\NodeElement[]
+     */
+    public function getElements($selector)
+    {
+        return $this->getSession()->getPage()->findAll('css', $selector);
+    }
+
+    public function waitForElementToHaveText($selector, $text)
+    {
+        $this->waitFor(function($context) use ($selector, $text){
+            try {
+                $this->assertElementContainsText($selector, $text);
+            } catch (ExpectationException $e) {
+
+            }
+        });
+    }
+
+    /**
+     * @When /^I click on "([^"]*)"$/
+     */
+    public function iClickOn($selector)
+    {
+        $this->clickElement($selector);
     }
 }

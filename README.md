@@ -49,12 +49,6 @@ Prophet should be installed via composer.  It is recommended to install it globa
 
 For best results, your Magento installation should be managed with magento-composer-installer.
 
-If you want to use Jest with prophet, either have it installed globally
-
-`npm install -g jest-cli`
-
-or as part of your module's node modules.
-
 ##Commands
 
 Prophet must be executed from the command line at the Magento root.
@@ -62,6 +56,8 @@ Prophet must be executed from the command line at the Magento root.
 `prophet`: Run PHPUnit tests for modules defined in prophet.json (this is an alias of `scry:phpunit`).
 
 `prophet validate`: Confirm that all modules in prophet.json are testable.
+
+`prophet show`: Display all modules in prophet.json, and their available tests.
 
 `prophet init`: Initialize any modules in prophet.json that do not have the expected test structure.
 
@@ -74,8 +70,6 @@ Prophet must be executed from the command line at the Magento root.
 `prophet scry:phpunit`: Same as the basic `prophet` invocation.
 
 `prophet scry:behat`: Run functional tests using Behat. Requires phantomjs and selenium-server.
-
-`prophet scry:barista`: (experimental) Run javascript acceptance tests using mocha and zombie. Requires mocha and zombie to be installed globally.
 
 `prophet help [command]`: View help for a specific command.
 
@@ -167,12 +161,27 @@ public function testRecentAction()
 
 http://dannorth.net/whats-in-a-story/
 
-Prophet can run functional tests using Behat and Mink. The default configuration from init will use
-PhantomJS and Selenium-Server, which must be installed separately.
+Prophet can run functional tests using Behat and Mink.
 
-At this time, the Behat integration does not support Windows. The process controls used to autostart and stop
-PhantomJS and Selenium-Server only work on OSX or Linux, and are very rudimentary.
-Better abstraction of process controls is planned but not yet available.
+Prophet does not configure any browsers or drivers; this is all configured
+via your behat.yml file. If you have not already configured something, the 
+[elgalu/selenium](https://github.com/elgalu/docker-selenium) docker container
+ provides a preconfigured Selenium hub with Firefox and Chrome.
+ 
+Recommended to use Parallels instead of Virtualbox if using docker-machine, unless you like tests running as slow as molasses. Also recommended to give the docker-machine at least 4GB of RAM to satiate Chrome's hunger for memory.
+
+https://github.com/Parallels/docker-machine-parallels/
+ 
+ TODO: add instructions on setting up elgalu container with prophet and behat, setting up docker-machine- write script
+ 
+ ```bash
+ #Create the docker container (assuming you already pulled elgalu/selenium
+docker run --rm --name=grid --add-host='develop.vagrant.dev:192.168.80.80' -p 4444:24444 -p 5920:25900 \
+   -v /dev/shm:/dev/shm -e VNC_PASSWORD=hola elgalu/selenium
+ 
+ #View the browser live during a test
+open vnc://:hola@$(docker-machine ip default):5920
+ ```
 
 Prophet provides a ProphetContext class that inherits from MinkContext and adds
 additional useful step definitions. It is highly recommended to make your FeatureContext

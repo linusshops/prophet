@@ -18,11 +18,11 @@ use LinusShops\Prophet\TestRunner;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class PhpUnit extends Scry
 {
     private $isolated;
+    private $noIsolate;
 
     protected function configure()
     {
@@ -38,6 +38,12 @@ class PhpUnit extends Scry
                 'Indicates to prophet that it is running as a subprocess, and'.
                 ' should assume it has only one module to run.'
             )
+            ->addOption(
+                'no-isolate',
+                null,
+                InputOption::VALUE_NONE,
+                'Disable process isolation of tests'
+            )
         ;
     }
 
@@ -50,9 +56,9 @@ class PhpUnit extends Scry
     public function doTest(Module $module, InputInterface $input, OutputInterface $output)
     {
         $this->isolated = $input->getOption('isolated');
-        $dispatcher = new EventDispatcher();
+        $this->noIsolate = $input->getOption('no-isolate');
 
-        if (!$this->isIsolated()) {
+        if (!$this->isIsolated() && !$this->noIsolate) {
             $output->writeln("<info>Isolating {$module->getName()}</info>");
             $cmd = $this->getProphetCall()
                 . " scry:phpunit --isolated -m {$module->getName()} -p {$input->getOption('path')}";
@@ -71,7 +77,7 @@ class PhpUnit extends Scry
             $this->cliHelper()->veryVerbose('Loading Magento classes...',
                 $output);
 
-            $options = array();
+            $options = new Events\Options();
 
             Events::dispatch(Events::PROPHET_PREMAGENTO, $options);
             Magento::bootstrap($input->getOption('path'), $options);
@@ -112,7 +118,7 @@ class PhpUnit extends Scry
                 ) {
                     $parts = explode('_', $classname);
 
-                    $loadpath = $rootPath.'/'.$modulePath.'/src/app/code/local/'
+                    $loadpath = $rootPath.'/'.$modulePath.'/src/app/code/community/'
                         . $parts[0].'/'.$parts[1]
                         . '/controllers';
                     for ($i = 2; $i<count($parts); $i++) {
@@ -155,8 +161,10 @@ class PhpUnit extends Scry
                 true);
 
             $output->writeln('Starting tests for ['.$module->getName().']');
+
             $eventData = array($module, 'phpunit');
-            Events::dispatch(Events::PROPHET_PREMODULE, $eventData);
+            $options = new Events\Options($eventData);
+            Events::dispatch(Events::PROPHET_PREMODULE, $options);
             $runner = new TestRunner($module);
             $runner->run(
                 $path = $input->getOption('path').'/'.$module->getPath(),
@@ -165,7 +173,7 @@ class PhpUnit extends Scry
                     'filter' => $input->getOption('filter')
                 )
             );
-            Events::dispatch(Events::PROPHET_POSTMODULE, $eventData);
+            Events::dispatch(Events::PROPHET_POSTMODULE, $options);
         }
     }
 
