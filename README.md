@@ -184,10 +184,7 @@ docker run --rm --name=grid --add-host='develop.vagrant.dev:192.168.80.80' -p 44
 open vnc://:hola@$(docker-machine ip default):5920
  ```
 
-Prophet provides a ProphetContext class that inherits from MinkContext and adds
-additional useful step definitions. It is highly recommended to make your FeatureContext
-files inherit from this.  It also provides a post-step hook that will automatically
-take a screenshot if a step fails.
+Prophet makes all of the contexts from [linusshops/behat-contexts](https://github.com/linusshops/behat-contexts) available to Behat via its custom loaders. See the behat-contexts repository for more information. Remember that you can generate an ide helper file to give you autocomplete (`prophet generate:ide-helper`).
 
 ## Author
 
