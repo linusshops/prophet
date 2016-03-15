@@ -136,7 +136,9 @@ class Analyze extends Command
                 $output->writeln($file->getRealPath());
             }
 
-            if ($file->getFilename() == 'phpunit.xml') {
+            $validFiles = array('phpunit.xml', 'behat.yml');
+
+            if (in_array($file->getFilename(), $validFiles)) {
                 $paths[] = $file->getPath();
             }
         }
