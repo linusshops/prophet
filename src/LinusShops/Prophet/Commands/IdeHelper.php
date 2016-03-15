@@ -56,7 +56,6 @@ class IdeHelper extends Command
 
     public function buildIdeHelper($classesByNamespace)
     {
-        print_r($classesByNamespace);
         $fileContents = "<?php \n die('This file is for autocomplete only and should not be included');\n";
 
         foreach ($classesByNamespace as $namespace => $classes) {
@@ -66,5 +65,16 @@ class IdeHelper extends Command
         }
 
         return $fileContents;
+    }
+
+    public function makeParameterString(\ReflectionMethod $method)
+    {
+        $parameters = array();
+
+        foreach ($method->getParameters() as $parameter) {
+            $parameters[] = $parameter->name;
+        }
+
+        return implode(',', $parameters);
     }
 }
