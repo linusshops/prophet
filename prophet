@@ -58,7 +58,6 @@ $application->setDefaultCommand('scry:phpunit');
 //Test framework implementations
 $application->add(new LinusShops\Prophet\Commands\Scry\PhpUnit());
 $application->add(new LinusShops\Prophet\Commands\Scry\Behat());
-$application->add(new LinusShops\Prophet\Commands\Scry\Barista());
 
 //Test setup
 $application->add(new LinusShops\Prophet\Commands\Validate());
