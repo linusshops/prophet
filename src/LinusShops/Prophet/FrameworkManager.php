@@ -15,11 +15,17 @@ class FrameworkManager
 {
     public static function install(Event $event)
     {
-
+        if (is_dir('./frameworks/behat') && is_dir('./frameworks/phpunit')) {
+            shell_exec('cd ./frameworks/behat && composer install && cd -');
+            shell_exec('cd ./frameworks/phpunit && composer install && cd -');
+        }
     }
 
     public static function update(Event $event)
     {
-
+        if (is_dir('./frameworks/behat') && is_dir('./frameworks/phpunit')) {
+            shell_exec('cd ./frameworks/behat && composer update && cd -');
+            shell_exec('cd ./frameworks/phpunit && composer update && cd -');
+        }
     }
 }
