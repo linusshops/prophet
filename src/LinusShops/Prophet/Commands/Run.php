@@ -11,7 +11,7 @@ namespace LinusShops\Prophet\Commands;
 use LinusShops\Prophet\Config;
 use LinusShops\Prophet\ConfigRepository;
 use LinusShops\Prophet\Module;
-use Symfony\Component\Console\Command\Command;
+use LinusShops\Prophet\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -98,13 +98,13 @@ class Run extends Command
 
     protected function runTestFramework($framework, $modulePath, $magentoPath)
     {
-        $path = PROPHET_ROOT_DIR.'/frameworks/'.$framework.'/loader.php';
+        $path = PROPHET_ROOT_DIR.'/frameworks/'.$framework;
         if (!is_file($path)) {
             return false;
         }
 
-        $cmd = "php {$path} ".PROPHET_ROOT_DIR." {$modulePath} {$magentoPath}";
-        passthru($cmd);
+        $cmd = "php loader.php ".PROPHET_ROOT_DIR." {$modulePath} {$magentoPath}";
+        $this->shell($cmd, $path);
 
         return true;
     }
