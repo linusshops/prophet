@@ -12,14 +12,15 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
-class Update extends Command
+class Remove extends Command
 {
     protected function configure()
     {
         $this
-            ->setName('framework:update')
-            ->setDescription('Update an installed framework.')
+            ->setName('framework:remove')
+            ->setDescription('Remove an installed framework.')
             ->addArgument(
                 'name',
                 InputArgument::REQUIRED,
@@ -35,8 +36,8 @@ class Update extends Command
         $frameworkDir = PROPHET_ROOT_DIR.'/frameworks/'.$name;
 
         if (is_dir($frameworkDir)) {
-            chdir($frameworkDir);
-            passthru('git pull && composer install');
+            $fs = new Filesystem();
+            $fs->remove($frameworkDir);
         } else {
             echo "{$name} not found.";
         }

@@ -30,6 +30,8 @@
     "php": ">=5.3",
     "ext-json": "*",
     "symfony/console": "^3.0.0",
+    "symfony/filesystem": "^3.0.0",
+    "symfony/process": "^3.0.0",
     "psy/psysh":"~0.4@stable"
   },
   "bin": [
