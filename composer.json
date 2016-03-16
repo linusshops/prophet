@@ -29,15 +29,8 @@
   "require": {
     "php": ">=5.3",
     "ext-json": "*",
-    "symfony/console": "~2.6",
-    "phpunit/phpunit": "^4.6.4",
-    "psy/psysh":"~0.4@stable",
-    "behat/behat": "~3",
-    "behat/mink-selenium2-driver":"~1",
-    "behat/mink-extension": "^2.1",
-    "behat/mink-goutte-driver": "^1.2",
-    "behat/mink": "^1.7",
-    "linusshops/behat-contexts": "dev-master@dev"
+    "symfony/console": "~3",
+    "psy/psysh":"~0.4@stable"
   },
   "bin": [
     "prophet"
@@ -46,5 +39,9 @@
     "psr-4": {
       "LinusShops\\Prophet\\":"src/LinusShops/Prophet"
     }
+  },
+  "scripts": {
+    "post-install-cmd": "LinusShops\\Prophet\\FrameworkManager::install",
+    "post-update-cmd": "LinusShops\\Prophet\\FrameworkManager::update"
   }
 }

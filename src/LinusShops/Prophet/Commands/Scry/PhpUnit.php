@@ -154,11 +154,9 @@ class PhpUnit extends Scry
             //will cause everything to die if it can't find the class. Also,
             //this will give us a hook in the future if Prophet ever
             //needs to intercept class loading.
-            spl_autoload_register($communityPool, true,
-                true);
+            spl_autoload_register($communityPool, true, true);
             spl_autoload_register($localPool, true, true);
-            spl_autoload_register($overrideLoader, true,
-                true);
+            spl_autoload_register($overrideLoader, true, true);
 
             $output->writeln('Starting tests for ['.$module->getName().']');
 
