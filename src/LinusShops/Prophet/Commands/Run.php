@@ -98,13 +98,13 @@ class Run extends Command
 
     protected function runTestFramework($framework, $modulePath, $magentoPath)
     {
-        $path = PROPHET_ROOT_DIR.'/frameworks/'.$framework;
+        $path = PROPHET_ROOT_DIR.'/frameworks/'.$framework.'/loader.php';
         if (!is_file($path)) {
             return false;
         }
 
-        $cmd = "php loader.php ".PROPHET_ROOT_DIR." {$modulePath} {$magentoPath}";
-        $this->shell($cmd, $path);
+        $cmd = "php {$path} ".PROPHET_ROOT_DIR." {$modulePath} {$magentoPath}";
+        $this->shell($cmd);
 
         return true;
     }
