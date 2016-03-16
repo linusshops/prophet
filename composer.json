@@ -29,7 +29,7 @@
   "require": {
     "php": ">=5.3",
     "ext-json": "*",
-    "symfony/console": "~3",
+    "symfony/console": "^3.0.0",
     "psy/psysh":"~0.4@stable"
   },
   "bin": [
