@@ -8,10 +8,11 @@
 
 namespace LinusShops\Prophet\Commands\Framework;
 
-use Symfony\Component\Console\Command\Command;
+use LinusShops\Prophet\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Process;
 
 class Update extends Command
 {
@@ -30,17 +31,14 @@ class Update extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $curdir = getcwd();
         $name = $input->getArgument('name');
         $frameworkDir = PROPHET_ROOT_DIR.'/frameworks/'.$name;
 
         if (is_dir($frameworkDir)) {
-            chdir($frameworkDir);
-            passthru('git pull && composer install');
+            $cmd = 'git pull && composer install';
+            $this->shell($cmd, $frameworkDir);
         } else {
             echo "{$name} not found.";
         }
-
-        chdir($curdir);
     }
 }

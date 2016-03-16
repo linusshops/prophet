@@ -8,7 +8,7 @@
 
 namespace LinusShops\Prophet\Commands\Framework;
 
-use Symfony\Component\Console\Command\Command;
+use LinusShops\Prophet\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -35,8 +35,6 @@ class Install extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $curdir = getcwd();
-
         $frameworkDir = PROPHET_ROOT_DIR.'/frameworks';
 
         if (!is_writable($frameworkDir)) {
@@ -51,14 +49,7 @@ class Install extends Command
             return;
         }
 
-        chdir($frameworkDir);
-
-        passthru('git clone '.$input->getArgument('repository').' '.$name);
-
-        chdir($name);
-
-        passthru('composer install');
-
-        chdir($curdir);
+        $this->shell('git clone '.$input->getArgument('repository').' '.$name, $frameworkDir);
+        $this->shell('composer install', $frameworkDir.'/'.$name);
     }
 }

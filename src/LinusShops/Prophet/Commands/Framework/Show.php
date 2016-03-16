@@ -8,7 +8,7 @@
 
 namespace LinusShops\Prophet\Commands\Framework;
 
-use Symfony\Component\Console\Command\Command;
+use LinusShops\Prophet\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -24,8 +24,6 @@ class Show extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $curdir = getcwd();
-
         $frameworkDir = PROPHET_ROOT_DIR.'/frameworks';
 
         $frameworks = array_diff(scandir($frameworkDir), array('.','..','.gitignore'));
@@ -33,7 +31,5 @@ class Show extends Command
         foreach ($frameworks as $f) {
             echo $f.PHP_EOL;
         }
-
-        chdir($curdir);
     }
 }
