@@ -27,3 +27,13 @@ Magento::bootstrap($options);
 Events::dispatch(Events::PROPHET_POSTMAGENTO);
 
 Magento::injectAutoloaders($modulePath, $magentoPath);
+
+$runner = new \PHPUnit_TextUI_Command();
+$options = array(
+    '--configuration',
+    $modulePath.'/phpunit.xml'
+);
+
+array_unshift($options, 'phpunit');
+
+return $runner->run($options, false);

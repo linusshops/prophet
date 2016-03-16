@@ -74,8 +74,7 @@ class PhpUnit extends Scry
             $modulePath = $module->getPath();
             $rootPath = $input->getOption('path');
 
-            $this->cliHelper()->veryVerbose('Loading Magento classes...',
-                $output);
+            $this->cliHelper()->veryVerbose('Loading Magento classes...', $output);
 
             $options = new Events\Options();
 
