@@ -39,9 +39,5 @@
     "psr-4": {
       "LinusShops\\Prophet\\":"src/LinusShops/Prophet"
     }
-  },
-  "scripts": {
-    "post-install-cmd": "LinusShops\\Prophet\\FrameworkManager::install",
-    "post-update-cmd": "LinusShops\\Prophet\\FrameworkManager::update"
   }
 }
