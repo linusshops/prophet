@@ -50,7 +50,7 @@ $application = new Application();
 
 $application->setName('Prophet');
 $application->setVersion('0.7.3');
-$application->setDefaultCommand('scry:phpunit');
+$application->setDefaultCommand('run');
 
 \LinusShops\Prophet\ConfigRepository::setProphetPath($_SERVER['argv'][0]);
 
@@ -58,6 +58,7 @@ $application->setDefaultCommand('scry:phpunit');
 \LinusShops\Prophet\PluginRepository::load();
 
 //Test framework implementations
+$application->add(new LinusShops\Prophet\Commands\Run());
 $application->add(new LinusShops\Prophet\Commands\Scry\PhpUnit());
 $application->add(new LinusShops\Prophet\Commands\Scry\Behat());
 
