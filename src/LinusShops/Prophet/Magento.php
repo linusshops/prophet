@@ -20,7 +20,7 @@ class Magento
         'autoload' => '/lib/Varien/Autoload.php'
     );
 
-    public static function bootstrap($path = '.', Options $options)
+    public static function bootstrap(Options $options, $path = '.')
     {
         if (!self::isLoaded()) {
 
@@ -38,6 +38,71 @@ class Magento
 
             self::$loaded = true;
         }
+    }
+
+    public static function injectAutoloaders($modulePath, $rootPath)
+    {
+        //Register a custom autoloader so that controller classes
+        //can be loaded for testing.
+        $localPool = function ($classname) use ($modulePath, $rootPath) {
+            if (strpos($classname, 'Controller') !== false) {
+                $parts = explode('_', $classname);
+
+                $loadpath = $rootPath.'/'.$modulePath.'/src/app/code/local/'
+                    . $parts[0].'/'.$parts[1]
+                    . '/controllers';
+                for ($i = 2; $i<count($parts); $i++) {
+                    $loadpath .= '/'.$parts[$i];
+                }
+
+                $loadpath .= '.php';
+
+                if (file_exists($loadpath)) {
+                    include $loadpath;
+                }
+            }
+        };
+
+        $communityPool = function ($classname) use ($modulePath, $rootPath) {
+            if (strpos($classname, 'Controller') !== false) {
+                $parts = explode('_', $classname);
+
+                $loadpath = $rootPath.'/'.$modulePath.'/src/app/code/community/'
+                    . $parts[0].'/'.$parts[1]
+                    . '/controllers';
+                for ($i = 2; $i<count($parts); $i++) {
+                    $loadpath .= '/'.$parts[$i];
+                }
+
+                $loadpath .= '.php';
+
+                if (file_exists($loadpath)) {
+                    include $loadpath;
+                }
+            }
+        };
+
+        //Prophet override loader.
+        //Prophet gives itself priority over all other loaders, as this
+        //allows the injection of testing specific classes. If there is
+        //a class you wish to override in testing, you can do this by adding
+        //a file with its exact class name in the tests/phpunit/classes directory
+        //in the module.
+        $overrideLoader = function ($classname) use ($modulePath, $rootPath) {
+            $loadpath = $rootPath.'/'.$modulePath.'/tests/phpunit/classes/'.$classname.'.php';
+
+            if (file_exists($loadpath)) {
+                include $loadpath;
+            }
+        };
+
+        //This autoloader is prepended, as the Varien autoloader
+        //will cause everything to die if it can't find the class. Also,
+        //this will give us a hook in the future if Prophet ever
+        //needs to intercept class loading.
+        spl_autoload_register($communityPool, true, true);
+        spl_autoload_register($localPool, true, true);
+        spl_autoload_register($overrideLoader, true, true);
     }
 
     /**
