@@ -75,6 +75,7 @@ $application->add(new LinusShops\Prophet\Commands\IdeHelper());
 //Frameworks
 $application->add(new \LinusShops\Prophet\Commands\Framework\Install());
 $application->add(new \LinusShops\Prophet\Commands\Framework\Show());
+$application->add(new \LinusShops\Prophet\Commands\Framework\Update());
 
 //Plugins
 $application->add(new \LinusShops\Prophet\Commands\Plugin\Show());
