@@ -91,6 +91,9 @@ class Injector
         $localPool = function ($classname) use ($modulePath, $rootPath) {
             if (strpos($classname, 'Controller') !== false) {
                 $parts = explode('_', $classname);
+                if (!isset($parts[0]) || !isset($parts[2])) {
+                    return;
+                }
 
                 $loadpath = $rootPath.'/'.$modulePath.'/src/app/code/local/'
                     . $parts[0].'/'.$parts[1]
@@ -110,6 +113,10 @@ class Injector
         $communityPool = function ($classname) use ($modulePath, $rootPath) {
             if (strpos($classname, 'Controller') !== false) {
                 $parts = explode('_', $classname);
+
+                if (!isset($parts[0]) || !isset($parts[2])) {
+                    return;
+                }
 
                 $loadpath = $rootPath.'/'.$modulePath.'/src/app/code/community/'
                     . $parts[0].'/'.$parts[1]
