@@ -7,7 +7,7 @@
      * @company Linus Shops
      */
 
-namespace LinusShops\Prophet\Overrides;
+namespace LinusShops\Prophet\Injectable\Overrides;
 
 class Request extends \Mage_Core_Controller_Request_Http
 {

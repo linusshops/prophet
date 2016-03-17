@@ -40,7 +40,7 @@ class Magento
         }
     }
 
-    public static function injectAutoloaders($modulePath, $rootPath)
+    public static function injectAutoloaders($modulePath, $rootPath, $prophetPath)
     {
         //Register a custom autoloader so that controller classes
         //can be loaded for testing.
@@ -82,6 +82,26 @@ class Magento
             }
         };
 
+        //Prophet injectable loader
+        //Prophet provides some common mock classes, such as requests and responses
+        //This loader allows the injector to retrieve them. They can be overriden
+        //by the override loader.
+        $injectableLoader = function ($classname) use ($prophetPath) {
+            if ($classname == 'LinusShops\\Prophet\\Injector') {
+                require $prophetPath.'/src/LinusShops/Prophet/Injector.php';
+            }
+
+            $parts = explode('\\', $classname);
+            $class = implode('/', $parts);
+            if (!in_array('LinusShops', $parts) || !in_array('Injectable', $parts)) {
+                return;
+            }
+            $path = $prophetPath.'/src/'.$class.'.php';
+            if (file_exists($path)) {
+                require $path;
+            }
+        };
+
         //Prophet override loader.
         //Prophet gives itself priority over all other loaders, as this
         //allows the injection of testing specific classes. If there is
@@ -102,6 +122,7 @@ class Magento
         //needs to intercept class loading.
         spl_autoload_register($communityPool, true, true);
         spl_autoload_register($localPool, true, true);
+        spl_autoload_register($injectableLoader, true, true);
         spl_autoload_register($overrideLoader, true, true);
     }
 
