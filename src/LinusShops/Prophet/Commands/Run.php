@@ -52,7 +52,7 @@ class Run extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if (!$this->isConfigValid($input, $output)) {
-
+            $output->writeln("<error>Invalid prophet config.</error>");
             return;
         }
         $framework = $input->getArgument('framework');
@@ -67,11 +67,6 @@ class Run extends Command
         /** @var Module $module */
         foreach ($config->getModuleList() as $module) {
             if ($this->checkIfRequested($modulesRequested, $module, $output)) {
-                $path = $module->getPath().'/tests/ProphetEvents.php';
-                if (file_exists($path)) {
-                    include $path;
-                }
-
                 $modulePath = $module->getPath();
                 $magentoPath = $input->getOption('path');
 

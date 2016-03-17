@@ -174,6 +174,12 @@ class Injector
         spl_autoload_register($localPool, true, true);
         spl_autoload_register($injectableLoader, true, true);
         spl_autoload_register($overrideLoader, true, true);
+
+        //Load the ProphetEvents file for the current module test
+        $path = $modulePath.'/tests/ProphetEvents.php';
+        if (file_exists($path)) {
+            include $path;
+        }
     }
 
     /**
