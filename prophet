@@ -48,7 +48,7 @@ use Symfony\Component\Console\Application;
 $application = new Application();
 
 $application->setName('Prophet');
-$application->setVersion('0.7.3');
+$application->setVersion('0.8.0');
 $application->setDefaultCommand('run');
 
 \LinusShops\Prophet\ConfigRepository::setProphetPath($_SERVER['argv'][0]);
