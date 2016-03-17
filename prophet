@@ -54,9 +54,6 @@ $application->setDefaultCommand('run');
 
 \LinusShops\Prophet\ConfigRepository::setProphetPath($_SERVER['argv'][0]);
 
-//Load plugins
-\LinusShops\Prophet\PluginRepository::load();
-
 //Test framework implementations
 $application->add(new LinusShops\Prophet\Commands\Run());
 
