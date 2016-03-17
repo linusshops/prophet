@@ -1,0 +1,8 @@
+{
+  "phpunit": {
+    "url": "git@github.com:linusshops/prophet-framework-phpunit.git"
+  },
+  "behat": {
+  "url": "https://github.com/linusshops/prophet-framework-behat"
+  }
+}

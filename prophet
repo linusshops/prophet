@@ -59,8 +59,6 @@ $application->setDefaultCommand('run');
 
 //Test framework implementations
 $application->add(new LinusShops\Prophet\Commands\Run());
-$application->add(new LinusShops\Prophet\Commands\Scry\PhpUnit());
-$application->add(new LinusShops\Prophet\Commands\Scry\Behat());
 
 //Test setup
 $application->add(new LinusShops\Prophet\Commands\Validate());
