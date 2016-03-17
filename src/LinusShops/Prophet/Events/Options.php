@@ -9,12 +9,11 @@
 
 namespace LinusShops\Prophet\Events;
 
-
 class Options
 {
     private $options=array();
 
-    public function __construct(array $options=array())
+    public function __construct(array $options = array())
     {
         $this->options = $options;
     }

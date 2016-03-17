@@ -1,18 +1,42 @@
 <?php
-/**
-     * Boostraps the containing Magento installation
-     *
-     * @author Sam Schmidt
-     * @date 2015-04-17
-     * @company Linus Shops
-     */
-
 namespace LinusShops\Prophet;
 
-use LinusShops\Prophet\Events\Options;
+use LinusShops\Prophet\Events;
 
-class Magento
+/**
+ * Facade class for Prophet Helpers
+ *
+ * @author Sam Schmidt
+ * @date 2015-06-18
+ * @company Linus Shops
+ */
+class Injector
 {
+    private static $paths;
+
+    /**
+     * @return mixed
+     */
+    public static function getModulePath()
+    {
+        return self::$paths['module'];
+    }
+
+    public static function setPaths(array $paths)
+    {
+        self::$paths = $paths;
+    }
+
+    public static function listen($event, $callable)
+    {
+        Events::listen($event, $callable);
+    }
+
+    public static function dispatch($eventName, &$options = array())
+    {
+        Events::dispatch($eventName, $options);
+    }
+
     protected static $loaded = false;
 
     protected static $magento = array(
@@ -20,7 +44,7 @@ class Magento
         'autoload' => '/lib/Varien/Autoload.php'
     );
 
-    public static function bootstrap(Options $options, $path = '.')
+    public static function bootMagento($path = '.')
     {
         if (!self::isLoaded()) {
 
@@ -32,7 +56,7 @@ class Magento
 
             require_once $path.'/app/Mage.php';
 
-            $app = \Mage::app('default', 'store', $options->getAll());
+            $app = \Mage::app('default', 'store', array());
             $app->getConfig()->loadEventObservers('global');
             $app->getConfig()->loadEventObservers('front');
 
@@ -87,8 +111,14 @@ class Magento
         //This loader allows the injector to retrieve them. They can be overriden
         //by the override loader.
         $injectableLoader = function ($classname) use ($prophetPath) {
-            if ($classname == 'LinusShops\\Prophet\\Injector') {
-                require $prophetPath.'/src/LinusShops/Prophet/Injector.php';
+            if ($classname == 'LinusShops\\Prophet\\Events') {
+                require $prophetPath.'/src/LinusShops/Prophet/Events.php';
+                return;
+            }
+
+            if ($classname == 'LinusShops\\Prophet\\Events\\Options') {
+                require $prophetPath.'/src/LinusShops/Prophet/Events/Options.php';
+                return;
             }
 
             $parts = explode('\\', $classname);

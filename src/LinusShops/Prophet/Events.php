@@ -33,11 +33,12 @@ class Events
 
     protected static $events = array();
 
-    public static function listen($eventName, $callable) {
+    public static function listen($eventName, $callable)
+    {
         self::$events[$eventName][] = $callable;
     }
 
-    public static function dispatch($eventName, &$options=array())
+    public static function dispatch($eventName, &$options = array())
     {
         if (isset(self::$events[$eventName])) {
             foreach (self::$events[$eventName] as $event) {
