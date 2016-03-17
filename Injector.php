@@ -39,9 +39,29 @@ class Injector
         Events::listen($event, $callable);
     }
 
+    public static function listenPremodule(callable $callable)
+    {
+        self::listen(Events::PROPHET_PREMODULE, $callable);
+    }
+
+    public static function listenPostmodule(callable $callable)
+    {
+        self::listen(Events::PROPHET_POSTMODULE, $callable);
+    }
+
     public static function dispatch($eventName, &$options = array())
     {
         Events::dispatch($eventName, $options);
+    }
+
+    public static function dispatchPremodule()
+    {
+        self::dispatch(Events::PROPHET_PREMODULE);
+    }
+
+    public static function dispatchPostmodule()
+    {
+        self::dispatch(Events::PROPHET_POSTMODULE);
     }
 
     public static function bootMagento($path = '.')
