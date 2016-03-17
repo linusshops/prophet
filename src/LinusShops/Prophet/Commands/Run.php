@@ -12,6 +12,7 @@ use LinusShops\Prophet\Config;
 use LinusShops\Prophet\ConfigRepository;
 use LinusShops\Prophet\Module;
 use LinusShops\Prophet\Command;
+use LinusShops\Prophet\Injector;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -66,7 +67,7 @@ class Run extends Command
         /** @var Module $module */
         foreach ($config->getModuleList() as $module) {
             if ($this->checkIfRequested($modulesRequested, $module, $output)) {
-                \PD::setCurrentModulePath($module->getPath());
+                Injector::setCurrentModulePath($module->getPath());
                 $path = $module->getPath().'/tests/ProphetEvents.php';
                 if (file_exists($path)) {
                     include $path;

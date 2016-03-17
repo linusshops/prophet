@@ -1,4 +1,6 @@
 <?php
+namespace LinusShops\Prophet;
+
 use LinusShops\Prophet\Events;
 
 /**
@@ -8,7 +10,7 @@ use LinusShops\Prophet\Events;
  * @date 2015-06-18
  * @company Linus Shops
  */
-class PD
+class Injector
 {
     private static $currentModulePath;
 
