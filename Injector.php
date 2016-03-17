@@ -14,6 +14,13 @@ class Injector
 {
     private static $paths;
 
+    protected static $loaded = false;
+
+    protected static $magento = array(
+        'functions' => '/app/code/core/Mage/Core/functions.php',
+        'autoload' => '/lib/Varien/Autoload.php'
+    );
+
     /**
      * @return mixed
      */
@@ -36,13 +43,6 @@ class Injector
     {
         Events::dispatch($eventName, $options);
     }
-
-    protected static $loaded = false;
-
-    protected static $magento = array(
-        'functions' => '/app/code/core/Mage/Core/functions.php',
-        'autoload' => '/lib/Varien/Autoload.php'
-    );
 
     public static function bootMagento($path = '.')
     {
