@@ -99,7 +99,7 @@ class Run extends Command
         }
 
         $cmd = "php {$path} ".PROPHET_ROOT_DIR." {$modulePath} {$magentoPath}";
-        $this->shell($cmd);
+        $this->shell($cmd, '.', true);
 
         return true;
     }

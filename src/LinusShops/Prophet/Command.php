@@ -12,9 +12,10 @@ use Symfony\Component\Process\Process;
 
 class Command extends \Symfony\Component\Console\Command\Command
 {
-    protected function shell($command, $workingDirectory = '.')
+    protected function shell($command, $workingDirectory = '.', $asTty = false)
     {
         $process = new Process($command, $workingDirectory, null, null, null);
+        $process->setTty($asTty);
         return $process->run(function ($type, $buffer) {
             echo $buffer;
         }) == 0;
