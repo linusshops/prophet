@@ -17,6 +17,6 @@ class Command extends \Symfony\Component\Console\Command\Command
         $process = new Process($command, $workingDirectory);
         return $process->run(function ($type, $buffer) {
             echo $buffer;
-        });
+        }) == 0;
     }
 }
