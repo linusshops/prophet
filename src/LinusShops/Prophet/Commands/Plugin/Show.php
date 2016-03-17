@@ -27,15 +27,12 @@ class Show extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $curdir = getcwd();
-        chdir(ConfigRepository::getPluginDirectory());
+        $frameworkDir = PROPHET_ROOT_DIR.'/plugins';
 
-        $plugins = array_diff(scandir('.'), array('.','..','.gitignore'));
+        $frameworks = array_diff(scandir($frameworkDir), array('.','..','.gitignore'));
 
-        foreach ($plugins as $plugin) {
-            echo $plugin.PHP_EOL;
+        foreach ($frameworks as $f) {
+            echo $f.PHP_EOL;
         }
-
-        chdir($curdir);
     }
 }

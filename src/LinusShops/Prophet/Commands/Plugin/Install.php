@@ -25,27 +25,56 @@ class Install extends Plugin
             ->setName('plugin:install')
             ->setDescription('Install a plugin.')
             ->addArgument(
-                'repository',
+                'name',
                 InputArgument::REQUIRED,
-                'Url to git repository'
+                'Local name for the plugin.'
+            )
+            ->addArgument(
+                'repository',
+                InputArgument::OPTIONAL,
+                'Url to git repository',
+                null
             )
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $curdir = getcwd();
-        $url = $input->getArgument('repository');
-        chdir(ConfigRepository::getPluginDirectory());
-        $dirs = scandir('.');
-        passthru('git clone '.$url);
-        $newdirs = scandir('.');
-        $diff = array_diff($newdirs, $dirs);
-        $pluginName = array_pop($diff);
-        chdir($pluginName);
-        passthru('composer install');
-        $this->copyConfig($pluginName);
+        $pluginDir = PROPHET_ROOT_DIR.'/plugins';
 
-        chdir($curdir);
+        if (!is_writable($pluginDir)) {
+            $output->writeln("{$pluginDir} is not writable.");
+            return;
+        }
+
+        $name = $input->getArgument('name');
+
+        if (is_dir($pluginDir.'/'.$name)) {
+            $output->writeln("{$name} already exists.");
+            return;
+        }
+
+        $repo = $input->getArgument('repository');
+
+        if (empty($repo)) {
+            $output->writeln("Repository not provided, checking defaults...");
+            $defaultRepos = file_get_contents(PROPHET_ROOT_DIR.'/defaults/plugins.json');
+            $defaultRepos = json_decode($defaultRepos, true);
+            if ($defaultRepos && isset($defaultRepos[$name])) {
+                $repo = $defaultRepos[$name]['url'];
+                $output->writeln("Using {$repo}...");
+            } else {
+                $output->writeln("{$name} has no default repository.");
+                return;
+            }
+        }
+
+        if ($this->shell('git clone '.$repo.' '.$name, $pluginDir)) {
+            $this->shell('composer install', $pluginDir . '/' . $name);
+        } else {
+            $output->writeln('Failed to install from '.$repo);
+        }
+
+        $this->copyConfig($name);
     }
 }

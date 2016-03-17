@@ -22,36 +22,25 @@ class Update extends Command
     {
         $this
             ->setName('plugin:update')
-            ->setDescription('Update a plugin, or all plugins if none provided.')
+            ->setDescription('Update a plugin.')
             ->addArgument(
                 'name',
-                InputArgument::OPTIONAL,
-                'Name of the plugin to update',
-                null
+                InputArgument::REQUIRED,
+                'Name of the plugin to update'
             )
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $curdir = getcwd();
         $name = $input->getArgument('name');
-        chdir(ConfigRepository::getPluginDirectory());
+        $pluginDir = PROPHET_ROOT_DIR.'/plugins/'.$name;
 
-        $plugins = array();
-
-        if ($name == null) {
-            $plugins = array_diff(scandir('.'), array('.','..','.gitignore'));
+        if (is_dir($pluginDir)) {
+            $cmd = 'git pull && composer install';
+            $this->shell($cmd, $pluginDir);
         } else {
-            $plugins[] = $name;
+            echo "{$name} not found.";
         }
-
-        foreach ($plugins as $plugin) {
-            chdir(ConfigRepository::getPluginDirectory().'/'.$plugin);
-            passthru('git pull');
-            passthru('composer update');
-        }
-
-        chdir($curdir);
     }
 }

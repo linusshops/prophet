@@ -15,6 +15,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 class Remove extends Command
 {
@@ -33,15 +34,15 @@ class Remove extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $curdir = getcwd();
         $name = $input->getArgument('name');
-        chdir(ConfigRepository::getPluginDirectory());
+        $frameworkDir = PROPHET_ROOT_DIR.'/plugins/'.$name;
 
-        if (strpos($name, 'prophet-plugin-')!==false) {
-            passthru('rm -rf '.$name);
-            echo "$name removed successfully.".PHP_EOL;
+        if (is_dir($frameworkDir)) {
+            $fs = new Filesystem();
+            $fs->remove($frameworkDir);
+            echo "Framework {$name} removed.";
+        } else {
+            echo "{$name} not found.";
         }
-
-        chdir($curdir);
     }
 }
