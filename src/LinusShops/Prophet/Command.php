@@ -14,7 +14,7 @@ class Command extends \Symfony\Component\Console\Command\Command
 {
     protected function shell($command, $workingDirectory = '.')
     {
-        $process = new Process($command, $workingDirectory);
+        $process = new Process($command, $workingDirectory, null, null, null);
         return $process->run(function ($type, $buffer) {
             echo $buffer;
         }) == 0;
