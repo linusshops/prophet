@@ -84,6 +84,8 @@ just one variable. Psysh `list` command will show you all the variables in your 
 
 ##Events and Bootstrapping
 
+TODO: event-dispatcher no longer used, update with new instructions.
+
 Events can be listened for using symfony/event-dispatcher.
 
 `prophet.premodule`: Fired right before the module test suite begins.

@@ -11,7 +11,7 @@ namespace LinusShops\Prophet\Commands;
 
 
 use LinusShops\Prophet\ConfigRepository;
-use Symfony\Component\Console\Command\Command;
+use LinusShops\Prophet\Command;
 
 class Plugin extends Command
 {

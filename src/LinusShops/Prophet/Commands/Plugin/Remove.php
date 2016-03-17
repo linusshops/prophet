@@ -10,7 +10,7 @@
 namespace LinusShops\Prophet\Commands\Plugin;
 
 use LinusShops\Prophet\ConfigRepository;
-use Symfony\Component\Console\Command\Command;
+use LinusShops\Prophet\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;

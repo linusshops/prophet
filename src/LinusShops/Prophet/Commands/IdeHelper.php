@@ -9,7 +9,7 @@
 namespace LinusShops\Prophet\Commands;
 
 use LinusShops\Contexts\Web;
-use Symfony\Component\Console\Command\Command;
+use LinusShops\Prophet\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
