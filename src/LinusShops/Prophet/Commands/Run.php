@@ -46,6 +46,12 @@ class Run extends Command
                 'Path to the magento root (defaults to current directory)',
                 '.'
             )
+            ->addOption(
+                'fparam',
+                null,
+                InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
+                'Cli parameter to pass to the test framework'
+            )
         ;
     }
 
@@ -72,7 +78,7 @@ class Run extends Command
 
                 $output->writeln('Running ['.$framework.'] tests for '.$module->getName());
 
-                $res = $this->runTestFramework($framework, $modulePath, $magentoPath);
+                $res = $this->runTestFramework($framework, $modulePath, $magentoPath, $input->getOption('fparam'));
                 $res ? null : $output->writeln("Failed to load framework {$framework} - loader not found.");
             }
         }
@@ -91,14 +97,16 @@ class Run extends Command
         return $loaded;
     }
 
-    protected function runTestFramework($framework, $modulePath, $magentoPath)
+    protected function runTestFramework($framework, $modulePath, $magentoPath, $frameworkParameters = array())
     {
         $path = PROPHET_ROOT_DIR.'/frameworks/'.$framework.'/loader.php';
         if (!is_file($path)) {
             return false;
         }
 
-        $cmd = "php {$path} ".PROPHET_ROOT_DIR." {$modulePath} {$magentoPath}";
+        $parameters = implode(' ', $frameworkParameters);
+
+        $cmd = "php {$path} ".PROPHET_ROOT_DIR." {$modulePath} {$magentoPath} {$parameters}";
         $this->shell($cmd, '.', true);
 
         return true;
