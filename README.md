@@ -1,8 +1,5 @@
 # prophet
 
-:boom:Prophet is currently undergoing a major overhaul- the below information
-is valid up to version 0.7.3. Updated documentation is coming once the codebase is stable.:boom:
-
 Objective: provide a test harness that does not require modifying Magento core,
 and allows testing by module.  The only thing that should exist is config files,
 and the tests themselves.
@@ -54,7 +51,7 @@ For best results, your Magento installation should be managed with magento-compo
 
 Prophet must be executed from the command line at the Magento root.
 
-`prophet`: Run PHPUnit tests for modules defined in prophet.json (this is an alias of `scry:phpunit`).
+`prophet`: Run tests, default to phpunit.
 
 `prophet validate`: Confirm that all modules in prophet.json are testable.
 
@@ -68,9 +65,7 @@ Prophet must be executed from the command line at the Magento root.
 
 `prophet list`: View all commands
 
-`prophet scry:phpunit`: Same as the basic `prophet` invocation.
-
-`prophet scry:behat`: Run functional tests using Behat. Requires phantomjs and selenium-server.
+`prophet run`: Run tests using a specified test framework.
 
 `prophet generate:ide-helper`: Create a hint file to include in your project for
 autocomplete of contexts and functions provided when executing tests via Prophet.
@@ -79,42 +74,21 @@ autocomplete of contexts and functions provided when executing tests via Prophet
 
 For troubleshooting, you can increase verbosity with `-vvv`, as with any symfony/console app.
 
-##Debug Helper
-
-Prophet has [PsySh](http://psysh.org) support built in for inspecting variables. You can
-break into Psysh with `PD::inspect($context)`. $context can be an array of variables, or
-just one variable. Psysh `list` command will show you all the variables in your context.
-
 ##Events and Bootstrapping
 
 TODO: event-dispatcher no longer used, update with new instructions.
-
-Events can be listened for using symfony/event-dispatcher.
-
-`prophet.premodule`: Fired right before the module test suite begins.
-`prophet.postmodule`: Fired right after the module test suite is completed (regardless of success or failure).
-
-```
-$dispatcher = new \Symfony\Component\EventDispatcher\EventDispatcher();
-
- $dispatcher->addListener('prophet.premodule', function (\Symfony\Component\EventDispatcher\Event $event) {
-     echo "PREMODULE";
- });
-
- $dispatcher->addListener('prophet.premodule', function (\Symfony\Component\EventDispatcher\Event $event) {
-     echo "POSTMODULE";
- });
-```
 
 Prophet will check for the existence of a tests/ProphetEvents.php file in your module. If it exists, it
 will be included.  The check for this occurs immediately prior to the registration of custom autoloaders
 and the firing of the premodule event.
 
-This file is included, so it is executed within the same context as Prophet. It can serve as a module
-bootstrap file, though it is not recommended as the premodule event should be used for this, or
+This file is included, so it is executed within the same context as your tests and Prophet.
+It can serve as a module bootstrap file, though it is not recommended as the premodule event should be used for this, or
 the PHPUnit setUp functions.
 
 ##Autoloader
+
+TODO: Prophet does way more than just controllers now, expand this section.
 
 The Varien autoloader is not able to directly load controllers.  To allow these controllers to be
 instantiated for testing, Prophet creates its own autoloader functions, and prepends them
@@ -124,6 +98,8 @@ This is due to the fact that the Varien autoloader dies if it can't instantiate 
 will still use the Varien autoloader; the custom autoloaders just have priority.
 
 ## Custom Classes
+
+TODO: Add notes on custom overrides provided by Prophet
 
 Prophet includes some classes for testing that can be used in place of the regular classes.
 See the overrides dir. Generally, they extend the existing class, and rewrite methods that are
@@ -141,27 +117,7 @@ Prophet loaders have priority over the Varien autoloader.  Essentially, this all
 
 ##Controller test example
 
-```
-public function testRecentAction()
-{
-    $request = PD::getRequest();
-    $request->setMethod('GET');
-
-    $response = PD::getResponse();
-
-    $controller = new Linus_Garage_SampleController($request, $response);
-    $controller->indexAction();
-    $headers = $controller->getResponse()->getHeaders();
-    $this->assertEquals($headers[0]['name'], 'Content-Type');
-    $this->assertEquals($headers[0]['value'], 'application/json');
-
-    $body = $controller->getResponse()->getBody();
-    $json = json_decode($body, true);
-    $this->assertTrue($json !== false);
-
-    $this->assertArrayHasKey('orders', $json);
-}
-```
+TODO
 
 ## Behat
 
