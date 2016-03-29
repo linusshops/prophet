@@ -9,105 +9,55 @@
 
 namespace LinusShops\Prophet;
 
-
 use LinusShops\Prophet\Exceptions\InvalidConfigException;
-use LinusShops\Prophet\Exceptions\ProphetException;
+use Symfony\Component\Yaml\Parser;
 
 class Config
 {
     private $modules;
-    private $prophetFilePath;
-    private $pathPrefix;
+
+    public function __construct($parsedConfigFile, $prefix = '')
+    {
+        if (!is_array($parsedConfigFile)) {
+            throw new InvalidConfigException('Invalid config: parsed config must be an array.');
+        }
+
+        if (isset($parsedConfigFile['modules'])) {
+            $this->loadModules($parsedConfigFile['modules']);
+        }
+    }
 
     /**
-     * Loads a prophet.json, replacing whatever is currently held by this object
-     * @param string $prophet parsed JSON
+     * @param string $path
+     * @return Config
+     * @throws InvalidConfigException
      */
-    public function __construct($prophet, $prefix = '')
+    public static function getConfigFromFile($path = '.')
     {
-        $this->pathPrefix = $prefix;
+        $path .= '/prophet.yml';
 
-        if (!is_array($prophet)) {
-            throw new InvalidConfigException('Config::loadConfig expects an array.');
+        if (!is_file($path)) {
+            throw new InvalidConfigException('Invalid config path given.');
         }
+        $yaml = new Parser();
 
-        if (isset($prophet['modules'])) {
-            $this->loadModules($prophet['modules']);
-        }
+        return new Config($yaml->parse(file_get_contents($path)));
     }
 
     private function loadModules($modules)
     {
-        foreach ($modules as $definition) {
+        foreach ($modules as $name => $definition) {
             $module = new Module(
-                $definition['name'],
-                $definition['path'],
-                $this->loadOptions($definition)
+                $name,
+                $definition['path']
             );
 
             $this->modules[$module->getName()] = $module;
         }
     }
 
-    private function loadOptions($definition)
-    {
-        return isset($definition['options']) ? $definition['options'] : array();
-    }
-
-    public function getModule($name)
-    {
-        return $this->modules[$name];
-    }
-
-    public function getModuleList()
+    public function getModules()
     {
         return $this->modules;
-    }
-
-    public function hasModules()
-    {
-        return empty($this->modules);
-    }
-
-    public function writeModule(Module $module)
-    {
-        $this->modules['modules'][] = array(
-            'name'=>$module->getName(),
-            'path'=>$module->getPath()
-        );
-
-        file_put_contents(
-            $this->getProphetFilePath(),
-            json_encode($this->modules)
-        );
-
-        //Config state has changed, update repository version
-        ConfigRepository::setConfig($this);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getProphetFilePath()
-    {
-        return $this->prophetFilePath == null ?
-            'prophet.json'
-            : $this->prophetFilePath;
-    }
-
-    /**
-     * @param mixed $prophetFilePath
-     */
-    public function setProphetFilePath($prophetFilePath)
-    {
-        $this->prophetFilePath = $prophetFilePath;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPathPrefix()
-    {
-        return $this->pathPrefix;
     }
 }

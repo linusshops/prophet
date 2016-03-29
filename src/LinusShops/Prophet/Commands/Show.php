@@ -31,19 +31,18 @@ class Show extends ProphetCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        parent::execute($input, $output);
-
-        $modules = ConfigRepository::getModules();
+        $config = parent::execute($input, $output);
+        $modules = $config->getModules();
 
         /** @var Module $module */
-        foreach($modules as $module) {
+        foreach ($modules as $module) {
             $tests = $module->getAvailableTestFrameworks();
             $line = $module->getName();
 
             if (count($tests) == 0) {
                 $line = "<error>{$line}</error>";
             } else {
-                $line .= ' ['.implode(', ',$tests).']';
+                $line .= ' ['.implode(', ', $tests).']';
             }
 
             $output->writeln($line);

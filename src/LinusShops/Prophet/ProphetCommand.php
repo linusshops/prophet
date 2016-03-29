@@ -31,29 +31,6 @@ class ProphetCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $loaded = $this->checkFile($input, $output);
-
-        $loaded = $loaded ?
-            ConfigRepository::loadConfig($input->getOption('path'), $input->getOption('path'))
-            : $loaded;
-
-        return $loaded;
+        return Config::getConfigFromFile($input->getOption('path'));
     }
-
-    private function checkFile(InputInterface $input, OutputInterface $output)
-    {
-        $exists = true;
-        $path = $input->getOption('path').'/prophet.json';
-        if (file_exists($path) === false) {
-            $output->writeln(
-                "<error>Failed to parse {$path}: file not found.</error>"
-            );
-
-            $exists = false;
-        }
-
-        return $exists;
-    }
-
-
 }
