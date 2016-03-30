@@ -9,8 +9,6 @@
 
 namespace LinusShops\Prophet\Commands\Plugin;
 
-
-use LinusShops\Prophet\ConfigRepository;
 use LinusShops\Prophet\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
