@@ -8,11 +8,8 @@
 
 namespace LinusShops\Prophet\Commands;
 
-
-use LinusShops\Prophet\ConfigRepository;
 use LinusShops\Prophet\Module;
 use LinusShops\Prophet\ProphetCommand;
-use LinusShops\Prophet\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 

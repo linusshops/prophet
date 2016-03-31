@@ -9,16 +9,15 @@
 namespace LinusShops\Prophet\Commands;
 
 use LinusShops\Prophet\Config;
-use LinusShops\Prophet\ConfigRepository;
 use LinusShops\Prophet\Module;
 use LinusShops\Prophet\Command;
-use LinusShops\Prophet\Injector;
+use LinusShops\Prophet\ProphetCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Run extends Command
+class Run extends ProphetCommand
 {
     protected $modules = [];
 
@@ -57,13 +56,10 @@ class Run extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$this->isConfigValid($input, $output)) {
-            $output->writeln("<error>Invalid prophet config.</error>");
-            return;
-        }
+        $config = parent::execute($input, $output);
+
         $framework = $input->getArgument('framework');
 
-        $config = ConfigRepository::getConfig();
         $modulesRequested = $input->getOption('module');
 
         if (!$this->loadClasses($modulesRequested, $config, $input, $output)) {
@@ -110,32 +106,6 @@ class Run extends Command
         $this->shell($cmd, '.', true);
 
         return true;
-    }
-
-    protected function isConfigValid(InputInterface $input, OutputInterface $output)
-    {
-        $loaded = $this->checkFile($input, $output);
-
-        $loaded = $loaded ?
-            ConfigRepository::loadConfig($input->getOption('path'), $input->getOption('path'))
-            : $loaded;
-
-        return $loaded;
-    }
-
-    private function checkFile(InputInterface $input, OutputInterface $output)
-    {
-        $exists = true;
-        $path = $input->getOption('path').'/prophet.json';
-        if (file_exists($path) === false) {
-            $output->writeln(
-                "<error>Failed to parse {$path}: file not found.</error>"
-            );
-
-            $exists = false;
-        }
-
-        return $exists;
     }
 
     private function checkIfRequested($modulesRequested, $module, OutputInterface $output)
