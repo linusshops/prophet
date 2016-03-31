@@ -1,7 +1,7 @@
 <?php
 /**
      * Scan the project, looking for testable modules.
-     * Then, attempt to build a skeleton prophet.json.
+     * Then, attempt to build a skeleton prophet.yml.
      *
      * @author Sam Schmidt
      * @date 2015-04-23
