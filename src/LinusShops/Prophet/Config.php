@@ -46,9 +46,9 @@ class Config
 
     private function loadModules($modules)
     {
-        foreach ($modules as $name => $definition) {
+        foreach ($modules as $definition) {
             $module = new Module(
-                $name,
+                $definition['name'],
                 $definition['path']
             );
 

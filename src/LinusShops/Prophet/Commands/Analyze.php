@@ -17,6 +17,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Yaml\Yaml;
 
 class Analyze extends Command
 {
@@ -35,8 +36,8 @@ class Analyze extends Command
                 'path',
                 'p',
                 InputOption::VALUE_REQUIRED,
-                'Set location to create prophet.json (defaults to cwd)',
-                'prophet.json'
+                'Set location to create prophet.yml (defaults to current working directory)',
+                'prophet.yml'
             )
         ;
     }
@@ -54,49 +55,52 @@ class Analyze extends Command
         }
 
         //Check if prophet.json already exists, warn about possible overwrite.
-        if (file_exists($input->getOption('path'))) {
+        $path = $input->getOption('path');
+        if (file_exists($path)) {
             $question = new ConfirmationQuestion(
-                "<error>prophet.json already exists. Overwrite?</error>", false
+                "<error>{$path} already exists. Overwrite?</error>",
+                false
             );
 
             if (!$helper->ask($input, $output, $question)) {
-                $build = false;
+                return;
             }
         }
 
-        if ($build) {
-            $output->writeln('Scanning vendor directory for testable modules...');
+        $output->writeln('Scanning vendor directory for testable modules...');
 
-            if ($output->isVerbose()) {
-                $output->writeln('Scanning files..');
-            }
-
-            $paths = $this->detectModules($output);
-
-            $modulesToWrite = $this->buildJson($paths, $input, $output);
-
-            $this->writeJson($modulesToWrite, $input, $output);
+        if ($output->isVerbose()) {
+            $output->writeln('Scanning files..');
         }
+
+        $paths = $this->detectModules($output);
+
+        $modulesToWrite = $this->buildModuleList($paths, $input, $output);
+
+        $this->writeConfig($modulesToWrite, $path);
+
+        $output->writeln("Config written to {$path}");
     }
 
-    private function writeJson($modulesToWrite, InputInterface $input, OutputInterface $output)
+    /**
+     * @param Module[] $modulesToWrite
+     */
+    private function writeConfig($modulesToWrite, $path)
     {
-        //Write prophet.json
-        $output->writeln("Writing prophet.json");
+        $conf = array('modules'=>array());
 
-        $pjson = array('modules'=>array());
 
         foreach ($modulesToWrite as $module) {
-            $pjson['modules'][] = array(
+            $conf['modules'][] = array(
                 'path'=>$module->getPath(),
                 'name'=>$module->getName()
             );
         }
 
-        file_put_contents($input->getOption('path'), json_encode($pjson));
+        file_put_contents($path, Yaml::dump($conf, 3));
     }
 
-    private function buildJson($paths, InputInterface $input, OutputInterface $output)
+    private function buildModuleList($paths, InputInterface $input, OutputInterface $output)
     {
         $modulesToWrite = array();
 
@@ -109,7 +113,7 @@ class Analyze extends Command
             );
 
             $question = new ConfirmationQuestion(
-                "<question>Add {$module->getName()} to prophet.json?</question>",
+                "<question>Add {$module->getName()} to config?</question>",
                 false
             );
 

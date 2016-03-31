@@ -55,9 +55,7 @@ $application->setDefaultCommand('run');
 $application->add(new LinusShops\Prophet\Commands\Run());
 
 //Test setup
-$application->add(new LinusShops\Prophet\Commands\Validate());
 $application->add(new LinusShops\Prophet\Commands\Analyze());
-$application->add(new LinusShops\Prophet\Commands\Init());
 $application->add(new \LinusShops\Prophet\Commands\Show());
 
 //Utilities
@@ -68,11 +66,5 @@ $application->add(new \LinusShops\Prophet\Commands\Framework\Install());
 $application->add(new \LinusShops\Prophet\Commands\Framework\Show());
 $application->add(new \LinusShops\Prophet\Commands\Framework\Update());
 $application->add(new \LinusShops\Prophet\Commands\Framework\Remove());
-
-//Plugins
-$application->add(new \LinusShops\Prophet\Commands\Plugin\Show());
-$application->add(new \LinusShops\Prophet\Commands\Plugin\Install());
-$application->add(new \LinusShops\Prophet\Commands\Plugin\Update());
-$application->add(new \LinusShops\Prophet\Commands\Plugin\Remove());
 
 $application->run();
