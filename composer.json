@@ -32,6 +32,7 @@
     "psy/psysh":"~0.4@stable",
     "symfony/console": "^3.0.0",
     "symfony/filesystem": "^3.0.0",
+    "symfony/finder": "^3.0.0",
     "symfony/process": "^3.0.0",
     "symfony/yaml": "^3.0.0"
   },

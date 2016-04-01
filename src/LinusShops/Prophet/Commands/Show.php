@@ -42,7 +42,7 @@ class Show extends ProphetCommand
             $line = $module->getName().' ';
             foreach ($frameworks as $framework) {
 
-                if ($framework->validate($module)) {
+                if ($framework->validateModule($module)) {
                     $line .= " <info>{$framework->getName()}</info>";
                 } else {
                     $line .= " <error>{$framework->getName()}</error>";

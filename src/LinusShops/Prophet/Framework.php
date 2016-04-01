@@ -21,9 +21,13 @@ class Framework
      * @param Module $module
      * @return boolean
      */
-    public function validate(Module $module)
+    public function validateModule(Module $module)
     {
-        $path = $module->getPath();
+        return $this->validatePath($module->getPath());
+    }
+
+    public function validatePath($path)
+    {
         $valid = true;
 
         if (isset($this->config['validation'])) {

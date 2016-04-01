@@ -10,6 +10,8 @@
 
 namespace LinusShops\Prophet\Commands;
 
+use LinusShops\Prophet\Framework;
+use LinusShops\Prophet\Frameworks\Repository;
 use LinusShops\Prophet\Module;
 use SplFileInfo;
 use LinusShops\Prophet\Command;
@@ -17,6 +19,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
 class Analyze extends Command
@@ -100,16 +103,16 @@ class Analyze extends Command
         file_put_contents($path, Yaml::dump($conf, 3));
     }
 
-    private function buildModuleList($paths, InputInterface $input, OutputInterface $output)
+    private function buildModuleList($mods, InputInterface $input, OutputInterface $output)
     {
         $modulesToWrite = array();
 
-        foreach ($paths as $path) {
-            $arrPath = explode(DIRECTORY_SEPARATOR, $path);
-            $module = new Module($arrPath[count($arrPath)-1], $path);
+        foreach ($mods as $mod) {
+            $arrPath = explode(DIRECTORY_SEPARATOR, $mod['path']);
+            $module = new Module($arrPath[count($arrPath)-1], $mod['path']);
 
             $output->writeln(
-                "Detected {$module->getPath()} as a testable module."
+                "Detected {$module->getPath()} as a {$mod['framework']} testable module."
             );
 
             $question = new ConfirmationQuestion(
@@ -129,9 +132,8 @@ class Analyze extends Command
 
     private function detectModules(OutputInterface $output)
     {
-        //Descend into the vendor directory and build a list of testable modules
-        $directory = new \RecursiveDirectoryIterator('vendor');
-        $files = new \RecursiveIteratorIterator($directory);
+        $finder = new Finder();
+        $files = $finder->directories()->in('vendor');
         $paths = array();
 
         /** @var SplFileInfo $file */
@@ -140,10 +142,15 @@ class Analyze extends Command
                 $output->writeln($file->getRealPath());
             }
 
-            $validFiles = array('phpunit.xml', 'behat.yml');
-
-            if (in_array($file->getFilename(), $validFiles)) {
-                $paths[] = $file->getPath();
+            $frameworks = Repository::get()->getFrameworks();
+            /** @var Framework $framework */
+            foreach ($frameworks as $framework) {
+                if ($framework->validatePath($file->getRealPath())) {
+                    $paths[] = array(
+                        'path' => 'vendor/'.$file->getRelativePathname(),
+                        'framework' => $framework->getName()
+                    );
+                }
             }
         }
 
