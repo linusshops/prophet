@@ -60,4 +60,9 @@ class Config
     {
         return $this->modules;
     }
+
+    public function hasModules()
+    {
+        return count($this->modules) > 0;
+    }
 }

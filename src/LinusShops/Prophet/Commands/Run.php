@@ -66,7 +66,7 @@ class Run extends ProphetCommand
         }
 
         /** @var Module $module */
-        foreach ($config->getModuleList() as $module) {
+        foreach ($config->getModules() as $module) {
             if ($this->checkIfRequested($modulesRequested, $module, $output)) {
                 $modulePath = $module->getPath();
                 $magentoPath = $input->getOption('path');
@@ -82,7 +82,8 @@ class Run extends ProphetCommand
     private function loadClasses($modulesRequested, Config $config, InputInterface $input, OutputInterface $output)
     {
         $loaded = true;
-        if ($config->hasModules()) {
+        
+        if (!$config->hasModules()) {
             $output->writeln('<error>No modules found in prophet.json.</error>');
             $loaded = false;
         } else {
