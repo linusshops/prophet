@@ -8,6 +8,8 @@
 
 namespace LinusShops\Prophet\Commands;
 
+use LinusShops\Prophet\Framework;
+use LinusShops\Prophet\Frameworks\Repository;
 use LinusShops\Prophet\Module;
 use LinusShops\Prophet\ProphetCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -29,17 +31,22 @@ class Show extends ProphetCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $config = parent::execute($input, $output);
+
+        $frameworks = Repository::get()->getFrameworks();
+
         $modules = $config->getModules();
 
         /** @var Module $module */
         foreach ($modules as $module) {
-            $tests = $module->getAvailableTestFrameworks();
-            $line = $module->getName();
+            /** @var Framework $framework */
+            $line = $module->getName().' ';
+            foreach ($frameworks as $framework) {
 
-            if (count($tests) == 0) {
-                $line = "<error>{$line}</error>";
-            } else {
-                $line .= ' ['.implode(', ', $tests).']';
+                if ($framework->validate($module)) {
+                    $line .= " <info>{$framework->getName()}</info>";
+                } else {
+                    $line .= " <error>{$framework->getName()}</error>";
+                }
             }
 
             $output->writeln($line);
