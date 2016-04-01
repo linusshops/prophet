@@ -29,7 +29,7 @@ class Analyze extends Command
         $this
             ->setName('analyze')
             ->setDescription(
-                'Scan the project and attempt to make a prophet.json. When using'
+                'Scan the project and attempt to make a prophet.yml. When using'
                 .' Analyze, prophet will search in the vendor directory, as it'
                 .' expects you to be managing your modules with composer. This'
                 .' will only detect modules that are already configured to test'
