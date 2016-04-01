@@ -59,6 +59,7 @@ $application->add(new LinusShops\Prophet\Commands\Analyze());
 $application->add(new \LinusShops\Prophet\Commands\Show());
 
 //Utilities
+$application->add(new LinusShops\Prophet\Commands\Init());
 $application->add(new LinusShops\Prophet\Commands\IdeHelper());
 
 //Frameworks

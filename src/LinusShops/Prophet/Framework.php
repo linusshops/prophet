@@ -8,6 +8,8 @@
 
 namespace LinusShops\Prophet;
 
+use Symfony\Component\Filesystem\Filesystem;
+
 class Framework
 {
     private $config = array();
@@ -57,5 +59,33 @@ class Framework
     public function getName()
     {
         return $this->config['name'];
+    }
+
+    public function init()
+    {
+        $this->initDirs();
+        $this->initFiles();
+    }
+
+    protected function initDirs()
+    {
+        if (!isset($this->config['init']['dirs'])) {
+            return;
+        }
+
+        $fs = new Filesystem();
+        $fs->mkdir($this->config['init']['dirs']);
+    }
+
+    protected function initFiles()
+    {
+        if (!isset($this->config['init']['files'])) {
+            return;
+        }
+
+        $fs = new Filesystem();
+        foreach ($this->config['init']['files'] as $filename => $contents) {
+            $fs->dumpFile($filename, $contents);
+        }
     }
 }

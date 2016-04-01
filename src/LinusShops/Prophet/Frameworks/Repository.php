@@ -27,7 +27,8 @@ final class Repository
     {
         foreach ($this->getFrameworkDirectories() as $dir) {
             $frameworkConfig = include($dir.'/framework.php');
-            $this->frameworks[] = new Framework($frameworkConfig);
+            $framework = new Framework($frameworkConfig);
+            $this->frameworks[$framework->getName()] = $framework;
         }
     }
 
@@ -64,5 +65,10 @@ final class Repository
     public function getFrameworks()
     {
         return $this->frameworks;
+    }
+
+    public function getFramework($name)
+    {
+        return $this->frameworks[$name];
     }
 }
