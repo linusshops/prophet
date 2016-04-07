@@ -48,7 +48,7 @@ use Symfony\Component\Console\Application;
 $application = new Application();
 
 $application->setName('Prophet');
-$application->setVersion('0.8.4');
+$application->setVersion('0.8.5');
 $application->setDefaultCommand('run');
 
 //Test framework implementations
