@@ -72,8 +72,8 @@ class Run extends ProphetCommand
                 $magentoPath = $input->getOption('path');
 
                 $output->writeln('Running ['.$framework.'] tests for '.$module->getName());
-
-                $res = $this->runTestFramework($framework, $modulePath, $magentoPath, $input->getOption('fparam'));
+                $verbosity = $output->getVerbosity();
+                $res = $this->runTestFramework($framework, $modulePath, $magentoPath, $verbosity, $input->getOption('fparam'));
                 $res ? null : $output->writeln("Failed to load framework {$framework} - loader not found.");
             }
         }
@@ -93,7 +93,7 @@ class Run extends ProphetCommand
         return $loaded;
     }
 
-    protected function runTestFramework($framework, $modulePath, $magentoPath, $frameworkParameters = array())
+    protected function runTestFramework($framework, $modulePath, $magentoPath, $verbosity, $frameworkParameters = array())
     {
         $path = PROPHET_ROOT_DIR.'/frameworks/'.$framework.'/loader.php';
         if (!is_file($path)) {
@@ -101,8 +101,15 @@ class Run extends ProphetCommand
         }
 
         $parameters = implode(' ', $frameworkParameters);
+        $v = '';
+        for($i=0; $i<$verbosity; $i++) {
+            $v .= 'v';
+        }
+        if ($v != '') {
+            $v = '-'.$v;
+        }
 
-        $cmd = "php {$path} ".PROPHET_ROOT_DIR." {$modulePath} {$magentoPath} {$parameters}";
+        $cmd = "php {$path} ".PROPHET_ROOT_DIR." {$modulePath} {$magentoPath} {$v} {$parameters}";
         $this->shell($cmd, '.', true);
 
         return true;
