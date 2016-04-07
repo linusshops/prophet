@@ -27,9 +27,8 @@ class Run extends ProphetCommand
             ->setDescription('Run tests using the specified test framework')
             ->addArgument(
                 'framework',
-                InputArgument::OPTIONAL,
-                'The test framework to use',
-                'phpunit'
+                InputArgument::REQUIRED,
+                'The test framework to use'
             )
             ->addOption(
                 'module',
