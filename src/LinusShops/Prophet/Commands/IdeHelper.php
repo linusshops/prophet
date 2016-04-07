@@ -12,6 +12,7 @@ use LinusShops\Contexts\Web;
 use LinusShops\Prophet\Command;
 use LinusShops\Prophet\Framework;
 use LinusShops\Prophet\Frameworks\Repository;
+use LinusShops\Prophet\Injector;
 use LinusShops\Prophet\ProphetCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -38,6 +39,9 @@ class IdeHelper extends ProphetCommand
     {
         $classesByNamespace = [];
 
+        //Magento classes need to be available to generate helper for override classes.
+        Injector::bootMagento();
+
         /** @var \ReflectionClass $class */
         foreach ($this->getClassesToGenerate() as $class) {
             $namespace = $class->getNamespaceName();
@@ -56,9 +60,18 @@ class IdeHelper extends ProphetCommand
 
     public function getClassesToGenerate()
     {
+        return array_merge(
+            [],
+            $this->getFrameworkClassesToGenerate(),
+            $this->getOverrideClasses()
+        );
+    }
+
+    public function getFrameworkClassesToGenerate()
+    {
         $frameworks = Repository::get()->getFrameworks();
         $classes = [];
-        
+
         /** @var Framework $framework */
         foreach ($frameworks as $framework) {
             foreach ($framework->getIdeHelperClasses() as $c) {
@@ -66,8 +79,16 @@ class IdeHelper extends ProphetCommand
                 $classes[] = new \ReflectionClass($c);
             }
         }
-        
+
         return $classes;
+    }
+
+    public function getOverrideClasses()
+    {
+        return [
+            new \ReflectionClass('LinusShops\Prophet\Injectable\Overrides\Request'),
+            new \ReflectionClass('LinusShops\Prophet\Injectable\Overrides\Response')
+        ];
     }
 
     public function buildIdeHelper($classesByNamespace)
