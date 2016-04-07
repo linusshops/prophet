@@ -14,7 +14,7 @@
 namespace <?= $namespace ?> {
 
 <?php foreach ($classes as $class) : ?>
-    class <?= $class->getShortName() ?> extends \<?= $class->getParentClass()->getName() ?>
+    class <?= $class->getShortName() ?> <?php if ($class->getParentClass()): ?>extends \<?= $class->getParentClass()->getName() ?> <?php endif; ?>
     {
         <?php foreach ($class->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) : ?>
         <?= $method->getDocComment() ?>

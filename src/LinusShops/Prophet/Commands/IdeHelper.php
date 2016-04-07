@@ -61,7 +61,7 @@ class IdeHelper extends ProphetCommand
     public function getClassesToGenerate()
     {
         return array_merge(
-            [],
+            [new \ReflectionClass('LinusShops\Prophet\Injector')],
             $this->getFrameworkClassesToGenerate(),
             $this->getOverrideClasses()
         );
