@@ -10,11 +10,14 @@ namespace LinusShops\Prophet\Commands;
 
 use LinusShops\Contexts\Web;
 use LinusShops\Prophet\Command;
+use LinusShops\Prophet\Framework;
+use LinusShops\Prophet\Frameworks\Repository;
+use LinusShops\Prophet\ProphetCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class IdeHelper extends Command
+class IdeHelper extends ProphetCommand
 {
     protected function configure()
     {
@@ -53,9 +56,18 @@ class IdeHelper extends Command
 
     public function getClassesToGenerate()
     {
-        return [
-            new \ReflectionClass('LinusShops\Contexts\Web')
-        ];
+        $frameworks = Repository::get()->getFrameworks();
+        $classes = [];
+        
+        /** @var Framework $framework */
+        foreach ($frameworks as $framework) {
+            foreach ($framework->getIdeHelperClasses() as $c) {
+                require($framework->getPath().'/vendor/autoload.php');
+                $classes[] = new \ReflectionClass($c);
+            }
+        }
+        
+        return $classes;
     }
 
     public function buildIdeHelper($classesByNamespace)

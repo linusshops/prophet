@@ -88,4 +88,14 @@ class Framework
             $fs->dumpFile($filename, $contents);
         }
     }
+
+    public function getIdeHelperClasses()
+    {
+        return isset($this->config['ideHelperClasses']) ? $this->config['ideHelperClasses'] : [];
+    }
+
+    public function getPath()
+    {
+        return PROPHET_ROOT_DIR.'/frameworks/'.$this->getName();
+    }
 }
