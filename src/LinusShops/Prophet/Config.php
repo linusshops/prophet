@@ -37,7 +37,7 @@ class Config
         $path .= '/prophet.yml';
 
         if (!is_file($path)) {
-            throw new InvalidConfigException('Invalid config path given.');
+            throw new InvalidConfigException("prophet.yml not found in path {$path}");
         }
         $yaml = new Parser();
 
