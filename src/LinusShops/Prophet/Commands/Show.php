@@ -44,8 +44,6 @@ class Show extends ProphetCommand
 
                 if ($framework->validateModule($module)) {
                     $line .= " <info>{$framework->getName()}</info>";
-                } else {
-                    $line .= " <error>{$framework->getName()}</error>";
                 }
             }
 
