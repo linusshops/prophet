@@ -2,15 +2,15 @@
   "repositories": [
     {
       "type": "composer",
-      "url": "http://packages.firegento.com"
+      "url": "https://packages.firegento.com"
     }
   ],
 
   "minimum-stability":"dev",
 
   "require":{
-    "magento-hackathon/magento-composer-installer":"~2.1.1",
-    "magento-hackathon/composer-command-integrator":"~1.2",
+    "magento-hackathon/magento-composer-installer":"~3",
+    "magento-hackathon/composer-command-integrator":"^1.2",
     "linusshops/prophet-magento-test-module": ">=0.1.1"
   },
 

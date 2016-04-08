@@ -14,11 +14,11 @@ install:
   - cd magento && git checkout tags/${MAGENTO_VERSION} && cd -
   - cp ./tests/composer.magento.json ./magento/composer.json
   - cd magento && composer install && cd -
-  - cd magento && ./vendor/bin/composerCommandIntegrator.php magento-module-deploy && cd -
+  - cd magento && composer run-script post-install-cmd -vvv -- --redeploy && cd -
 
-script:
-  - phpunit --coverage-text --coverage-clover=coverage.clover
+#script:
+#  - phpunit --coverage-text --coverage-clover=coverage.clover
 
-after_script:
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+#after_script:
+#  - wget https://scrutinizer-ci.com/ocular.phar
+#  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
