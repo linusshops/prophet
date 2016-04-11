@@ -15,6 +15,8 @@ install:
   - cp ./tests/composer.magento.json ./magento/composer.json
   - cd magento && composer install && cd -
   - cd magento && composer run-script post-install-cmd -vvv -- --redeploy && cd -
+  - prophet install behat
+  - prophet install phpunit
 
 #script:
 #  - phpunit --coverage-text --coverage-clover=coverage.clover

@@ -20,4 +20,36 @@ class FeatureContext implements Context, SnippetAcceptingContext
     public function __construct()
     {
     }
+
+    /**
+     * @Given /^I am in a magento root$/
+     */
+    public function iAmInAMagentoRoot()
+    {
+        
+    }
+
+    /**
+     * @When /^I run the show command$/
+     */
+    public function iRunTheShowCommand()
+    {
+        throw new \Behat\Behat\Tester\Exception\PendingException();
+    }
+
+    /**
+     * @Then /^I should see the no config found error$/
+     */
+    public function iShouldSeeTheNoConfigFoundError()
+    {
+        throw new \Behat\Behat\Tester\Exception\PendingException();
+    }
+
+    /**
+     * @Then /^I should see the sample module with phpunit enabled$/
+     */
+    public function iShouldSeeTheSampleModuleWithPhpunitEnabled()
+    {
+        throw new \Behat\Behat\Tester\Exception\PendingException();
+    }
 }
