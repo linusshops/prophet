@@ -4,12 +4,17 @@ use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
+use Symfony\Component\Process\Process;
 
 /**
  * Defines application features from the specific context.
  */
 class FeatureContext implements Context, SnippetAcceptingContext
 {
+    use \LinusShops\Contexts\Generic;
+
+    protected $lastOutput;
+
     /**
      * Initializes context.
      *
@@ -21,12 +26,16 @@ class FeatureContext implements Context, SnippetAcceptingContext
     {
     }
 
-    /**
-     * @Given /^I am in a magento root$/
-     */
-    public function iAmInAMagentoRoot()
+    public function getMagentoPath()
     {
-        
+        return './testbed';
+    }
+    
+    public function runCommand($command)
+    {
+        $process = new Process($command);
+        $process->mustRun();
+        return $process->getOutput();
     }
 
     /**
@@ -34,15 +43,7 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     public function iRunTheShowCommand()
     {
-        throw new \Behat\Behat\Tester\Exception\PendingException();
-    }
-
-    /**
-     * @Then /^I should see the no config found error$/
-     */
-    public function iShouldSeeTheNoConfigFoundError()
-    {
-        throw new \Behat\Behat\Tester\Exception\PendingException();
+        $this->lastOutput = $this->runCommand("./prophet show --path={$this->getMagentoPath()}");
     }
 
     /**
@@ -50,6 +51,6 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     public function iShouldSeeTheSampleModuleWithPhpunitEnabled()
     {
-        throw new \Behat\Behat\Tester\Exception\PendingException();
+        $this->assertRegex('/phpunit/', $this->lastOutput);
     }
 }

@@ -1,0 +1,8 @@
+default:
+    autoload:
+        '': %paths.base%/tests/contexts
+    suites:
+        default:
+          paths: [ %paths.base%/tests/features ]
+          contexts:
+            - FeatureContext

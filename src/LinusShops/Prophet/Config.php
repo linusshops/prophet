@@ -16,14 +16,14 @@ class Config
 {
     private $modules;
 
-    public function __construct($parsedConfigFile, $prefix = '')
+    public function __construct($parsedConfigFile, $pathPrefix = '')
     {
         if (!is_array($parsedConfigFile)) {
             throw new InvalidConfigException('Invalid config: parsed config must be an array.');
         }
 
         if (isset($parsedConfigFile['modules'])) {
-            $this->loadModules($parsedConfigFile['modules']);
+            $this->loadModules($parsedConfigFile['modules'], $pathPrefix);
         }
     }
 
@@ -34,6 +34,7 @@ class Config
      */
     public static function getConfigFromFile($path = '.')
     {
+        $prefix = $path;
         $path .= '/prophet.yml';
 
         if (!is_file($path)) {
@@ -41,19 +42,21 @@ class Config
         }
         $yaml = new Parser();
 
-        return new Config($yaml->parse(file_get_contents($path)));
+        return new Config($yaml->parse(file_get_contents($path)), $prefix);
     }
 
-    private function loadModules($modules)
+    private function loadModules($modules, $pathPrefix)
     {
         foreach ($modules as $definition) {
             $module = new Module(
                 $definition['name'],
-                $definition['path']
+                $pathPrefix.'/'.$definition['path']
             );
 
             $this->modules[$module->getName()] = $module;
         }
+
+        print_r($this->modules);
     }
 
     public function getModules()
