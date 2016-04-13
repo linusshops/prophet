@@ -1,0 +1,4 @@
+modules:
+    -
+        path: vendor/linusshops/prophet-magento-test-module
+        name: testmodule
