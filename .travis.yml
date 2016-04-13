@@ -9,12 +9,7 @@ env:
   - MAGENTO_VERSION="1.9.1.0"
 
 install:
-  - composer install
-  - git clone https://github.com/OpenMage/magento-mirror.git magento
-  - cd magento && git checkout tags/${MAGENTO_VERSION} && cd -
-  - cp ./tests/composer.magento.json ./magento/composer.json
-  - cd magento && composer install && cd -
-  - cd magento && composer run-script post-install-cmd -vvv -- --redeploy && cd -
+  - make_test_environment.sh
   - prophet install behat
   - prophet install phpunit
 
