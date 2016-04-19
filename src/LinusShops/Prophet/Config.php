@@ -55,8 +55,6 @@ class Config
 
             $this->modules[$module->getName()] = $module;
         }
-
-        print_r($this->modules);
     }
 
     public function getModules()
