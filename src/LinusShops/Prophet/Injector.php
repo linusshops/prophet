@@ -163,10 +163,10 @@ class Injector
         //Prophet gives itself priority over all other loaders, as this
         //allows the injection of testing specific classes. If there is
         //a class you wish to override in testing, you can do this by adding
-        //a file with its exact class name in the tests/phpunit/classes directory
+        //a file with its exact class name in the tests/overrides/classes directory
         //in the module.
         $overrideLoader = function ($classname) use ($modulePath, $rootPath) {
-            $loadpath = $rootPath.'/'.$modulePath.'/tests/phpunit/classes/'.$classname.'.php';
+            $loadpath = $rootPath.'/'.$modulePath.'/tests/overrides/classes/'.$classname.'.php';
 
             if (file_exists($loadpath)) {
                 include $loadpath;
