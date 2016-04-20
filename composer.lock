@@ -129,16 +129,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v2.0.1",
+            "version": "v2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "ce5be709d59b32dd8a88c80259028759991a4206"
+                "reference": "47b254ea51f1d6d5dc04b9b299e88346bf2369e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/ce5be709d59b32dd8a88c80259028759991a4206",
-                "reference": "ce5be709d59b32dd8a88c80259028759991a4206",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/47b254ea51f1d6d5dc04b9b299e88346bf2369e3",
+                "reference": "47b254ea51f1d6d5dc04b9b299e88346bf2369e3",
                 "shasum": ""
             },
             "require": {
@@ -154,7 +154,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0-dev"
+                    "dev-master": "2.1-dev"
                 }
             },
             "autoload": {
@@ -176,7 +176,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2016-02-28 19:48:28"
+            "time": "2016-04-19 13:41:41"
         },
         {
             "name": "psy/psysh",
@@ -1050,12 +1050,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/linusshops/behat-contexts.git",
-                "reference": "30c6f4f55b80c8e94799e639d564e3667dd34118"
+                "reference": "ab9ab23105a49912b45bc10abd65554bfdf80425"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/linusshops/behat-contexts/zipball/30c6f4f55b80c8e94799e639d564e3667dd34118",
-                "reference": "30c6f4f55b80c8e94799e639d564e3667dd34118",
+                "url": "https://api.github.com/repos/linusshops/behat-contexts/zipball/ab9ab23105a49912b45bc10abd65554bfdf80425",
+                "reference": "ab9ab23105a49912b45bc10abd65554bfdf80425",
                 "shasum": ""
             },
             "require": {
@@ -1095,7 +1095,7 @@
                 "Context",
                 "testing"
             ],
-            "time": "2016-04-01 18:21:16"
+            "time": "2016-04-20 17:39:07"
         },
         {
             "name": "symfony/class-loader",
